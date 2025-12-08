@@ -22,8 +22,8 @@
                 </svg>
 
                 @for (entry of state.map; track entry.node.id) {
-                    <div [ngStyle]="getNodePositionStyle(entry.node.position)" class="node">
-                        {{ entry.node.id }}
+                    <div [ngStyle]="getNodePositionStyle(entry.node.position)" class="node" [class]="temp(entry)">
+                        <div class="node-text">{{entry.node.id}}</div>
                     </div>
                 }
             </app-pan-container>

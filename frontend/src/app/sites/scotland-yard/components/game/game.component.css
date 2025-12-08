@@ -36,8 +36,25 @@
 
     border-radius: 50%;
     border: 1px solid black;
+}
 
-    font-size: 10px;
+.node.taxi {
+    background-color: #f7ad2d;
+}
+.node.bus {
+    background-color: #24ab6a;
+}
+.node.metro {
+    background-color: #FF00FF;
+}
+
+.node-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    font-size: 14px;
 }
 
 .edge.taxi {
@@ -47,5 +64,5 @@
     stroke: #24ab6a;
 }
 .edge.metro {
-    stroke: #c9089c;
+    stroke: #FF00FF;
 }

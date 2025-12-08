@@ -1,21 +1,17 @@
 import {Component, computed, inject, OnInit, signal, viewChild} from '@angular/core';
-import {ScotlandYardConfigComponent} from "../config/config.component";
-import {GameSessionGameComponent} from "../../../all/components/game-session-game.component";
-import {QwirkleService} from "../../../qwirkle/services/qwirkle.service";
-import {Router} from "@angular/router";
 import {ScotlandYardService} from "../../services/scotland-yard.service";
 import {GameState} from "../../dto/game/GameState";
 import {MainHeaderComponent} from "../../../../main/components/all/main-header/main-header.component";
-import {NgIf, NgStyle} from "@angular/common";
+import {NgStyle} from "@angular/common";
 import {PanContainerComponent} from "../../../../main/components/all/pan-container/pan-container.component";
 import {Position} from "../../../../main/dto/all/Position";
+import {GraphNode} from "../../dto/GraphNode";
+import {EdgeType} from "../../dto/EdgeType";
 
 @Component({
   selector: 'scotland-yard-game',
   imports: [
-    GameSessionGameComponent,
     MainHeaderComponent,
-    NgIf,
     PanContainerComponent,
     NgStyle
   ],
@@ -28,7 +24,7 @@ export class ScotlandYardGameComponent implements OnInit{
   private map = viewChild.required<PanContainerComponent>('map');
   protected gameState = signal<GameState | null>(null);
 
-  private nodeSize = 20;
+  private nodeSize = 30;
 
   protected maxSize = computed((): Position => {
     const state = this.gameState();
@@ -44,16 +40,7 @@ export class ScotlandYardGameComponent implements OnInit{
     return {x: maxX, y: maxY};
   })
 
-  private nodeMap = computed(() => {
-    const map = new Map<number, { x: number, y: number }>();
-    const state = this.gameState();
-    if(!state) return map;
-
-    state.map.forEach(n => map.set(n.node.id, n.node.position));
-    return map;
-  });
-
-  renderedEdges = computed(() => {
+  protected renderedEdges = computed(() => {
     const edges: any[] = [];
     const state = this.gameState();
     if(!state) return edges;
@@ -78,9 +65,6 @@ export class ScotlandYardGameComponent implements OnInit{
       });
     }
 
-    console.log(edges)
-
-
     return edges;
   });
 
@@ -95,6 +79,21 @@ export class ScotlandYardGameComponent implements OnInit{
       width: `${this.nodeSize}px`,
       height: `${this.nodeSize}px`
     }
+  }
+
+  protected temp(entry: GraphNode) {
+    let classes = '';
+    for(const edge of entry.edges) {
+      if(edge.type === EdgeType.TAXI && !classes.includes('taxi')) {
+        classes += 'taxi ';
+      } else if(edge.type === EdgeType.BUS && !classes.includes('bus')) {
+        classes += 'bus ';
+      } else if(edge.type === EdgeType.METRO && !classes.includes('metro')) {
+        classes += 'metro ';
+      }
+    }
+
+    return classes;
   }
 
   private getSession() {
