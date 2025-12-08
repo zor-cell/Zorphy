@@ -12,6 +12,8 @@ import {JollyGameComponent} from "./sites/jolly/components/game/game.component";
 import {JollyConfigComponent} from "./sites/jolly/components/config/config.component";
 import {RiskSimulationComponent} from "./sites/risk/components/simulation/simulation.component";
 import {GameStatsComponent} from "./main/components/games/stats/game-stats/game-stats.component";
+import {ScotlandYardGameComponent} from "./sites/scotland-yard/components/game/game.component";
+import {ScotlandYardConfigComponent} from "./sites/scotland-yard/components/config/config.component";
 
 export const routes: Routes = [
     //project routing
@@ -45,4 +47,9 @@ export const routes: Routes = [
     //risk routing
     {path: 'projects/risk', redirectTo: 'projects/risk/simulation', pathMatch: 'full'},
     {path: 'projects/risk/simulation', component: RiskSimulationComponent},
+
+    // scotland yard routing
+    {path: 'projects/scotland-yard', redirectTo: 'projects/scotland-yard/config', pathMatch: 'full'},
+    {path: 'projects/scotland-yard/config', component: ScotlandYardConfigComponent},
+    {path: 'projects/scotland-yard/game', component: ScotlandYardGameComponent},
 ];
