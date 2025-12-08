@@ -1000,17 +1000,17 @@
     {
       "from": 108,
       "to": 115,
-      "type": "FERRY"
+      "type": "BLACK"
     },
     {
       "from": 115,
       "to": 157,
-      "type": "FERRY"
+      "type": "BLACK"
     },
     {
       "from": 157,
       "to": 194,
-      "type": "FERRY"
+      "type": "BLACK"
     },
     {
       "from": 1,

@@ -8,6 +8,7 @@ import {Position} from "../../../../main/dto/all/Position";
 import {GraphNode} from "../../dto/GraphNode";
 import {EdgeType} from "../../dto/EdgeType";
 import {MapType} from "../../dto/MapType";
+import {HeatMapEntry} from "../../dto/HeatMapEntry";
 
 @Component({
   selector: 'scotland-yard-game',
@@ -25,6 +26,7 @@ export class ScotlandYardGameComponent implements OnInit{
   protected edgeTypes = Object.values(EdgeType);
 
   protected gameState = signal<GameState | null>(null);
+  protected heatMap = signal<HeatMapEntry[]>([]);
   protected moves = signal<EdgeType[]>([]);
   protected selectedMove = signal<EdgeType>(this.edgeTypes[0]);
 
@@ -101,12 +103,25 @@ export class ScotlandYardGameComponent implements OnInit{
 
   protected addMove() {
     this.moves.update((currentMoves) => [...currentMoves, this.selectedMove()]);
+
+    this.getHeatMap();
   }
 
   protected changeMove(event: Event) {
     const target = event.target as HTMLSelectElement;
 
     this.selectedMove.set(target.value as EdgeType);
+  }
+
+  private getHeatMap() {
+    const config = {
+      startNode: 1,
+      moves: this.moves()
+    };
+
+    this.scotlandYardService.getHeatMap(config).subscribe(res => {
+      this.heatMap.set(res);
+    })
   }
 
   private getSession() {

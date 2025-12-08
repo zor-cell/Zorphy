@@ -2,13 +2,10 @@ package net.zorphy.backend.site.scotlandyard.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.zorphy.backend.site.connect4.exception.InvalidOperationException;
-import net.zorphy.backend.site.scotlandyard.dto.GraphNode;
-import net.zorphy.backend.site.scotlandyard.dto.MapType;
+import net.zorphy.backend.site.scotlandyard.dto.*;
 import net.zorphy.backend.site.scotlandyard.dto.game.GameConfig;
 import net.zorphy.backend.site.scotlandyard.dto.game.GameState;
-import net.zorphy.backend.site.scotlandyard.dto.Edge;
-import net.zorphy.backend.site.scotlandyard.dto.Node;
-import net.zorphy.backend.site.scotlandyard.dto.Position;
+import net.zorphy.backend.site.scotlandyard.service.util.ScotlandYardUtil;
 import net.zorphy.backend.site.scotlandyard.service.util.json.JsonEdge;
 import net.zorphy.backend.site.scotlandyard.service.util.json.JsonGraph;
 import net.zorphy.backend.site.scotlandyard.service.util.json.JsonNode;
@@ -21,10 +18,56 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ScotlandYardServiceImpl implements ScotlandYardService {
     private final ObjectMapper mapper = new ObjectMapper();
+
+    @Override
+    public GameState createSession(GameConfig gameConfig) {
+        var map = readMap(gameConfig.mapType());
+
+        return new GameState(
+                Instant.now(),
+                gameConfig,
+                listFromMap(map)
+        );
+    }
+
+    @Override
+    public GameState updateSession(GameState oldState, GameConfig gameConfig) {
+        return null;
+    }
+
+    @Override
+    public List<HeatMapEntry> computeHeatMap(GameState oldState, HeatMapConfig heatMapConfig) {
+        var map = mapFromList(oldState.map());
+
+        var found = map.keySet().stream()
+                .filter(k -> k.id() == heatMapConfig.startNode()).findFirst()
+                .orElse(null);
+        if(found == null) {
+            throw new InvalidOperationException("Starting node id is not valid");
+        }
+
+        return ScotlandYardUtil.computeHeatmap(map, found, heatMapConfig.moves());
+    }
+
+    private static List<GraphNode> listFromMap(Map<Node, List<Edge>> map) {
+        return map.entrySet().stream().map(e -> new GraphNode(
+                e.getKey(),
+                e.getValue()
+        )).toList();
+    }
+
+    private static Map<Node, List<Edge>> mapFromList(List<GraphNode> list) {
+        return list.stream()
+                .collect(Collectors.toMap(
+                        GraphNode::node,
+                        GraphNode::edges
+                ));
+    }
 
     private Map<Node, List<Edge>> readMap(MapType mapType) {
         String filename = "data/scotland-yard/" + mapType.toString().toLowerCase() + ".json";
@@ -80,28 +123,5 @@ public class ScotlandYardServiceImpl implements ScotlandYardService {
         }
 
         return map;
-    }
-
-    @Override
-    public GameState createSession(GameConfig gameConfig) {
-        var map = readMap(gameConfig.mapType());
-
-        return new GameState(
-                Instant.now(),
-                gameConfig,
-                listFromMap(map)
-        );
-    }
-
-    @Override
-    public GameState updateSession(GameState oldState, GameConfig gameConfig) {
-        return null;
-    }
-
-    private static List<GraphNode> listFromMap(Map<Node, List<Edge>> map) {
-        return map.entrySet().stream().map(e -> new GraphNode(
-                e.getKey(),
-                e.getValue()
-        )).toList();
     }
 }

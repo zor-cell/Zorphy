@@ -1,10 +1,15 @@
 package net.zorphy.backend.site.scotlandyard.service.util;
 
+import net.zorphy.backend.site.scotlandyard.dto.Edge;
+import net.zorphy.backend.site.scotlandyard.dto.EdgeType;
+import net.zorphy.backend.site.scotlandyard.dto.HeatMapEntry;
+import net.zorphy.backend.site.scotlandyard.dto.Node;
+
 import java.util.*;
 
 public class ScotlandYardUtil {
-    /*public static Map<Integer, Integer> computeHeatmap(Map<Node, List<Edge>> graph, Node start, List<EdgeType> moves) {
-        Map<Integer, Integer> heatmap = new HashMap<>();
+    public static List<HeatMapEntry> computeHeatmap(Map<Node, List<Edge>> graph, Node start, List<EdgeType> moves) {
+        Map<Node, Integer> heatmap = new HashMap<>();
 
         Queue<Node> queue = new LinkedList<>();
         queue.add(start);
@@ -14,12 +19,12 @@ public class ScotlandYardUtil {
                 Node current = queue.poll();
 
                 List<Edge> edges = graph.get(current);
-                List<Integer> neighbors = edges.stream()
-                        .filter(e -> e.types().contains(move) || move.equals(EdgeType.BLACK))
+                List<Node> neighbors = edges.stream()
+                        .filter(e -> move.equals(e.type()) || move.equals(EdgeType.BLACK))
                         .map(Edge::to)
                         .toList();
 
-                for(Integer neighbor : neighbors) {
+                for(Node neighbor : neighbors) {
                     //add to counter heatmap
                     heatmap.merge(neighbor, 1, Integer::sum);
 
@@ -28,6 +33,9 @@ public class ScotlandYardUtil {
             }
         }
 
-        return heatmap;
-    }*/
+        return heatmap.entrySet().stream().map(entry -> new HeatMapEntry(
+                entry.getKey(),
+                entry.getValue()
+        )).toList();
+    }
 }
