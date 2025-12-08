@@ -1,4 +1,4 @@
-package net.zorphy.backend.site.scotlandyard.service.util;
+package net.zorphy.backend.site.scotlandyard.dto;
 
 public record Position(
         int x,
