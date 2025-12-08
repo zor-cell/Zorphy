@@ -4,5 +4,6 @@ public enum EdgeType {
     TAXI,
     BUS,
     METRO,
-    BLACK
+    FERRY,
+    ALL
 }

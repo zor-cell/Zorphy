@@ -14,4 +14,6 @@ public class ScotlandYardController extends GameSessionBaseController<GameConfig
 
         this.scotlandYardService = scotlandYardService;
     }
+
+
 }

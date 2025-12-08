@@ -3,8 +3,8 @@ package net.zorphy.backend.site.scotlandyard.service.util;
 import java.util.*;
 
 public class ScotlandYardUtil {
-    public static Map<Node, Integer> computeHeatmap(Map<Node, List<Edge>> graph, Node start, List<EdgeType> moves) {
-        Map<Node, Integer> heatmap = new HashMap<>();
+    /*public static Map<Integer, Integer> computeHeatmap(Map<Node, List<Edge>> graph, Node start, List<EdgeType> moves) {
+        Map<Integer, Integer> heatmap = new HashMap<>();
 
         Queue<Node> queue = new LinkedList<>();
         queue.add(start);
@@ -14,12 +14,12 @@ public class ScotlandYardUtil {
                 Node current = queue.poll();
 
                 List<Edge> edges = graph.get(current);
-                List<Node> neighbors = edges.stream()
-                        .filter(e -> e.type().equals(move) || move.equals(EdgeType.BLACK))
+                List<Integer> neighbors = edges.stream()
+                        .filter(e -> e.types().contains(move) || move.equals(EdgeType.BLACK))
                         .map(Edge::to)
                         .toList();
 
-                for(Node neighbor : neighbors) {
+                for(Integer neighbor : neighbors) {
                     //add to counter heatmap
                     heatmap.merge(neighbor, 1, Integer::sum);
 
@@ -29,5 +29,5 @@ public class ScotlandYardUtil {
         }
 
         return heatmap;
-    }
+    }*/
 }
