@@ -38,6 +38,13 @@
     border: 1px solid black;
 }
 
+.node.highlighted {
+    background-color: rgba(255, 255, 255, 0.5);
+
+    box-shadow: 0 0 5px rgba(255, 0, 0);
+    border: none;
+}
+
 .node-text {
     position: absolute;
     top: 50%;

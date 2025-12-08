@@ -14,8 +14,11 @@ public class ScotlandYardUtil {
         Queue<Node> queue = new LinkedList<>();
         queue.add(start);
 
-        for(EdgeType move : moves) {
-            for(int i = 0;i < queue.size();i++) {
+        for(int j = 0;j < moves.size();j++) {
+            var move = moves.get(j);
+
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
                 Node current = queue.poll();
 
                 List<Edge> edges = graph.get(current);
@@ -24,14 +27,17 @@ public class ScotlandYardUtil {
                         .map(Edge::to)
                         .toList();
 
-                for(Node neighbor : neighbors) {
-                    //add to counter heatmap
-                    heatmap.merge(neighbor, 1, Integer::sum);
+                for (Node neighbor : neighbors) {
+                    //add to counter heatmap if its the last stage
+                    if(j == moves.size() - 1) {
+                        heatmap.merge(neighbor, 1, Integer::sum);
+                    }
 
                     queue.add(neighbor);
                 }
             }
         }
+
 
         return heatmap.entrySet().stream().map(entry -> new HeatMapEntry(
                 entry.getKey(),

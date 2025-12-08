@@ -32,6 +32,10 @@ export class ScotlandYardGameComponent implements OnInit{
 
   private nodeSize = 30;
 
+  protected maxHeatMapCount = computed(() => {
+    return Math.max(0, ...this.heatMap().map(x => x.count));
+  })
+
   protected bounds = computed((): Position => {
     const state = this.gameState();
     if(!state) return {x: 0, y: 0};
@@ -77,12 +81,12 @@ export class ScotlandYardGameComponent implements OnInit{
     this.getSession();
   }
 
-  protected getNodePositionStyle(position: Position) {
+  protected getNodePositionStyle(position: Position, incr: number = 0) {
     return {
-      left: `${position.x - this.nodeSize / 2}px`,
-      top: `${position.y - this.nodeSize / 2}px`,
-      width: `${this.nodeSize}px`,
-      height: `${this.nodeSize}px`
+      left: `${position.x - this.nodeSize / 2 - (incr / 2) * this.nodeSize / 2}px`,
+      top: `${position.y - this.nodeSize / 2 - (incr / 2) * this.nodeSize / 2}px`,
+      width: `${this.nodeSize + incr * this.nodeSize / 2}px`,
+      height: `${this.nodeSize + incr * this.nodeSize / 2}px`
     }
   }
 

@@ -23,7 +23,7 @@
                     </div>
 
                     <div class="moves-container">
-                        @for (move of moves(); track move) {
+                        @for (move of moves(); track $index) {
                             <div class="move" [class]="move.toString().toLowerCase()">
                                 {{ move }}
                             </div>
@@ -53,6 +53,11 @@
                     <div [ngStyle]="getNodePositionStyle(entry.node.position)" class="node"
                          [class]="getNodeColorClasses(entry)">
                         <div class="node-text">{{ entry.node.id }}</div>
+                    </div>
+                }
+
+                @for(entry of heatMap(); track entry.node.id) {
+                    <div [ngStyle]="getNodePositionStyle(entry.node.position, entry.count / maxHeatMapCount())" class="node highlighted">
                     </div>
                 }
             </app-pan-container>
