@@ -4,9 +4,37 @@
 @if (state) {
     <div class="main-container">
         <div class="game-container">
-            <div>config</div>
-            <app-pan-container #map class="map">
-                <svg [ngStyle]="{width: `${maxSize().x}px`, height: `${maxSize().y}px`}" class="test">
+            <div class="config">
+
+                <div class="highlighted-container transport-container">
+                    <div class="inputs-container">
+                        <input class="number-input-lg position-input" type="number" placeholder="Start Position">
+
+                        <div class="move-config">
+                            <select class="move-select" (change)="changeMove($event)">
+                                @for (type of edgeTypes; track type) {
+                                    <option>{{ type }}</option>
+                                }
+                            </select>
+                            <button class="small-btn" (click)="addMove()">
+                                <i class="bi bi-plus-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="moves-container">
+                        @for (move of moves(); track move) {
+                            <div class="move" [class]="move.toString().toLowerCase()">
+                                {{ move }}
+                            </div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+
+            <app-pan-container #map [centerPosition]="{x: 0, y: 0}" class="map">
+                <svg [ngStyle]="{width: `${bounds().x}px`, height: `${bounds().y}px`}" class="test">
                     @for (edge of renderedEdges(); track edge.id) {
                         <line stroke="black"
                               stroke-width="1"
@@ -22,8 +50,9 @@
                 </svg>
 
                 @for (entry of state.map; track entry.node.id) {
-                    <div [ngStyle]="getNodePositionStyle(entry.node.position)" class="node" [class]="temp(entry)">
-                        <div class="node-text">{{entry.node.id}}</div>
+                    <div [ngStyle]="getNodePositionStyle(entry.node.position)" class="node"
+                         [class]="getNodeColorClasses(entry)">
+                        <div class="node-text">{{ entry.node.id }}</div>
                     </div>
                 }
             </app-pan-container>

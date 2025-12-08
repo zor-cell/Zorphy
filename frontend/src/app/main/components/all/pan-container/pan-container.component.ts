@@ -111,8 +111,27 @@ export class PanContainerComponent {
 
         const delta = -event.deltaY;
         const zoomFactor = delta > 0 ? 1.1 : 0.9;
-        this.zoomScale = Math.min(this.maxZoom, Math.max(this.minZoom, this.zoomScale * zoomFactor));
+        const newScale = Math.min(this.maxZoom, Math.max(this.minZoom, this.zoomScale * zoomFactor));
 
+        if (newScale === this.zoomScale) return;
+
+        const rect = this.elementRef.nativeElement.getBoundingClientRect();
+        const mouseX = event.clientX - rect.left;
+        const mouseY = event.clientY - rect.top;
+
+        const currentTranslateX = this.centerPosition().x + this.panOffset.x;
+        const currentTranslateY = this.centerPosition().y + this.panOffset.y;
+
+        const worldX = (mouseX - currentTranslateX) / this.zoomScale;
+        const worldY = (mouseY - currentTranslateY) / this.zoomScale;
+
+        this.zoomScale = newScale;
+
+        const newTranslateX = mouseX - (worldX * newScale);
+        const newTranslateY = mouseY - (worldY * newScale);
+
+        this.panOffset.x = newTranslateX - this.centerPosition().x;
+        this.panOffset.y = newTranslateY - this.centerPosition().y;
     }
 
     protected pinch(event: TouchEvent) {

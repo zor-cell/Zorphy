@@ -1,6 +1,6 @@
 .game-container {
     display: grid;
-    grid-template-columns: 300px 1fr;
+    grid-template-columns: 200px 1fr;
 
 
     height: 600px;
@@ -38,16 +38,6 @@
     border: 1px solid black;
 }
 
-.node.taxi {
-    background-color: #f7ad2d;
-}
-.node.bus {
-    background-color: #24ab6a;
-}
-.node.metro {
-    background-color: #FF00FF;
-}
-
 .node-text {
     position: absolute;
     top: 50%;
@@ -65,4 +55,78 @@
 }
 .edge.metro {
     stroke: #FF00FF;
+}
+
+.config {
+    display: flex;
+
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.inputs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.position-input {
+    width: 100%;
+}
+
+.transport-container {
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+
+    gap: 2rem;
+}
+
+.moves-container {
+    height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.move-config {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+.move-select {
+    width: 100%;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+}
+
+.move {
+    width: 100%;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+
+    font-size: 1.2rem;
+    text-align: center;
+
+    padding: 0.5rem;
+}
+
+.taxi {
+    background-color: #f7ad2d;
+}
+.bus {
+    background-color: #24ab6a;
+}
+.metro {
+    background-color: #FF00FF;
+}
+.all {
+    background-color: black;
+    color: white;
 }

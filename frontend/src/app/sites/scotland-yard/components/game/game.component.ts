@@ -7,6 +7,7 @@ import {PanContainerComponent} from "../../../../main/components/all/pan-contain
 import {Position} from "../../../../main/dto/all/Position";
 import {GraphNode} from "../../dto/GraphNode";
 import {EdgeType} from "../../dto/EdgeType";
+import {MapType} from "../../dto/MapType";
 
 @Component({
   selector: 'scotland-yard-game',
@@ -21,12 +22,15 @@ import {EdgeType} from "../../dto/EdgeType";
 export class ScotlandYardGameComponent implements OnInit{
   protected scotlandYardService = inject(ScotlandYardService);
 
-  private map = viewChild.required<PanContainerComponent>('map');
+  protected edgeTypes = Object.values(EdgeType);
+
   protected gameState = signal<GameState | null>(null);
+  protected moves = signal<EdgeType[]>([]);
+  protected selectedMove = signal<EdgeType>(this.edgeTypes[0]);
 
   private nodeSize = 30;
 
-  protected maxSize = computed((): Position => {
+  protected bounds = computed((): Position => {
     const state = this.gameState();
     if(!state) return {x: 0, y: 0};
 
@@ -61,7 +65,6 @@ export class ScotlandYardGameComponent implements OnInit{
             type: e.type
           });
         }
-
       });
     }
 
@@ -81,7 +84,7 @@ export class ScotlandYardGameComponent implements OnInit{
     }
   }
 
-  protected temp(entry: GraphNode) {
+  protected getNodeColorClasses(entry: GraphNode) {
     let classes = '';
     for(const edge of entry.edges) {
       if(edge.type === EdgeType.TAXI && !classes.includes('taxi')) {
@@ -96,6 +99,16 @@ export class ScotlandYardGameComponent implements OnInit{
     return classes;
   }
 
+  protected addMove() {
+    this.moves.update((currentMoves) => [...currentMoves, this.selectedMove()]);
+  }
+
+  protected changeMove(event: Event) {
+    const target = event.target as HTMLSelectElement;
+
+    this.selectedMove.set(target.value as EdgeType);
+  }
+
   private getSession() {
     this.scotlandYardService.getSession().subscribe({
       next: res => {
@@ -103,4 +116,6 @@ export class ScotlandYardGameComponent implements OnInit{
       }
     });
   }
+
+
 }
