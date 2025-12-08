@@ -6,5 +6,6 @@ public enum GameType {
     QWIRKLE,
     JOLLY,
     RISK,
-    HASHI
+    HASHI,
+    SCOTLAND_YARD
 }
