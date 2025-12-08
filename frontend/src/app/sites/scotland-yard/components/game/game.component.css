@@ -1,0 +1,51 @@
+.game-container {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+
+
+    height: 600px;
+    width: 1000px;
+    gap: 2rem;
+}
+
+@media (max-width: 780px) {
+    .game-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+
+        gap: 3rem;
+
+        width: 100%;
+        height: 1000px;
+    }
+}
+
+.map {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.node {
+    position: absolute;
+    background-color: white;
+
+    text-align: center;
+    vertical-align: middle;
+
+    border-radius: 50%;
+    border: 1px solid black;
+
+    font-size: 10px;
+}
+
+.edge.taxi {
+    stroke: #f7ad2d;
+}
+.edge.bus {
+    stroke: #24ab6a;
+}
+.edge.metro {
+    stroke: #c9089c;
+}

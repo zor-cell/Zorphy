@@ -1,1 +1,33 @@
-<p>game works!</p>
+<app-main-header/>
+
+@let state = gameState();
+@if (state) {
+    <div class="main-container">
+        <div class="game-container">
+            <div>config</div>
+            <app-pan-container #map class="map">
+                <svg [ngStyle]="{width: `${maxSize().x}px`, height: `${maxSize().y}px`}" class="test">
+                    @for (edge of renderedEdges(); track edge.id) {
+                        <line stroke="black"
+                              stroke-width="1"
+                              [attr.x1]="edge.x1"
+                              [attr.y1]="edge.y1"
+                              [attr.x2]="edge.x2"
+                              [attr.y2]="edge.y2"
+                              class="edge"
+                              [class]="edge.type.toLowerCase()"
+                        >
+                        </line>
+                    }
+                </svg>
+
+                @for (entry of state.map; track entry.node.id) {
+                    <div [ngStyle]="getNodePositionStyle(entry.node.position)" class="node">
+                        {{ entry.node.id }}
+                    </div>
+                }
+            </app-pan-container>
+        </div>
+    </div>
+}
+
