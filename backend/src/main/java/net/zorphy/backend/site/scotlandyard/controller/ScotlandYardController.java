@@ -5,7 +5,11 @@ import net.zorphy.backend.site.all.controller.GameSessionBaseController;
 import net.zorphy.backend.site.scotlandyard.dto.game.GameConfig;
 import net.zorphy.backend.site.scotlandyard.dto.game.GameState;
 import net.zorphy.backend.site.scotlandyard.service.ScotlandYardService;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
+@RequestMapping("/scotland-yard")
 public class ScotlandYardController extends GameSessionBaseController<GameConfig, GameState> {
     private final ScotlandYardService scotlandYardService;
 

@@ -1000,117 +1000,117 @@
     {
       "from": 108,
       "to": 115,
-      "type": "WATER"
+      "type": "FERRY"
     },
     {
       "from": 115,
       "to": 157,
-      "type": "WATER"
+      "type": "FERRY"
     },
     {
       "from": 157,
       "to": 194,
-      "type": "WATER"
+      "type": "FERRY"
     },
     {
       "from": 1,
       "to": 46,
-      "type": "UNDERGROUND"
+      "type": "METRO"
     },
     {
       "from": 13,
       "to": 46,
-      "type": "UNDERGROUND"
+      "type": "METRO"
     },
     {
       "from": 13,
       "to": 67,
-      "type": "UNDERGROUND"
+      "type": "METRO"
     },
     {
       "from": 13,
       "to": 89,
-      "type": "UNDERGROUND"
+      "type": "METRO"
     },
     {
       "from": 46,
       "to": 74,
-      "type": "UNDERGROUND"
+      "type": "METRO"
     },
     {
       "from": 46,
       "to": 79,
-      "type": "UNDERGROUND"
+      "type": "METRO"
     },
     {
       "from": 67,
       "to": 79,
-      "type": "UNDERGROUND"
+      "type": "METRO"
     },
     {
       "from": 67,
       "to": 89,
-      "type": "UNDERGROUND"
+      "type": "METRO"
     },
     {
       "from": 67,
       "to": 111,
-      "type": "UNDERGROUND"
+      "type": "METRO"
     },
     {
       "from": 79,
       "to": 93,
-      "type": "UNDERGROUND"
+      "type": "METRO"
     },
     {
       "from": 79,
       "to": 111,
-      "type": "UNDERGROUND"
+      "type": "METRO"
     },
     {
       "from": 89,
       "to": 128,
-      "type": "UNDERGROUND"
+      "type": "METRO"
     },
     {
       "from": 89,
       "to": 140,
-      "type": "UNDERGROUND"
+      "type": "METRO"
     },
     {
       "from": 111,
       "to": 153,
-      "type": "UNDERGROUND"
+      "type": "METRO"
     },
     {
       "from": 111,
       "to": 163,
-      "type": "UNDERGROUND"
+      "type": "METRO"
     },
     {
       "from": 128,
       "to": 140,
-      "type": "UNDERGROUND"
+      "type": "METRO"
     },
     {
       "from": 128,
       "to": 185,
-      "type": "UNDERGROUND"
+      "type": "METRO"
     },
     {
       "from": 140,
       "to": 153,
-      "type": "UNDERGROUND"
+      "type": "METRO"
     },
     {
       "from": 153,
       "to": 163,
-      "type": "UNDERGROUND"
+      "type": "METRO"
     },
     {
       "from": 153,
       "to": 185,
-      "type": "UNDERGROUND"
+      "type": "METRO"
     },
     {
       "from": 1,

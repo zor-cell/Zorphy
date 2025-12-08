@@ -52,6 +52,8 @@ public class ScotlandYardServiceImpl implements ScotlandYardService {
             );
             var edges = new ArrayList<Edge>();
             for(JsonEdge jsonEdge : graph.edges()) {
+                if(jsonNode.id() != jsonEdge.from() && jsonNode.id() != jsonEdge.to()) continue;
+
                 int to;
                 if(jsonNode.id() == jsonEdge.from()) {
                     to = jsonEdge.to();
