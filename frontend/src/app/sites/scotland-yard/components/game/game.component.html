@@ -8,7 +8,10 @@
 
                 <div class="highlighted-container transport-container">
                     <form [formGroup]="heatMapForm" class="inputs-container">
-                        <input class="number-input-lg position-input" type="number" placeholder="Mr. X Position" formControlName="startNode">
+                        <h3 class="config-header">Mr. X</h3>
+
+                        <input class="number-input-lg position-input" type="number" placeholder="Mr. X Position"
+                               formControlName="startNode">
 
                         <div class="move-config">
                             <select class="move-select" [formControl]="selectedMoveControl">
@@ -24,25 +27,40 @@
 
                     <div class="moves-container">
                         @for (move of moves(); track $index) {
-                            <div class="move" [class]="move.toString().toLowerCase()">
-                                {{ move }}
+                            <div class="move-container">
+                                <button class="small-btn" style="height: fit-content" (click)="deleteMove($index)">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                                <div class="move" [class]="move.toString().toLowerCase()">
+                                    {{ move }}
+                                </div>
                             </div>
                         }
                     </div>
                 </div>
                 <div class="highlighted-container transport-container">
-                    <div class="move-config">
-                        <input class="number-input-lg position-input" type="number" placeholder="Detective Position" [formControl]="selectedPlayerControl">
+                    <div class="inputs-container">
+                        <h3 class="config-header">Detectives</h3>
 
-                        <button class="small-btn" (click)="addPlayer()">
-                            <i class="bi bi-plus-circle"></i>
-                        </button>
+                        <div class="move-config">
+                            <input class="number-input-lg position-input" type="number" placeholder="Detective Position"
+                                   [formControl]="selectedPlayerControl">
+
+                            <button class="small-btn" (click)="addPlayer()">
+                                <i class="bi bi-plus-circle"></i>
+                            </button>
+                        </div>
                     </div>
 
                     <div class="moves-container">
-                        @for(player of players(); track $index) {
-                            <div class="move">
-                                {{player}}
+                        @for (player of players(); track $index) {
+                            <div class="move-container">
+                                <button class="small-btn" style="height: fit-content" (click)="deletePlayer($index)">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                                <div class="move">
+                                    {{ player }}
+                                </div>
                             </div>
                         }
                     </div>
@@ -50,7 +68,8 @@
 
             </div>
 
-            <app-pan-container [centerPosition]="{x: 0, y: 0}" class="map">
+            <app-pan-container [centerPosition]="{x: -bounds().x / 4, y: -bounds().y / 4}" class="map">
+                <!-- graph edges -->
                 <svg [ngStyle]="{width: `${bounds().x}px`, height: `${bounds().y}px`}" class="test">
                     @for (edge of renderedEdges(); track edge.id) {
                         <line stroke="black"
@@ -66,6 +85,7 @@
                     }
                 </svg>
 
+                <!-- available nodes -->
                 @for (entry of renderedNodes(); track entry.node.id) {
                     <div [ngStyle]="getNodePositionStyle(entry.node.position)" class="node"
                          [class]="getNodeColorClasses(entry)">
@@ -73,11 +93,21 @@
                     </div>
                 }
 
-                @for(entry of renderedPlayers(); track entry.node.id) {
+                <!-- forbidden player nodes -->
+                @for (entry of renderedPlayers(); track entry.node.id) {
                     <div [ngStyle]="getNodePositionStyle(entry.node.position)" class="node black">
                         <div class="node-text">{{ entry.node.id }}</div>
                     </div>
                 }
+
+                <!-- start node -->
+                @let start = renderedStart();
+                @if (start) {
+                    <div [ngStyle]="getNodePositionStyle(start.node.position)" class="node start">
+                        <div class="node-text">{{ start.node.id }}</div>
+                    </div>
+                }
+
 
             </app-pan-container>
         </div>

@@ -37,11 +37,18 @@ export class ScotlandYardGameComponent implements OnInit{
   })
   protected selectedMoveControl = this.fb.control<EdgeType>(EdgeType.TAXI);
   protected selectedPlayerControl = this.fb.control<number>(13);
+  protected startPosition = toSignal(this.heatMapForm.controls.startNode.valueChanges, {initialValue: this.heatMapForm.controls.startNode.value});
   protected moves = toSignal(this.heatMapForm.controls.moves.valueChanges);
   protected players = toSignal(this.heatMapForm.controls.playerNodes.valueChanges);
 
   protected edgeTypes = Object.values(EdgeType);
   private nodeSize = 30;
+
+  constructor() {
+    this.heatMapForm.valueChanges.subscribe(change => {
+      this.getHeatMap();
+    })
+  }
 
   protected bounds = computed((): Position => {
     const state = this.gameState();
@@ -55,6 +62,15 @@ export class ScotlandYardGameComponent implements OnInit{
     })
 
     return {x: maxX, y: maxY};
+  })
+
+  protected renderedStart = computed(() => {
+    const nodes = this.gameState()?.map;
+    const start = this.startPosition();
+
+    if(!nodes) return undefined;
+
+    return nodes.find(n => start === n.node.id);
   })
 
   protected renderedPlayers = computed(() => {
@@ -150,8 +166,12 @@ export class ScotlandYardGameComponent implements OnInit{
 
       this.heatMapForm.controls.moves.setValue([...currentMoves, move]);
     }
+  }
 
-    this.getHeatMap();
+  protected deleteMove(index: number) {
+    const moveControl = this.heatMapForm.controls.moves;
+    const updated = [...moveControl.value.slice(0, index), ...moveControl.value.slice(index + 1)]
+    this.heatMapForm.controls.moves.setValue(updated);
   }
 
   protected addPlayer() {
@@ -162,15 +182,17 @@ export class ScotlandYardGameComponent implements OnInit{
       const currentNodes = playerControl.value;
 
       this.heatMapForm.controls.playerNodes.setValue([...currentNodes, playerNode]);
-
-      this.getHeatMap();
     }
+  }
 
+  protected deletePlayer(index: number) {
+    const playerControl = this.heatMapForm.controls.playerNodes;
+    const updated = [...playerControl.value.slice(0, index), ...playerControl.value.slice(index + 1)]
+    this.heatMapForm.controls.playerNodes.setValue(updated);
   }
 
   private getHeatMap() {
     const config = this.heatMapForm.getRawValue() as HeatMapConfig;
-    console.log(config)
 
     this.scotlandYardService.getHeatMap(config).subscribe(res => {
       this.heatMap.set(res);

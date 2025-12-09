@@ -3,7 +3,7 @@
     grid-template-columns: 200px 1fr;
 
 
-    height: 600px;
+    height: 700px;
     width: 1000px;
     gap: 2rem;
 }
@@ -54,16 +54,6 @@
     font-size: 14px;
 }
 
-.edge.taxi {
-    stroke: #f7ad2d;
-}
-.edge.bus {
-    stroke: #24ab6a;
-}
-.edge.metro {
-    stroke: #FF00FF;
-}
-
 .config {
     display: flex;
 
@@ -101,6 +91,14 @@
     overflow-y: auto;
 }
 
+.move-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    gap: 0.5rem;
+}
+
 .move-config {
     display: flex;
     flex-direction: row;
@@ -126,14 +124,22 @@
 
 .taxi {
     background-color: #f7ad2d;
+    stroke: #f7ad2d;
+
 }
 .bus {
     background-color: #24ab6a;
+    stroke: #24ab6a;
 }
 .metro {
     background-color: #FF00FF;
+    stroke: #FF00FF;
 }
 .black {
     background-color: black;
+    color: white;
+}
+.start {
+    background-color: blue;
     color: white;
 }
