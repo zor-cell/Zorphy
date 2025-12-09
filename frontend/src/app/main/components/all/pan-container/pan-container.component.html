@@ -10,14 +10,14 @@
      (wheel)="scroll($event)"
 >
     <div class="pan-actions">
-        <button class="small-btn" (click)="resetOffset()">
+        <button class="small-btn" (click)="reset()">
             <i class="bi bi-crosshair"></i>
         </button>
         <button class="small-btn" (click)="rotate()">
             <i class="bi bi-arrow-clockwise"></i>
         </button>
     </div>
-    <div [ngStyle]="transformStyle" class="pan-content">
+    <div [ngStyle]="transformStyle()" class="pan-content">
         <ng-content></ng-content>
     </div>
 </div>

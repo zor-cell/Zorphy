@@ -1,4 +1,4 @@
-import {Component, ElementRef, inject, input, Input} from '@angular/core';
+import {Component, computed, ElementRef, inject, input, signal} from '@angular/core';
 import {NgStyle} from "@angular/common";
 import {Position} from "../../../dto/all/Position";
 
@@ -17,71 +17,54 @@ export class PanContainerComponent {
     public canPan = input<boolean>(true);
     public canZoom = input<boolean>(true);
     public canRotate = input<boolean>(true);
-    public centerPosition = input<Position>({
-        x: 0,
-        y: 0
-    })
+    public centerPosition = input<Position>({x: 0, y: 0})
+
+    private panOffset = signal<Position>({x: 0, y: 0});
+    private zoomScale = signal<number>(1);
+    private rotation = signal<number>(0);
 
     private isPanning = false;
-    private panOffset: Position = {
-        x: 0,
-        y: 0
-    };
-    private lastMousePosition: Position = {
-        x: 0,
-        y: 0
-    };
-
+    private lastMousePosition: Position = {x: 0, y: 0};
+    private initialPinchDistance: number | null = null;
     private minZoom: number = 0.3;
     private maxZoom: number = 2;
-    private zoomScale: number = 1;
-    private initialPinchDistance: number | null = null;
 
-    private rotation: number = 0;
+    protected transformStyle = computed(() => {
+        const off = this.panOffset();
+        const center = this.centerPosition();
 
-    get transformStyle() {
+        const x = center.x + off.x;
+        const y = center.y + off.y;
+
         return {
-            transform: `translate(${this.centerPosition().x + this.panOffset.x}px, ${this.centerPosition().y + this.panOffset.y}px)
-        scale(${this.zoomScale})
-        rotate(${this.rotation}deg)`,
+            transform: `translate(${x}px, ${y}px) scale(${this.zoomScale()}) rotate(${this.rotation()}deg)`,
             transformOrigin: `0 0`
         };
-    }
+    })
 
-    protected resetOffset() {
-        this.panOffset = {
+    protected reset() {
+        this.panOffset.set({
             x: 0,
             y: 0
-        };
-        this.zoomScale = 1;
-        this.rotation = 0;
+        });
+        this.zoomScale.set(1);
+        this.rotation.set(0);
     }
 
     protected rotate() {
-        this.rotation = (this.rotation + 90) % 360;
+        if(!this.canRotate()) return;
+
+        this.rotation.update(currentRotation => (currentRotation + 90) % 360);
     }
 
+    // pan logic
     protected startPan(event: MouseEvent | TouchEvent) {
         this.isPanning = true;
-
         this.lastMousePosition = this.getEventPos(event);
     }
 
-    protected touchStart(event: TouchEvent) {
-        if (event.touches.length === 1) {
-            this.startPan(event);
-        } else if (event.touches.length === 2) {
-            this.initialPinchDistance = this.getPinchDistance(event);
-            event.preventDefault();
-        }
-    }
-
-    protected touchMove(event: TouchEvent) {
-        if(event.touches.length === 1) {
-            this.pan(event);
-        } else if(event.touches.length === 2) {
-            this.pinch(event);
-        }
+    protected endPan() {
+        this.isPanning = false;
     }
 
     protected pan(event: MouseEvent | TouchEvent) {
@@ -93,16 +76,45 @@ export class PanContainerComponent {
         const dx = eventPos.x - this.lastMousePosition.x;
         const dy = eventPos.y - this.lastMousePosition.y;
 
-        this.panOffset.x += dx;
-        this.panOffset.y += dy;
-        this.lastMousePosition = {
-            x: eventPos.x,
-            y: eventPos.y
-        };
+        this.panOffset.update(prev => ({
+            x: prev.x + dx,
+            y: prev.y + dy
+        }))
+        this.lastMousePosition = eventPos;
     }
 
-    protected endPan() {
-        this.isPanning = false;
+    // zoom logic
+    private applyZoomAtPosition(newScaleRaw: number, screenX: number, screenY: number) {
+        const currentScale = this.zoomScale();
+        const newScale = Math.min(this.maxZoom, Math.max(this.minZoom, newScaleRaw));
+
+        if (newScale === currentScale) return;
+
+        const rect = this.elementRef.nativeElement.getBoundingClientRect();
+
+        // calculate mouse position relative to container
+        const relativeX = screenX - rect.left;
+        const relativeY = screenY - rect.top;
+
+        // current total translation
+        const currentTotalX = this.centerPosition().x + this.panOffset().x;
+        const currentTotalY = this.centerPosition().y + this.panOffset().y;
+
+        // calculate world point under the cursor
+        const worldX = (relativeX - currentTotalX) / currentScale;
+        const worldY = (relativeY - currentTotalY) / currentScale;
+
+        this.zoomScale.set(newScale);
+
+        // calculate new translation to keep world point under cursor
+        const newTotalX = relativeX - (worldX * newScale);
+        const newTotalY = relativeY - (worldY * newScale);
+
+        // update pan offset
+        this.panOffset.set({
+            x: newTotalX - this.centerPosition().x,
+            y: newTotalY - this.centerPosition().y
+        });
     }
 
     protected scroll(event: WheelEvent) {
@@ -111,43 +123,46 @@ export class PanContainerComponent {
 
         const delta = -event.deltaY;
         const zoomFactor = delta > 0 ? 1.1 : 0.9;
-        const newScale = Math.min(this.maxZoom, Math.max(this.minZoom, this.zoomScale * zoomFactor));
+        const targetScale = this.zoomScale() * zoomFactor;
 
-        if (newScale === this.zoomScale) return;
-
-        const rect = this.elementRef.nativeElement.getBoundingClientRect();
-        const mouseX = event.clientX - rect.left;
-        const mouseY = event.clientY - rect.top;
-
-        const currentTranslateX = this.centerPosition().x + this.panOffset.x;
-        const currentTranslateY = this.centerPosition().y + this.panOffset.y;
-
-        const worldX = (mouseX - currentTranslateX) / this.zoomScale;
-        const worldY = (mouseY - currentTranslateY) / this.zoomScale;
-
-        this.zoomScale = newScale;
-
-        const newTranslateX = mouseX - (worldX * newScale);
-        const newTranslateY = mouseY - (worldY * newScale);
-
-        this.panOffset.x = newTranslateX - this.centerPosition().x;
-        this.panOffset.y = newTranslateY - this.centerPosition().y;
+        this.applyZoomAtPosition(targetScale, event.clientX, event.clientY);
     }
 
-    protected pinch(event: TouchEvent) {
-        if (!this.canZoom() || event.touches.length !== 2) return;
-        event.preventDefault();
-
-        const currentDistance = this.getPinchDistance(event);
-        if (this.initialPinchDistance) {
-            const scaleChange = currentDistance / this.initialPinchDistance;
-            const newZoom = this.zoomScale * scaleChange;
-
-            this.zoomScale = Math.min(this.maxZoom, Math.max(this.minZoom, newZoom));
-            this.initialPinchDistance = currentDistance; // Update for next frame
+    protected touchStart(event: TouchEvent) {
+        if (event.touches.length === 1) {
+            this.startPan(event);
+        } else if (event.touches.length === 2) {
+            this.initialPinchDistance = this.getPinchDistance(event);
+            this.lastMousePosition = this.getMidpoint(event);
+            event.preventDefault();
         }
     }
 
+    protected touchMove(event: TouchEvent) {
+        if (event.touches.length === 1) {
+            this.pan(event);
+        } else if (event.touches.length === 2) {
+            this.pinch(event);
+        }
+    }
+
+    protected pinch(event: TouchEvent) {
+        if (!this.canZoom() || event.touches.length !== 2 || !this.initialPinchDistance) return;
+        event.preventDefault();
+
+        const currentDistance = this.getPinchDistance(event);
+        const scaleChange = currentDistance / this.initialPinchDistance;
+        const targetScale = this.zoomScale() * scaleChange;
+
+        // Get the center point between fingers
+        const midpoint = this.getMidpoint(event);
+
+        this.applyZoomAtPosition(targetScale, midpoint.x, midpoint.y);
+
+        this.initialPinchDistance = currentDistance;
+    }
+
+    // helper methods
     private getEventPos(event: MouseEvent | TouchEvent): Position {
         if (event instanceof MouseEvent) {
             return {
@@ -168,5 +183,14 @@ export class PanContainerComponent {
         const dx = touch1.clientX - touch2.clientX;
         const dy = touch1.clientY - touch2.clientY;
         return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    private getMidpoint(event: TouchEvent): Position {
+        const t1 = event.touches[0];
+        const t2 = event.touches[1];
+        return {
+            x: (t1.clientX + t2.clientX) / 2,
+            y: (t1.clientY + t2.clientY) / 2
+        };
     }
 }
