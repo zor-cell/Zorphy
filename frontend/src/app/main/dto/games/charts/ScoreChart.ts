@@ -14,10 +14,10 @@ export class ScoreChart extends BaseChart {
         ...BaseChart.options,
         scales: {
             x: {
-                type: "category",
+                type: "linear",
                 title: {
                     display: true,
-                    text: 'Date',
+                    text: 'Game',
                     font: BaseChart.axisFont
                 }
             },
@@ -51,11 +51,20 @@ export class ScoreChart extends BaseChart {
     }
 
     static refresh(data: ChartDataHistory) {
-        const dataPoints = data.entries.map(entry => ({
-            x: new Date(entry.date).toLocaleString(),
+        data.entries.sort((a, b) => {
+            const dateA = new Date(a.date).getTime();
+            const dateB = new Date(b.date).getTime();
+
+            return dateA - dateB;
+        });
+
+        const dataPoints = data.entries.map((entry, i) => ({
+            x: i + 1,
             y: entry.score,
-            won: entry.won
+            won: entry.won,
+            label: new Date(entry.date).toLocaleString()
         }));
+        console.log(dataPoints);
 
         const pointColors = data.entries.map(entry =>
             entry.won ? '#4caf50' : '#f44336'
