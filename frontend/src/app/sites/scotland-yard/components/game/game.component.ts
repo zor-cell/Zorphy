@@ -5,8 +5,8 @@ import {MainHeaderComponent} from "../../../../main/components/all/main-header/m
 import {NgStyle} from "@angular/common";
 import {PanContainerComponent} from "../../../../main/components/all/pan-container/pan-container.component";
 import {Position} from "../../../../main/dto/all/Position";
-import {GraphNode} from "../../dto/GraphNode";
-import {EdgeType} from "../../dto/EdgeType";
+import {GraphNode} from "../../dto/graph/GraphNode";
+import {EdgeType} from "../../dto/graph/EdgeType";
 import {HeatMapEntry} from "../../dto/HeatMapEntry";
 import {NonNullableFormBuilder, ReactiveFormsModule} from "@angular/forms";
 import {HeatMapConfig} from "../../dto/HeatMapConfig";

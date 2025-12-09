@@ -1,9 +1,9 @@
 package net.zorphy.backend.site.scotlandyard.service.util;
 
-import net.zorphy.backend.site.scotlandyard.dto.Edge;
-import net.zorphy.backend.site.scotlandyard.dto.EdgeType;
+import net.zorphy.backend.site.scotlandyard.dto.graph.Edge;
+import net.zorphy.backend.site.scotlandyard.dto.graph.EdgeType;
 import net.zorphy.backend.site.scotlandyard.dto.HeatMapEntry;
-import net.zorphy.backend.site.scotlandyard.dto.Node;
+import net.zorphy.backend.site.scotlandyard.dto.graph.Node;
 
 import java.util.*;
 

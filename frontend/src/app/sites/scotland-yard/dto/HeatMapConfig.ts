@@ -1,4 +1,4 @@
-import {EdgeType} from "./EdgeType";
+import {EdgeType} from "./graph/EdgeType";
 
 export interface HeatMapConfig {
     startNode: number;

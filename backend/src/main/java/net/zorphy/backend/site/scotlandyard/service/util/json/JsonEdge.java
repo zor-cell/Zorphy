@@ -1,6 +1,6 @@
 package net.zorphy.backend.site.scotlandyard.service.util.json;
 
-import net.zorphy.backend.site.scotlandyard.dto.EdgeType;
+import net.zorphy.backend.site.scotlandyard.dto.graph.EdgeType;
 
 public record JsonEdge(
         int from,

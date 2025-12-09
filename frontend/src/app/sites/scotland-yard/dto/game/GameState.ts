@@ -1,6 +1,6 @@
 import {GameStateBase} from "../../../all/dto/GameStateBase";
 import {GameConfig} from "./GameConfig";
-import {GraphNode} from "../GraphNode";
+import {GraphNode} from "../graph/GraphNode";
 
 export interface GameState extends GameStateBase {
     gameConfig: GameConfig;

@@ -1,4 +1,4 @@
-package net.zorphy.backend.site.scotlandyard.dto;
+package net.zorphy.backend.site.scotlandyard.dto.graph;
 
 import java.util.List;
 

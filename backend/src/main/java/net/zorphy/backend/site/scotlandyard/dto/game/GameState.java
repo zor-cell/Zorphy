@@ -1,7 +1,7 @@
 package net.zorphy.backend.site.scotlandyard.dto.game;
 
 import net.zorphy.backend.site.all.dto.GameStateBase;
-import net.zorphy.backend.site.scotlandyard.dto.GraphNode;
+import net.zorphy.backend.site.scotlandyard.dto.graph.GraphNode;
 
 import java.time.Instant;
 import java.util.List;
