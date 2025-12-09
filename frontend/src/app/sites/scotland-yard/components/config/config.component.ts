@@ -1,6 +1,6 @@
 import {Component, inject, signal} from '@angular/core';
 import {NonNullableFormBuilder, ReactiveFormsModule} from "@angular/forms";
-import {ScotlandYardService} from "../../services/scotland-yard.service";
+import {ScotlandYardService} from "../../scotland-yard.service";
 import {Team} from "../../../../main/dto/all/Team";
 import {CustomValidators} from "../../../../main/classes/validators";
 import {MapType} from "../../dto/MapType";

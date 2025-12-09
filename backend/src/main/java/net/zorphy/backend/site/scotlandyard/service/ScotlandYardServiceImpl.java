@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,7 +48,7 @@ public class ScotlandYardServiceImpl implements ScotlandYardService {
             throw new InvalidOperationException("Starting node id is not valid");
         }
 
-        return ScotlandYardUtil.computeHeatmap(map, found, heatMapConfig.moves());
+        return ScotlandYardUtil.computeHeatmap(map, found, heatMapConfig.moves(), new HashSet<>(heatMapConfig.playerNodes()));
     }
 
     private static List<GraphNode> listFromMap(Map<Node, List<Edge>> map) {

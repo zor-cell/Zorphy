@@ -7,20 +7,20 @@
             <div class="config">
 
                 <div class="highlighted-container transport-container">
-                    <div class="inputs-container">
-                        <input class="number-input-lg position-input" type="number" placeholder="Start Position">
+                    <form [formGroup]="heatMapForm" class="inputs-container">
+                        <input class="number-input-lg position-input" type="number" placeholder="Mr. X Position" formControlName="startNode">
 
                         <div class="move-config">
-                            <select class="move-select" (change)="changeMove($event)">
+                            <select class="move-select" [formControl]="selectedMoveControl">
                                 @for (type of edgeTypes; track type) {
-                                    <option>{{ type }}</option>
+                                    <option [ngValue]="type">{{ type }}</option>
                                 }
                             </select>
                             <button class="small-btn" (click)="addMove()">
                                 <i class="bi bi-plus-circle"></i>
                             </button>
                         </div>
-                    </div>
+                    </form>
 
                     <div class="moves-container">
                         @for (move of moves(); track $index) {
@@ -30,10 +30,27 @@
                         }
                     </div>
                 </div>
+                <div class="highlighted-container transport-container">
+                    <div class="move-config">
+                        <input class="number-input-lg position-input" type="number" placeholder="Detective Position" [formControl]="selectedPlayerControl">
+
+                        <button class="small-btn" (click)="addPlayer()">
+                            <i class="bi bi-plus-circle"></i>
+                        </button>
+                    </div>
+
+                    <div class="moves-container">
+                        @for(player of players(); track $index) {
+                            <div class="move">
+                                {{player}}
+                            </div>
+                        }
+                    </div>
+                </div>
 
             </div>
 
-            <app-pan-container #map [centerPosition]="{x: 0, y: 0}" class="map">
+            <app-pan-container [centerPosition]="{x: 0, y: 0}" class="map">
                 <svg [ngStyle]="{width: `${bounds().x}px`, height: `${bounds().y}px`}" class="test">
                     @for (edge of renderedEdges(); track edge.id) {
                         <line stroke="black"
@@ -49,17 +66,19 @@
                     }
                 </svg>
 
-                @for (entry of state.map; track entry.node.id) {
+                @for (entry of renderedNodes(); track entry.node.id) {
                     <div [ngStyle]="getNodePositionStyle(entry.node.position)" class="node"
                          [class]="getNodeColorClasses(entry)">
                         <div class="node-text">{{ entry.node.id }}</div>
                     </div>
                 }
 
-                @for(entry of heatMap(); track entry.node.id) {
-                    <div [ngStyle]="getNodePositionStyle(entry.node.position, entry.count / maxHeatMapCount())" class="node highlighted">
+                @for(entry of renderedPlayers(); track entry.node.id) {
+                    <div [ngStyle]="getNodePositionStyle(entry.node.position)" class="node black">
+                        <div class="node-text">{{ entry.node.id }}</div>
                     </div>
                 }
+
             </app-pan-container>
         </div>
     </div>

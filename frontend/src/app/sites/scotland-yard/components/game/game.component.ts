@@ -1,5 +1,5 @@
-import {Component, computed, inject, OnInit, signal, viewChild} from '@angular/core';
-import {ScotlandYardService} from "../../services/scotland-yard.service";
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
+import {ScotlandYardService} from "../../scotland-yard.service";
 import {GameState} from "../../dto/game/GameState";
 import {MainHeaderComponent} from "../../../../main/components/all/main-header/main-header.component";
 import {NgStyle} from "@angular/common";
@@ -7,34 +7,41 @@ import {PanContainerComponent} from "../../../../main/components/all/pan-contain
 import {Position} from "../../../../main/dto/all/Position";
 import {GraphNode} from "../../dto/GraphNode";
 import {EdgeType} from "../../dto/EdgeType";
-import {MapType} from "../../dto/MapType";
 import {HeatMapEntry} from "../../dto/HeatMapEntry";
+import {NonNullableFormBuilder, ReactiveFormsModule} from "@angular/forms";
+import {HeatMapConfig} from "../../dto/HeatMapConfig";
+import {toSignal} from "@angular/core/rxjs-interop";
 
 @Component({
   selector: 'scotland-yard-game',
   imports: [
     MainHeaderComponent,
     PanContainerComponent,
-    NgStyle
+    NgStyle,
+    ReactiveFormsModule
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css'
 })
 export class ScotlandYardGameComponent implements OnInit{
+  private fb = inject(NonNullableFormBuilder);
   protected scotlandYardService = inject(ScotlandYardService);
-
-  protected edgeTypes = Object.values(EdgeType);
 
   protected gameState = signal<GameState | null>(null);
   protected heatMap = signal<HeatMapEntry[]>([]);
-  protected moves = signal<EdgeType[]>([]);
-  protected selectedMove = signal<EdgeType>(this.edgeTypes[0]);
 
-  private nodeSize = 30;
-
-  protected maxHeatMapCount = computed(() => {
-    return Math.max(0, ...this.heatMap().map(x => x.count));
+  protected heatMapForm = this.fb.group({
+    startNode: this.fb.control<number>(67),
+    moves: this.fb.control<EdgeType[]>([]),
+    playerNodes: this.fb.control<number[]>([])
   })
+  protected selectedMoveControl = this.fb.control<EdgeType>(EdgeType.TAXI);
+  protected selectedPlayerControl = this.fb.control<number>(13);
+  protected moves = toSignal(this.heatMapForm.controls.moves.valueChanges);
+  protected players = toSignal(this.heatMapForm.controls.playerNodes.valueChanges);
+
+  protected edgeTypes = Object.values(EdgeType);
+  private nodeSize = 30;
 
   protected bounds = computed((): Position => {
     const state = this.gameState();
@@ -49,6 +56,36 @@ export class ScotlandYardGameComponent implements OnInit{
 
     return {x: maxX, y: maxY};
   })
+
+  protected renderedPlayers = computed(() => {
+    const players = this.players();
+    const nodes = this.gameState()?.map;
+
+    if(!players || !nodes) return [];
+
+    return nodes.filter(n => players.includes(n.node.id));
+  })
+
+  protected renderedNodes = computed(() => {
+    const state = this.gameState();
+    const heatMap = this.heatMap();
+
+    if(!state) return [];
+
+    if(heatMap.length === 0) {
+      return state.map;
+    }
+
+    const nodes = [];
+    for(const entry of heatMap) {
+      const found =  state.map.find(x => x.node.id === entry.node.id);
+      if(found) {
+        nodes.push(found);
+      }
+    }
+
+   return nodes;
+  });
 
   protected renderedEdges = computed(() => {
     const edges: any[] = [];
@@ -106,22 +143,34 @@ export class ScotlandYardGameComponent implements OnInit{
   }
 
   protected addMove() {
-    this.moves.update((currentMoves) => [...currentMoves, this.selectedMove()]);
+    const move = this.selectedMoveControl.value;
+    if (move) {
+      const moveControl = this.heatMapForm.controls.moves;
+      const currentMoves = moveControl.value;
+
+      this.heatMapForm.controls.moves.setValue([...currentMoves, move]);
+    }
 
     this.getHeatMap();
   }
 
-  protected changeMove(event: Event) {
-    const target = event.target as HTMLSelectElement;
+  protected addPlayer() {
+    const playerNode = this.selectedPlayerControl.value;
+    const playerControl = this.heatMapForm.controls.playerNodes;
 
-    this.selectedMove.set(target.value as EdgeType);
+    if (playerNode && !playerControl.value.includes(playerNode)) {
+      const currentNodes = playerControl.value;
+
+      this.heatMapForm.controls.playerNodes.setValue([...currentNodes, playerNode]);
+
+      this.getHeatMap();
+    }
+
   }
 
   private getHeatMap() {
-    const config = {
-      startNode: 1,
-      moves: this.moves()
-    };
+    const config = this.heatMapForm.getRawValue() as HeatMapConfig;
+    console.log(config)
 
     this.scotlandYardService.getHeatMap(config).subscribe(res => {
       this.heatMap.set(res);

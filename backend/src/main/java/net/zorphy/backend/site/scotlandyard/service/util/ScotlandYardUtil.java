@@ -8,9 +8,10 @@ import net.zorphy.backend.site.scotlandyard.dto.Node;
 import java.util.*;
 
 public class ScotlandYardUtil {
-    public static List<HeatMapEntry> computeHeatmap(Map<Node, List<Edge>> graph, Node start, List<EdgeType> moves) {
+    public static List<HeatMapEntry> computeHeatmap(Map<Node, List<Edge>> graph, Node start, List<EdgeType> moves, Set<Integer> forbiddenNodes) {
         Map<Node, Integer> heatmap = new HashMap<>();
 
+        //Set<Node> visited = new HashSet<>();
         Queue<Node> queue = new LinkedList<>();
         queue.add(start);
 
@@ -28,6 +29,10 @@ public class ScotlandYardUtil {
                         .toList();
 
                 for (Node neighbor : neighbors) {
+                    if(forbiddenNodes.contains(neighbor.id())) {
+                        continue;
+                    }
+
                     //add to counter heatmap if its the last stage
                     if(j == moves.size() - 1) {
                         heatmap.merge(neighbor, 1, Integer::sum);
