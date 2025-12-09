@@ -33,6 +33,11 @@
                         </div>
                     </div>
 
+                    <!-- show data charts -->
+                    @for(chartData of stats.chartData; track $index) {
+                        <game-data-chart [chartData]="chartData"/>
+                    }
+
                     <!-- dynamically render game specific stats -->
                     <div>
                         <div class="stats-header">Game Specific Stats</div>
@@ -55,10 +60,7 @@
                         </div>
                     </div>-->
 
-                    <!-- show data charts -->
-                    @for(chartData of stats.chartData; track $index) {
-                        <game-data-chart [chartData]="chartData"/>
-                    }
+
                 }
             </div>
         </div>
