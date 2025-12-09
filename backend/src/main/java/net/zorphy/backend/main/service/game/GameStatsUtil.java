@@ -2,7 +2,10 @@ package net.zorphy.backend.main.service.game;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.zorphy.backend.main.dto.game.GameType;
-import net.zorphy.backend.main.dto.game.stats.*;
+import net.zorphy.backend.main.dto.game.stats.GameSpecificStats;
+import net.zorphy.backend.main.dto.game.stats.GameStats;
+import net.zorphy.backend.main.dto.game.stats.chart.ChartData;
+import net.zorphy.backend.main.dto.game.stats.chart.ChartEntry;
 import net.zorphy.backend.main.dto.game.stats.correlation.CorrelationAxisType;
 import net.zorphy.backend.main.dto.game.stats.correlation.CorrelationDataPoint;
 import net.zorphy.backend.main.dto.game.stats.correlation.CorrelationMetadata;
@@ -45,6 +48,10 @@ public class GameStatsUtil {
         List<CorrelationResult> correlations = new ArrayList<>();
         List<CorrelationDataPoint> startingPositionToScore = new ArrayList<>();
 
+        //chart data
+        List<ChartData> chartData = new ArrayList<>();
+        List<ChartEntry> scoreEntries = new ArrayList<>();
+
         int gamesPlayed = 0;
         int gamesWon = 0;
 
@@ -71,7 +78,7 @@ public class GameStatsUtil {
                 }
 
                 //update opponents
-                if(playerIsWinner) {
+                if (playerIsWinner) {
                     //all players are counted since current player won
                     for (ResultTeamState teamResult : result.teams()) {
                         if (teamResult.equals(playerTeam)) continue;
@@ -82,7 +89,7 @@ public class GameStatsUtil {
                     }
                 } else {
                     //all players from winning team are counted
-                    for(var opponent : winnerTeam.team().players()) {
+                    for (var opponent : winnerTeam.team().players()) {
                         updatePlayerMap(opponentMap, opponent, false);
                     }
                 }
@@ -105,6 +112,13 @@ public class GameStatsUtil {
                 //correlation data
                 startingPositionToScore.add(new CorrelationDataPoint(
                         playerStartPosition + 1,
+                        curScore,
+                        playerIsWinner
+                ));
+
+                //chart data
+                scoreEntries.add(new ChartEntry(
+                        game.getPlayedAt(),
                         curScore,
                         playerIsWinner
                 ));
@@ -135,6 +149,11 @@ public class GameStatsUtil {
         ));
         correlations.add(startPosCorrelation);
 
+        //chart data
+        chartData.add(new ChartData(
+                scoreEntries
+        ));
+
         //game specific stats
         GameSpecificStats gameSpecificStats = null;
         GameSpecificStatsCalculator calc = statsCalculatorMap.get(gameType);
@@ -153,6 +172,7 @@ public class GameStatsUtil {
                 rival,
                 companion,
                 correlations,
+                chartData,
                 gameSpecificStats
         );
     }

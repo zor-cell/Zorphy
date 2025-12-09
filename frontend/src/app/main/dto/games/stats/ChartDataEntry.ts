@@ -1,4 +1,5 @@
-export interface ChartDataEntry<X, Y> {
-    dimension: X,
-    measure: Y
+export interface ChartDataEntry{
+    date: string;
+    score: number;
+    won: boolean;
 }

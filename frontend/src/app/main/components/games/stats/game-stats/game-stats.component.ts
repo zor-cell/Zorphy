@@ -10,6 +10,7 @@ import {CorrelationChartComponent} from "../correlation-chart/correlation-chart.
 import {DurationPipe} from "../../../../pipes/DurationPipe";
 import {GameStatsMetaComponent} from "../game-stats-meta/game-stats-meta.component";
 import {GameStatsMetricsComponent} from "../game-stats-metrics/game-stats-metrics.component";
+import {DataChartComponent} from "../data-chart/data-chart.component";
 
 @Component({
     selector: 'game-stats',
@@ -23,7 +24,8 @@ import {GameStatsMetricsComponent} from "../game-stats-metrics/game-stats-metric
         CorrelationChartComponent,
         GameStatsMetaComponent,
         DurationPipe,
-        GameStatsMetricsComponent
+        GameStatsMetricsComponent,
+        DataChartComponent
     ],
     templateUrl: './game-stats.component.html',
     standalone: true,

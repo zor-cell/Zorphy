@@ -1,5 +1,6 @@
 package net.zorphy.backend.main.dto.game.stats;
 
+import net.zorphy.backend.main.dto.game.stats.chart.ChartData;
 import net.zorphy.backend.main.dto.game.stats.correlation.CorrelationResult;
 import net.zorphy.backend.main.dto.game.stats.metrics.GameStatsMetrics;
 import net.zorphy.backend.main.dto.player.PlayerDetails;
@@ -19,6 +20,7 @@ public record GameStats(
         PlayerDetails rival,
         PlayerDetails companion,
         List<CorrelationResult> correlations,
+        List<ChartData> chartData,
         GameSpecificStats gameSpecific
 ) {
 }

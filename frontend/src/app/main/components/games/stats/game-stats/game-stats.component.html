@@ -46,14 +46,19 @@
                     </div>
 
                     <!-- show correlation charts -->
-                    <div>
+                    <!--<div>
                         <div class="stats-header">Correlation Stats</div>
                         <div class="correlations">
                             <div *ngFor="let correlation of stats.correlations">
                                 <game-correlation-chart [correlationData]="correlation"/>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
+
+                    <!-- show data charts -->
+                    @for(chartData of stats.chartData; track $index) {
+                        <game-data-chart [chartData]="chartData"/>
+                    }
                 }
             </div>
         </div>
