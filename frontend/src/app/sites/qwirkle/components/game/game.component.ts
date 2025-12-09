@@ -1,7 +1,7 @@
 import {Component, HostListener, inject, OnInit, ViewChild} from '@angular/core';
 import {QwirkleHandComponent} from "../hand/hand.component";
 import {QwirkleStackComponent} from "../stack/stack.component";
-import {QwirkleService} from "../../services/qwirkle.service";
+import {QwirkleService} from "../../qwirkle.service";
 import {GameState} from "../../dto/game/GameState";
 import {NgForOf, NgIf, NgStyle} from "@angular/common";
 import {QwirkleTileComponent} from "../tile/tile.component";

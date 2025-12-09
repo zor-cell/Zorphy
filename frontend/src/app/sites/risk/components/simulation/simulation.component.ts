@@ -1,5 +1,5 @@
 import {Component, effect, inject, signal} from '@angular/core';
-import {RiskService} from "../../services/risk.service";
+import {RiskService} from "../../risk.service";
 import {DataEntry} from "../../dto/DataEntry";
 import {NonNullableFormBuilder, ReactiveFormsModule} from "@angular/forms";
 import {SimulationConfig} from "../../dto/SimulationConfig";

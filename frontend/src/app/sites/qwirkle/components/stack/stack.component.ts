@@ -4,7 +4,7 @@ import {QwirkleTileComponent} from "../tile/tile.component";
 import {NgForOf} from "@angular/common";
 import {Tile} from "../../dto/tile/Tile";
 import {FormsModule} from "@angular/forms";
-import {QwirkleService} from "../../services/qwirkle.service";
+import {QwirkleService} from "../../qwirkle.service";
 import {GameState} from "../../dto/game/GameState";
 import {SelectionInfo} from "../../dto/SelectionInfo";
 

@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {Globals} from "../../../main/classes/globals";
+import {Globals} from "../../main/classes/globals";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {MoveRequest, SolveRequest, UndoRequest} from "../dto/requests";
-import {MoveResponse, SolveResponse} from "../dto/responses";
+import {MoveRequest, SolveRequest, UndoRequest} from "./dto/requests";
+import {MoveResponse, SolveResponse} from "./dto/responses";
 
 
 @Injectable({

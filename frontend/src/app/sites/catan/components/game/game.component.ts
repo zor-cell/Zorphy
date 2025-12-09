@@ -1,7 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {GameState} from "../../dto/game/GameState";
 import {NgClass, NgForOf, NgIf} from "@angular/common";
-import {CatanService} from "../../services/catan.service";
+import {CatanService} from "../../catan.service";
 import {CatanDiceRollComponent} from "../dice-roll/dice-roll.component";
 import {DiceRoll} from "../../dto/DiceRoll";
 import {CatanHistogramComponent} from "../histogram/histogram.component";

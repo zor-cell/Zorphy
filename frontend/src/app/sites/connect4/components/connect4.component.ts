@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {CellComponent} from "./cell/cell.component";
 import {NgForOf, NgIf} from "@angular/common";
-import {Connect4Service} from "../services/connect4.service";
+import {Connect4Service} from "../connect4.service";
 import {MoveRequest, SolveRequest, UndoRequest} from "../dto/requests";
 import {GameState, PlayerConfig} from "../dto/data";
 import {Globals} from "../../../main/classes/globals";

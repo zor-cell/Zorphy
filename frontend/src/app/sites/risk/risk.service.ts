@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Globals} from "../../../main/classes/globals";
-import {SimulationConfig} from "../dto/SimulationConfig";
-import {DataEntry} from "../dto/DataEntry";
+import {Globals} from "../../main/classes/globals";
+import {SimulationConfig} from "./dto/SimulationConfig";
+import {DataEntry} from "./dto/DataEntry";
 import {Data} from "@angular/router";
 
 @Injectable({

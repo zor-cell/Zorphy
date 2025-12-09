@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Globals} from "../../../main/classes/globals";
+import {Globals} from "../../main/classes/globals";
 import {Observable} from "rxjs";
-import {GameState} from "../dto/game/GameState";
-import {Move} from "../dto/move/Move";
-import {Tile} from "../dto/tile/Tile";
-import {MoveGroup} from "../dto/move/MoveGroup";
-import {SelectionInfo} from "../dto/SelectionInfo";
-import {GameSessionService} from "../../all/services/game-session.service";
-import {GameConfig} from "../dto/game/GameConfig";
+import {GameState} from "./dto/game/GameState";
+import {Move} from "./dto/move/Move";
+import {Tile} from "./dto/tile/Tile";
+import {MoveGroup} from "./dto/move/MoveGroup";
+import {SelectionInfo} from "./dto/SelectionInfo";
+import {GameSessionService} from "../all/game-session.service";
+import {GameConfig} from "./dto/game/GameConfig";
 import {State} from "@popperjs/core";
 
 @Injectable({

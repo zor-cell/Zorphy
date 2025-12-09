@@ -2,7 +2,7 @@ import {Component, effect, inject, input, output} from '@angular/core';
 import {NgForOf, NgStyle} from "@angular/common";
 import {QwirkleTileComponent} from "../tile/tile.component";
 import {Tile} from "../../dto/tile/Tile";
-import {QwirkleService} from "../../services/qwirkle.service";
+import {QwirkleService} from "../../qwirkle.service";
 import {SelectionInfo} from "../../dto/SelectionInfo";
 import {GameState} from "../../dto/game/GameState";
 

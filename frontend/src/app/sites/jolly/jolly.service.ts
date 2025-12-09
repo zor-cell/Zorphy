@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
-import {GameConfig} from "../dto/game/GameConfig";
-import {GameState} from "../dto/game/GameState";
-import {GameSessionService} from "../../all/services/game-session.service";
-import {Globals} from "../../../main/classes/globals";
+import {GameConfig} from "./dto/game/GameConfig";
+import {GameState} from "./dto/game/GameState";
+import {GameSessionService} from "../all/game-session.service";
+import {Globals} from "../../main/classes/globals";
 import {HttpClient} from "@angular/common/http";
-import {RoundResult} from "../dto/RoundResult";
+import {RoundResult} from "./dto/RoundResult";
 import {tap} from "rxjs";
 
 @Injectable({

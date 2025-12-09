@@ -3,7 +3,7 @@ import {SliderCheckboxComponent} from "../../../../main/components/all/slider-ch
 import {NgForOf, NgOptimizedImage} from "@angular/common";
 import {FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {GameConfig} from "../../dto/game/GameConfig";
-import {CatanService} from "../../services/catan.service";
+import {CatanService} from "../../catan.service";
 import {PlayerSelectComponent} from "../../../../main/components/all/player-select/player-select.component";
 import {GameMode, getGameModeName} from "../../dto/enums/GameMode";
 import {GameSessionConfigComponent} from "../../../all/components/game-session-config.component";

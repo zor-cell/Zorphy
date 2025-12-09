@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {NgIf} from "@angular/common";
-import {QwirkleService} from "../../services/qwirkle.service";
+import {QwirkleService} from "../../qwirkle.service";
 
 @Component({
   selector: 'qwirkle-image-input',

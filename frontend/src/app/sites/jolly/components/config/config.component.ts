@@ -1,6 +1,6 @@
 import {Component, effect, inject, signal} from '@angular/core';
 import {GameSessionConfigComponent} from "../../../all/components/game-session-config.component";
-import {JollyService} from "../../services/jolly.service";
+import {JollyService} from "../../jolly.service";
 import {GameConfig} from "../../dto/game/GameConfig";
 import {FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {PlayerSelectComponent} from "../../../../main/components/all/player-select/player-select.component";

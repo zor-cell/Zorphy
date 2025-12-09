@@ -8,7 +8,7 @@ import {DurationPipe} from "../../../../main/pipes/DurationPipe";
 import {RoundPopupComponent} from "../popups/round-popup/round-popup.component";
 import {WithFile} from "../../../../main/dto/all/WithFile";
 import {RoundResult} from "../../dto/RoundResult";
-import {JollyService} from "../../services/jolly.service";
+import {JollyService} from "../../jolly.service";
 
 @Component({
   selector: 'jolly-round-table',

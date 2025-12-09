@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Globals} from "../../../main/classes/globals";
+import {Globals} from "../../main/classes/globals";
 import {Observable} from "rxjs";
-import {GameState} from "../dto/game/GameState";
-import {GameConfig} from "../dto/game/GameConfig";
-import {GameSessionService} from "../../all/services/game-session.service";
+import {GameState} from "./dto/game/GameState";
+import {GameConfig} from "./dto/game/GameConfig";
+import {GameSessionService} from "../all/game-session.service";
 
 @Injectable({
     providedIn: 'root'
