@@ -5,7 +5,7 @@
 
 <div class="main-container">
     @if (gameStats().length > 0 && gameType()) {
-        <div class="card w-100" *ngFor="let stats of gameStats();let i = index">
+        <div class="card w-100 mb-5" *ngFor="let stats of gameStats();let i = index">
             <div class="card-header">
                 Stats for {{ stats.player.name }} - {{ gameType() }}
             </div>
