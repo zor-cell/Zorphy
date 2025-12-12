@@ -1,6 +1,26 @@
 <div>
-    <game-stats-meta [label]="'Min ' + label()" [data]="metric().min" [pipe]="pipe()"/>
-    <game-stats-meta [label]="'Max ' + label()" [data]="metric().max" [pipe]="pipe()"/>
-    <game-stats-meta [label]="'Avg ' + label()" [data]="metric().avg" [pipe]="pipe()"/>
-    <game-stats-meta [label]="'Median ' + label()" [data]="metric().median" [pipe]="pipe()"/>
+    @let met = metric();
+    <game-stats-meta [label]="'Min ' + label()" [data]="met.min" [pipe]="pipe()">
+        @if(met.min.gameId) {
+            <a [routerLink]="['/games', met.min.gameId]">{{ transformValue(met.min.value) }}</a>
+        } @else {
+            <div>{{transformValue(met.min.value)}}</div>
+        }
+    </game-stats-meta>
+
+    <game-stats-meta [label]="'Max ' + label()" [data]="met.max" [pipe]="pipe()">
+        @if(met.max.gameId) {
+            <a [routerLink]="['/games', met.max.gameId]">{{ transformValue(met.max.value) }}</a>
+        } @else {
+            <div>{{transformValue(met.max.value)}}</div>
+        }
+    </game-stats-meta>
+
+    <game-stats-meta [label]="'Avg ' + label()" [data]="metric().avg">
+        <div>{{transformValue(met.avg)}}</div>
+    </game-stats-meta>
+
+    <game-stats-meta [label]="'Median ' + label()" [data]="metric().median">
+        <div>{{transformValue(met.median)}}</div>
+    </game-stats-meta>
 </div>

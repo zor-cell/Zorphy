@@ -10,6 +10,7 @@ import net.zorphy.backend.main.dto.game.stats.correlation.CorrelationAxisType;
 import net.zorphy.backend.main.dto.game.stats.correlation.CorrelationDataPoint;
 import net.zorphy.backend.main.dto.game.stats.correlation.CorrelationMetadata;
 import net.zorphy.backend.main.dto.game.stats.correlation.CorrelationResult;
+import net.zorphy.backend.main.dto.game.stats.metrics.GameStatsStreak;
 import net.zorphy.backend.main.dto.player.PlayerDetails;
 import net.zorphy.backend.main.entity.Game;
 import net.zorphy.backend.main.service.game.metrics.DoubleArithmeticStrategy;
@@ -55,6 +56,11 @@ public class GameStatsUtil {
         int gamesPlayed = 0;
         int gamesWon = 0;
 
+        //streaks
+        GameStatsStreak currentStreak = new GameStatsStreak(0, null, null);
+        GameStatsStreak maxStreak = new GameStatsStreak(0, null, null);
+
+        //metrics
         GameStatsMetricAggregator<Double> scoreMetrics = new GameStatsMetricAggregator<>(new DoubleArithmeticStrategy());
         GameStatsMetricAggregator<Duration> durationMetrics = new GameStatsMetricAggregator<>(new DurationArithmeticStrategy());
 
@@ -106,10 +112,28 @@ public class GameStatsUtil {
                 gamesPlayed++;
                 if (playerIsWinner) gamesWon++;
 
+                //streaks
+                if(playerIsWinner) {
+                    if(currentStreak.streak() == 0) {
+                        currentStreak = new GameStatsStreak(1, game, null);
+                    } else {
+                        currentStreak = new GameStatsStreak(
+                                currentStreak.streak() + 1,
+                                currentStreak.start(),
+                                game
+                        );
+                    }
 
-                int playerStartPosition = result.teams().indexOf(playerTeam);
+                    if(currentStreak.streak() > maxStreak.streak()) {
+                        maxStreak = currentStreak;
+                    }
+
+                } else {
+                    currentStreak = new GameStatsStreak(0, null, null);
+                }
 
                 //correlation data
+                int playerStartPosition = result.teams().indexOf(playerTeam);
                 startingPositionToScore.add(new CorrelationDataPoint(
                         playerStartPosition + 1,
                         curScore,
@@ -165,6 +189,8 @@ public class GameStatsUtil {
                 currentPlayer,
                 gamesPlayed,
                 computeFraction(gamesWon, gamesPlayed),
+                currentStreak,
+                maxStreak,
                 scoreMetrics.aggregate(),
                 durationMetrics.aggregate(),
                 nemesis,

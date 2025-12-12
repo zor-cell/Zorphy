@@ -3,12 +3,5 @@
         {{ label() }} <span *ngIf="subLabel()" class="fw-normal">{{ subLabel() }}</span>
     </div>
 
-    @let linked = isLinkedGameStats(data());
-    @if (!data()) {
-        <div>{{ defaultValue() }}</div>
-    } @else if (linked) {
-        <a [routerLink]="['/games', linked.gameId]">{{ transformValue(linked.value) }}</a>
-    } @else {
-        <div>{{ transformValue(data()) }}</div>
-    }
+    <ng-content/>
 </div>

@@ -1,0 +1,8 @@
+<game-stats-meta [data]="'abc'" [label]="label()" [subLabel]="subLabel()">
+    @let data = text();
+    @if(data) {
+        <div>{{ data }}</div>
+    } @else {
+        <div>{{ defaultValue() }}</div>
+    }
+</game-stats-meta>

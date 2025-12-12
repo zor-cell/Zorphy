@@ -11,6 +11,8 @@ import {DurationPipe} from "../../../../pipes/DurationPipe";
 import {GameStatsMetaComponent} from "../game-stats-meta/game-stats-meta.component";
 import {GameStatsMetricsComponent} from "../game-stats-metrics/game-stats-metrics.component";
 import {DataChartComponent} from "../data-chart/data-chart.component";
+import {GameStatsStreakComponent} from "../game-stats-streak/game-stats-streak.component";
+import {GameStatsSimpleComponent} from "../game-stats-simple/game-stats-simple.component";
 
 @Component({
     selector: 'game-stats',
@@ -25,7 +27,9 @@ import {DataChartComponent} from "../data-chart/data-chart.component";
         GameStatsMetaComponent,
         DurationPipe,
         GameStatsMetricsComponent,
-        DataChartComponent
+        DataChartComponent,
+        GameStatsStreakComponent,
+        GameStatsSimpleComponent
     ],
     templateUrl: './game-stats.component.html',
     standalone: true,

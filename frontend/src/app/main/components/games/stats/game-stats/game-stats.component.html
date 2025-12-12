@@ -17,18 +17,20 @@
                         <div class="stats-header">Default Stats</div>
                         <div class="meta">
                             <div>
-                                <game-stats-meta label="Games Played" [data]="stats.gamesPlayed.toString()"/>
-                                <game-stats-meta label="Win Rate" [data]="(stats.winRate * 100).toFixed(2) + '%'"/>
+                                <game-stats-simple label="Games Played" [text]="stats.gamesPlayed.toString()"/>
+                                <game-stats-simple label="Win Rate" [text]="(stats.winRate * 100).toFixed(2) + '%'"/>
+                                <game-stats-streak label="Current Win Streak" [streak]="stats.currentWinStreak"/>
+                                <game-stats-streak label="Max Win Streak" [streak]="stats.maxWinStreak"/>
                             </div>
 
                             <game-stats-metrics [metric]="stats.scoreMetrics" label="Score"/>
                             <game-stats-metrics [metric]="stats.durationMetrics" label="Duration" [pipe]="DurationPipe" />
 
                             <div>
-                                <game-stats-meta label="Nemesis" subLabel="(Worst win rate)" [data]="stats.nemesis?.name"/>
-                                <game-stats-meta label="Victim" subLabel="(Best win rate)" [data]="stats.victim?.name"/>
-                                <game-stats-meta label="Rival" subLabel="(Most played against)" [data]="stats.rival?.name"/>
-                                <game-stats-meta label="Companion" subLabel="(Most played with)" [data]="stats.companion?.name"/>
+                                <game-stats-simple label="Nemesis" subLabel="(Worst win rate)" [text]="stats.nemesis?.name"/>
+                                <game-stats-simple label="Victim" subLabel="(Best win rate)" [text]="stats.victim?.name"/>
+                                <game-stats-simple label="Rival" subLabel="(Most played against)" [text]="stats.rival?.name"/>
+                                <game-stats-simple label="Companion" subLabel="(Most played with)" [text]="stats.companion?.name"/>
                             </div>
                         </div>
                     </div>

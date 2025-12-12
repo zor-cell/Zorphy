@@ -3,6 +3,7 @@ import {LinkedGameStats} from "../../../../dto/games/stats/LinkedGameStats";
 import {RouterLink} from "@angular/router";
 import {NgIf} from "@angular/common";
 import {DurationPipe} from "../../../../pipes/DurationPipe";
+import {GameStatsStreak} from "../../../../dto/games/stats/GameStatsStreak";
 
 @Component({
   selector: 'game-stats-meta',
