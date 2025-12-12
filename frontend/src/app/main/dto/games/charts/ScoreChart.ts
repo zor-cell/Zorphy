@@ -64,7 +64,6 @@ export class ScoreChart extends BaseChart {
             won: entry.won,
             label: new Date(entry.date).toLocaleString()
         }));
-        console.log(dataPoints);
 
         const pointColors = data.entries.map(entry =>
             entry.won ? '#4caf50' : '#f44336'

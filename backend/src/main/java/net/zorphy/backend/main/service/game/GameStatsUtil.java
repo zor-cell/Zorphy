@@ -68,7 +68,8 @@ public class GameStatsUtil {
         GameStatsMetricAggregator<Double> scoreMetrics = new GameStatsMetricAggregator<>(new DoubleArithmeticStrategy());
         GameStatsMetricAggregator<Duration> durationMetrics = new GameStatsMetricAggregator<>(new DurationArithmeticStrategy());
 
-        for (Game game : games) {
+        var sortedGames = games.stream().sorted(Comparator.comparing(Game::getPlayedAt)).toList();
+        for (Game game : sortedGames) {
             try {
                 ResultState result = objectMapper.convertValue(game.getResult(), ResultState.class);
 

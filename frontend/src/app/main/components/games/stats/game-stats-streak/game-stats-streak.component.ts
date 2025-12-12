@@ -23,7 +23,7 @@ export class GameStatsStreakComponent {
     if(str.start && str.end) {
       return {
         dateFrom: this.formatDateToInput(new Date(str.start.metadata.playedAt)),
-        dateTo: this.formatDateToInput(new Date(str.end.metadata.playedAt)),
+        dateTo: this.formatDateToInput(new Date(str.end.metadata.playedAt), 1),
         players: [str.playerId],
         gameTypes: [str.start.metadata.gameType]
       };
@@ -36,11 +36,11 @@ export class GameStatsStreakComponent {
     } else return {};
   }
 
-  private formatDateToInput(date: Date): string {
+  private formatDateToInput(date: Date, dayIncr: number = 0): string {
     const year = date.getFullYear();
 
     const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const day = String(date.getDate() + dayIncr).padStart(2, '0');
 
     return `${year}-${month}-${day}`;
   }
