@@ -1,14 +1,14 @@
 <div class="meta">
     <div>
-        <game-stats-meta label="Rounds Played" [data]="stats().roundsPlayed.toString()"/>
-        <game-stats-meta label="Win Rate" [data]="(stats().roundWinRate * 100).toFixed(2) + '%'"/>
+        <game-stats-simple label="Rounds Played" [text]="stats().roundsPlayed.toString()"/>
+        <game-stats-simple label="Win Rate" [text]="(stats().roundWinRate * 100).toFixed(2) + '%'"/>
     </div>
 
     <game-stats-metrics [metric]="stats().roundScoreMetrics" label="Round Score"/>
     <game-stats-metrics [metric]="stats().roundDurationMetrics" label="Round Duration" [pipe]="DurationPipe"/>
 
     <div>
-        <game-stats-meta label="Closed rate" [data]="(stats().closedRate * 100).toFixed(2) + '%'"/>
-        <game-stats-meta label="Out In One Rate" [data]="(stats().outInOneRate * 100).toFixed(2) + '%'"/>
+        <game-stats-simple label="Closed rate" [text]="(stats().closedRate * 100).toFixed(2) + '%'"/>
+        <game-stats-simple label="Out In One Rate" [text]="(stats().outInOneRate * 100).toFixed(2) + '%'"/>
     </div>
 </div>

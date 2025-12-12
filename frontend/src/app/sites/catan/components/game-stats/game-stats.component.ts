@@ -6,6 +6,9 @@ import {DurationPipe} from "../../../../main/pipes/DurationPipe";
 import {
     GameStatsMetricsComponent
 } from "../../../../main/components/games/stats/game-stats-metrics/game-stats-metrics.component";
+import {
+    GameStatsSimpleComponent
+} from "../../../../main/components/games/stats/game-stats-simple/game-stats-simple.component";
 
 @Component({
     selector: 'catan-game-stats',
@@ -13,7 +16,8 @@ import {
         CatanHistogramComponent,
         GameStatsMetaComponent,
         DurationPipe,
-        GameStatsMetricsComponent
+        GameStatsMetricsComponent,
+        GameStatsSimpleComponent
     ],
     templateUrl: './game-stats.component.html',
     styleUrl: './game-stats.component.css',

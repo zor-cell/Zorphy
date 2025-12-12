@@ -1,6 +1,6 @@
 <div>
     @let met = metric();
-    <game-stats-meta [label]="'Min ' + label()" [data]="met.min" [pipe]="pipe()">
+    <game-stats-meta [label]="'Min ' + label()">
         @if(met.min.gameId) {
             <a [routerLink]="['/games', met.min.gameId]">{{ transformValue(met.min.value) }}</a>
         } @else {
@@ -8,7 +8,7 @@
         }
     </game-stats-meta>
 
-    <game-stats-meta [label]="'Max ' + label()" [data]="met.max" [pipe]="pipe()">
+    <game-stats-meta [label]="'Max ' + label()">
         @if(met.max.gameId) {
             <a [routerLink]="['/games', met.max.gameId]">{{ transformValue(met.max.value) }}</a>
         } @else {
@@ -16,11 +16,11 @@
         }
     </game-stats-meta>
 
-    <game-stats-meta [label]="'Avg ' + label()" [data]="metric().avg">
+    <game-stats-meta [label]="'Avg ' + label()">
         <div>{{transformValue(met.avg)}}</div>
     </game-stats-meta>
 
-    <game-stats-meta [label]="'Median ' + label()" [data]="metric().median">
+    <game-stats-meta [label]="'Median ' + label()">
         <div>{{transformValue(met.median)}}</div>
     </game-stats-meta>
 </div>

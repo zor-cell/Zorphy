@@ -5,13 +5,17 @@ import {GameStatsMetaComponent} from "../../../../main/components/games/stats/ga
 import {
     GameStatsMetricsComponent
 } from "../../../../main/components/games/stats/game-stats-metrics/game-stats-metrics.component";
+import {
+    GameStatsSimpleComponent
+} from "../../../../main/components/games/stats/game-stats-simple/game-stats-simple.component";
 
 @Component({
   selector: 'jolly-game-stats',
     imports: [
         DurationPipe,
         GameStatsMetaComponent,
-        GameStatsMetricsComponent
+        GameStatsMetricsComponent,
+        GameStatsSimpleComponent
     ],
   templateUrl: './game-stats.component.html',
   styleUrl: './game-stats.component.css',

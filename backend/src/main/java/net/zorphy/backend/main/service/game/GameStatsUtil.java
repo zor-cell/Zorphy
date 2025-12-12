@@ -1,6 +1,7 @@
 package net.zorphy.backend.main.service.game;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.zorphy.backend.main.dto.game.GameDetails;
 import net.zorphy.backend.main.dto.game.GameType;
 import net.zorphy.backend.main.dto.game.stats.GameSpecificStats;
 import net.zorphy.backend.main.dto.game.stats.GameStats;
@@ -13,6 +14,7 @@ import net.zorphy.backend.main.dto.game.stats.correlation.CorrelationResult;
 import net.zorphy.backend.main.dto.game.stats.metrics.GameStatsStreak;
 import net.zorphy.backend.main.dto.player.PlayerDetails;
 import net.zorphy.backend.main.entity.Game;
+import net.zorphy.backend.main.mapper.GameMapper;
 import net.zorphy.backend.main.service.game.metrics.DoubleArithmeticStrategy;
 import net.zorphy.backend.main.service.game.metrics.DurationArithmeticStrategy;
 import net.zorphy.backend.main.service.game.metrics.GameStatsMetricAggregator;
@@ -31,11 +33,13 @@ import java.util.function.ToDoubleFunction;
 public class GameStatsUtil {
     private final Map<GameType, GameSpecificStatsCalculator> statsCalculatorMap = new HashMap<>();
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final GameMapper gameMapper;
 
-    public GameStatsUtil(List<GameSpecificStatsCalculator> calculators) {
+    public GameStatsUtil(List<GameSpecificStatsCalculator> calculators, GameMapper gameMapper) {
         for (var calc : calculators) {
             statsCalculatorMap.put(calc.supportedType(), calc);
         }
+        this.gameMapper = gameMapper;
     }
 
     /**
@@ -57,8 +61,8 @@ public class GameStatsUtil {
         int gamesWon = 0;
 
         //streaks
-        GameStatsStreak currentStreak = new GameStatsStreak(0, null, null);
-        GameStatsStreak maxStreak = new GameStatsStreak(0, null, null);
+        GameStatsStreak currentStreak = new GameStatsStreak(0, null, null, null);
+        GameStatsStreak maxStreak = new GameStatsStreak(0, null, null, null);
 
         //metrics
         GameStatsMetricAggregator<Double> scoreMetrics = new GameStatsMetricAggregator<>(new DoubleArithmeticStrategy());
@@ -114,13 +118,15 @@ public class GameStatsUtil {
 
                 //streaks
                 if(playerIsWinner) {
+                    GameDetails gameDetails = gameMapper.gameToGameDetails(game);
                     if(currentStreak.streak() == 0) {
-                        currentStreak = new GameStatsStreak(1, game, null);
+                        currentStreak = new GameStatsStreak(1, gameDetails, null, currentPlayer.id());
                     } else {
                         currentStreak = new GameStatsStreak(
                                 currentStreak.streak() + 1,
                                 currentStreak.start(),
-                                game
+                                gameDetails,
+                                currentStreak.playerId()
                         );
                     }
 
@@ -129,7 +135,7 @@ public class GameStatsUtil {
                     }
 
                 } else {
-                    currentStreak = new GameStatsStreak(0, null, null);
+                    currentStreak = new GameStatsStreak(0, null, null, null);
                 }
 
                 //correlation data

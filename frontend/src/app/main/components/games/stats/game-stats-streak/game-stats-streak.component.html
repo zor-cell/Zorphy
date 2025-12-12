@@ -1,10 +1,10 @@
 @let str = streak();
 
-<game-stats-meta [label]="label()" [data]="str.streak.toString()">
+<game-stats-meta [label]="label()">
     @if(str.start && str.end) {
-        <a [routerLink]="['/games', 1]">{{ str.streak }}</a>
+        <a [routerLink]="['/games']" [queryParams]="getQueryParams()">{{ str.streak }}</a>
     } @else if(str.start) {
-        <a [routerLink]="['/games', 1]">{{ str.streak }}</a>
+        <a [routerLink]="['/games']" [queryParams]="getQueryParams()">{{ str.streak }}</a>
     } @else {
         <div>{{ str.streak }}</div>
     }

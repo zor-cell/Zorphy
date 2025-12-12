@@ -4,4 +4,5 @@ export interface GameStatsStreak {
     streak: number;
     start: GameDetails;
     end: GameDetails;
+    playerId: string;
 }

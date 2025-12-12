@@ -1,6 +1,6 @@
 <div class="meta">
     <div>
-        <game-stats-meta label="Luck Metric" [data]="stats().luckMetric.toFixed(2)"/>
+        <game-stats-simple label="Luck Metric" [text]="stats().luckMetric.toFixed(2)"/>
     </div>
 
     <game-stats-metrics [metric]="stats().rollDurationMetrics" label="Roll Duration" [pipe]="DurationPipe"/>
