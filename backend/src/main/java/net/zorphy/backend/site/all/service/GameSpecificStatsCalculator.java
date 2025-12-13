@@ -1,10 +1,10 @@
 package net.zorphy.backend.site.all.service;
 
-import net.zorphy.backend.main.dto.game.GameType;
-import net.zorphy.backend.main.dto.game.stats.correlation.CorrelationResult;
-import net.zorphy.backend.main.dto.game.stats.GameSpecificStats;
-import net.zorphy.backend.main.dto.player.PlayerDetails;
-import net.zorphy.backend.main.entity.Game;
+import net.zorphy.backend.main.game.dto.GameType;
+import net.zorphy.backend.main.game.dto.stats.correlation.CorrelationResult;
+import net.zorphy.backend.main.game.dto.stats.GameSpecificStats;
+import net.zorphy.backend.main.player.dto.PlayerDetails;
+import net.zorphy.backend.main.game.entity.Game;
 
 import java.util.List;
 

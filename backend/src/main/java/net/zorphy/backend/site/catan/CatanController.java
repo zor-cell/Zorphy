@@ -1,7 +1,7 @@
 package net.zorphy.backend.site.catan;
 
 import jakarta.servlet.http.HttpSession;
-import net.zorphy.backend.main.dto.game.GameType;
+import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.site.all.controller.GameSessionSaveController;
 import net.zorphy.backend.site.all.dto.ResultState;
 import net.zorphy.backend.site.catan.dto.game.GameConfig;

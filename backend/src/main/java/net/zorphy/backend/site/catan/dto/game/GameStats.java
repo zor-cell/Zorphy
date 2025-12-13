@@ -1,7 +1,7 @@
 package net.zorphy.backend.site.catan.dto.game;
 
-import net.zorphy.backend.main.dto.game.stats.GameSpecificStats;
-import net.zorphy.backend.main.dto.game.stats.metrics.GameStatsMetrics;
+import net.zorphy.backend.main.game.dto.stats.GameSpecificStats;
+import net.zorphy.backend.main.game.dto.stats.metrics.GameStatsMetrics;
 import net.zorphy.backend.site.catan.dto.DiceRoll;
 
 import java.time.Duration;

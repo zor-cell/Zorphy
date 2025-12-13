@@ -1,9 +1,9 @@
 package net.zorphy.backend.site.catan.service;
 
-import net.zorphy.backend.main.dto.game.GameDetails;
-import net.zorphy.backend.main.dto.game.GameType;
-import net.zorphy.backend.main.dto.player.TeamDetails;
-import net.zorphy.backend.main.service.game.GameService;
+import net.zorphy.backend.main.game.dto.GameDetails;
+import net.zorphy.backend.main.game.dto.GameType;
+import net.zorphy.backend.main.player.dto.TeamDetails;
+import net.zorphy.backend.main.game.service.GameService;
 import net.zorphy.backend.site.all.dto.ResultState;
 import net.zorphy.backend.site.catan.dto.DicePair;
 import net.zorphy.backend.site.catan.dto.DiceRoll;

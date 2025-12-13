@@ -1,10 +1,10 @@
 package net.zorphy.backend.site.jolly.service;
 
-import net.zorphy.backend.main.dto.file.FileStorageFile;
-import net.zorphy.backend.main.dto.game.GameDetails;
-import net.zorphy.backend.main.dto.game.GameType;
-import net.zorphy.backend.main.service.FileStorageService;
-import net.zorphy.backend.main.service.game.GameService;
+import net.zorphy.backend.main.file.dto.FileStorageFile;
+import net.zorphy.backend.main.game.dto.GameDetails;
+import net.zorphy.backend.main.game.dto.GameType;
+import net.zorphy.backend.main.file.service.FileStorageService;
+import net.zorphy.backend.main.game.service.GameService;
 import net.zorphy.backend.site.all.dto.ResultState;
 import net.zorphy.backend.site.connect4.exception.InvalidOperationException;
 import net.zorphy.backend.site.jolly.dto.RoundInfo;

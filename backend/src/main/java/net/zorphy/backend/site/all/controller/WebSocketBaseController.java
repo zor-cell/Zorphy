@@ -1,6 +1,6 @@
 package net.zorphy.backend.site.all.controller;
 
-import net.zorphy.backend.main.dto.game.GameType;
+import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.site.all.dto.GameConfigBase;
 import net.zorphy.backend.site.all.dto.GameStateBase;
 import org.springframework.messaging.handler.annotation.DestinationVariable;

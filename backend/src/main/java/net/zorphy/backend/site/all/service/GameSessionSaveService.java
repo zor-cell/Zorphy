@@ -1,6 +1,6 @@
 package net.zorphy.backend.site.all.service;
 
-import net.zorphy.backend.main.dto.game.GameDetails;
+import net.zorphy.backend.main.game.dto.GameDetails;
 import net.zorphy.backend.site.all.dto.GameConfigBase;
 import net.zorphy.backend.site.all.dto.GameStateBase;
 import net.zorphy.backend.site.all.dto.ResultStateBase;

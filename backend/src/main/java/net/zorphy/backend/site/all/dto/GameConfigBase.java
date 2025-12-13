@@ -1,6 +1,6 @@
 package net.zorphy.backend.site.all.dto;
 
-import net.zorphy.backend.main.dto.player.TeamDetails;
+import net.zorphy.backend.main.player.dto.TeamDetails;
 
 import java.util.List;
 

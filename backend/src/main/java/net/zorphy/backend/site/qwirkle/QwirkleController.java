@@ -2,7 +2,7 @@ package net.zorphy.backend.site.qwirkle;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import net.zorphy.backend.main.dto.game.GameType;
+import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.site.all.controller.GameSessionSaveController;
 import net.zorphy.backend.site.all.dto.ResultState;
 import net.zorphy.backend.site.qwirkle.dto.SelectionInfo;
