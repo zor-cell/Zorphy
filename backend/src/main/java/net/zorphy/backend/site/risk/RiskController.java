@@ -1,4 +1,4 @@
-package net.zorphy.backend.site.risk.controller;
+package net.zorphy.backend.site.risk;
 
 import jakarta.validation.Valid;
 import net.zorphy.backend.site.risk.dto.SimulationConfig;

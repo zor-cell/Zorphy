@@ -1,4 +1,4 @@
-package net.zorphy.backend.site.jolly.controller;
+package net.zorphy.backend.site.jolly;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;

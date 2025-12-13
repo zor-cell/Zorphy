@@ -1,4 +1,4 @@
-package net.zorphy.backend.site.scotlandyard.controller;
+package net.zorphy.backend.site.scotlandyard;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;

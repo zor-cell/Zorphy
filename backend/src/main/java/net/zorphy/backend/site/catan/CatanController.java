@@ -1,4 +1,4 @@
-package net.zorphy.backend.site.catan.controller;
+package net.zorphy.backend.site.catan;
 
 import jakarta.servlet.http.HttpSession;
 import net.zorphy.backend.main.dto.game.GameType;

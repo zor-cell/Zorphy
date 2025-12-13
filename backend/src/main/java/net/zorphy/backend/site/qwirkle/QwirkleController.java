@@ -1,4 +1,4 @@
-package net.zorphy.backend.site.qwirkle.controller;
+package net.zorphy.backend.site.qwirkle;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;

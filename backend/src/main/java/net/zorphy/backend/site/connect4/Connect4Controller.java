@@ -1,4 +1,4 @@
-package net.zorphy.backend.site.connect4.controller;
+package net.zorphy.backend.site.connect4;
 
 import net.zorphy.backend.site.connect4.dto.request.MoveRequest;
 import net.zorphy.backend.site.connect4.dto.request.SolveRequest;
