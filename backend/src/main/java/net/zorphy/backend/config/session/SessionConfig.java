@@ -16,10 +16,11 @@ public class SessionConfig implements BeanClassLoaderAware {
 
     @Bean
     public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
-        return new WrapperGenericJackson2JsonRedisSerializer(objectMapper());
+        return new WrapperGenericJackson2JsonRedisSerializer(redisObjectMapper());
     }
 
-    private ObjectMapper objectMapper() {
+    @Bean
+    public ObjectMapper redisObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
 
         mapper.registerModule(new JavaTimeModule());
