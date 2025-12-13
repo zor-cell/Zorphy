@@ -1,21 +1,21 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Globals} from "../classes/globals";
 import {Observable, tap} from "rxjs";
 import {UserLoginDetails} from "../dto/all/UserLoginDetails";
 import {UserDetails} from "../dto/all/UserDetails";
 import {Role} from "../dto/all/Role";
+import {environment} from "../../../environments/environment";
+import {SILENT_ERROR_CONTEXT} from "../classes/interceptors";
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
-    private readonly baseUri: string;
-    user: UserDetails | null = null;
+    private readonly baseUri: string = environment.httpApiUrl;
+    private httpClient = inject(HttpClient);
 
-    constructor(private httpClient: HttpClient, private globals: Globals) {
-        this.baseUri = this.globals.backendUri + '/auth';
-    }
+    public user: UserDetails | null = null;
 
     login(credentials: UserLoginDetails): Observable<void> {
         return this.httpClient.post<void>(this.baseUri + '/login', credentials);
@@ -26,8 +26,8 @@ export class AuthService {
     }
 
     loadUser(): Observable<UserDetails> {
-        return this.httpClient.get<UserDetails>(this.globals.backendUri + '/users/me', {
-            context: this.globals.silentErrorContext
+        return this.httpClient.get<UserDetails>(this.baseUri + '/users/me', {
+            context: SILENT_ERROR_CONTEXT
         }).pipe(
             tap(user => this.user = user)
         );

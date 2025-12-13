@@ -14,6 +14,7 @@ import {RiskSimulationComponent} from "./sites/risk/components/simulation/simula
 import {GameStatsComponent} from "./main/components/games/stats/game-stats/game-stats.component";
 import {ScotlandYardGameComponent} from "./sites/scotland-yard/components/game/game.component";
 import {ScotlandYardConfigComponent} from "./sites/scotland-yard/components/config/config.component";
+import {NobodyIsPerfectConfigComponent} from "./sites/nobody-is-perfect/components/config/config.component";
 
 export const routes: Routes = [
     //project routing
@@ -52,4 +53,9 @@ export const routes: Routes = [
     {path: 'projects/scotland-yard', redirectTo: 'projects/scotland-yard/config', pathMatch: 'full'},
     {path: 'projects/scotland-yard/config', component: ScotlandYardConfigComponent},
     {path: 'projects/scotland-yard/game', component: ScotlandYardGameComponent},
+
+    // nobody is perfect routing
+    {path: 'projects/nobody-is-perfect', redirectTo: 'projects/nobody-is-perfect/config', pathMatch: 'full'},
+    {path: 'projects/nobody-is-perfect/config', component: NobodyIsPerfectConfigComponent},
+    {path: 'projects/nobody-is-perfect/game', component: ScotlandYardGameComponent},
 ];

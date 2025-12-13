@@ -9,6 +9,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ToastrModule} from "ngx-toastr";
 import {LIGHTBOX_CONFIG, LightboxConfig} from "ng-gallery/lightbox";
 import {GALLERY_CONFIG, GalleryConfig} from "ng-gallery";
+import {RxStompService} from "./rx-stomp.service";
+import {rxStompConfig} from "./rx-stomp-config";
 
 const galleryProvider: {provide: any, useValue: GalleryConfig} = {
     provide: GALLERY_CONFIG,
@@ -28,7 +30,6 @@ const lightBoxProvider: {provide: any, useValue: LightboxConfig} = {
     }
 };
 
-
 export const appConfig: ApplicationConfig = {
     providers: [
         provideZoneChangeDetection({eventCoalescing: true}),
@@ -40,6 +41,15 @@ export const appConfig: ApplicationConfig = {
         ),
         provideCharts(withDefaultRegisterables()),
         galleryProvider,
-        lightBoxProvider
+        lightBoxProvider,
+        {
+            provide: RxStompService,
+            useFactory: () => {
+                const rxStompService = new RxStompService();
+                rxStompService.configure(rxStompConfig);
+                rxStompService.activate();
+                return rxStompService;
+            }
+        }
     ]
 };
