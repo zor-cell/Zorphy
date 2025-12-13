@@ -1,11 +1,11 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {finalize, Observable, tap} from "rxjs";
-import {Globals} from "../../main/classes/globals";
-import {ResultState} from "../../main/dto/all/result/ResultState";
-import {GameDetails} from "../../main/dto/games/GameDetails";
-import {GameConfigBase} from "./dto/GameConfigBase";
-import {GameStateBase} from "./dto/GameStateBase";
+import {Globals} from "../../../../main/classes/globals";
+import {ResultState} from "../../../../main/dto/all/result/ResultState";
+import {GameDetails} from "../../../../main/dto/games/GameDetails";
+import {GameConfigBase} from "../../dto/GameConfigBase";
+import {GameStateBase} from "../../dto/GameStateBase";
 import {ToastrService} from "ngx-toastr";
 
 @Injectable({

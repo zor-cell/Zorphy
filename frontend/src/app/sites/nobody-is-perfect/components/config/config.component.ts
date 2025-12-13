@@ -1,6 +1,6 @@
 import {Component, inject} from '@angular/core';
 import {NobodyIsPerfectService} from "../../nobody-is-perfect.service";
-import {RxStompService} from "../../../../rx-stomp.service";
+import {RxStompService} from "../../../all/services/ws/rx-stomp.service";
 
 @Component({
   selector: 'app-config',

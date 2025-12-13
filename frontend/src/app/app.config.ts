@@ -9,7 +9,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ToastrModule} from "ngx-toastr";
 import {LIGHTBOX_CONFIG, LightboxConfig} from "ng-gallery/lightbox";
 import {GALLERY_CONFIG, GalleryConfig} from "ng-gallery";
-import {RxStompService} from "./rx-stomp.service";
+import {RxStompService} from "./sites/all/services/ws/rx-stomp.service";
 import {rxStompConfig} from "./rx-stomp-config";
 
 const galleryProvider: {provide: any, useValue: GalleryConfig} = {

@@ -4,7 +4,7 @@ import {NgIf} from "@angular/common";
 import {AuthService} from "../../../main/services/auth.service";
 import {GameStateBase} from "../dto/GameStateBase";
 import {GameConfigBase} from "../dto/GameConfigBase";
-import {GameSessionService} from "../game-session.service";
+import {GameSessionService} from "../services/http/game-session.service";
 import {ResultState} from "../../../main/dto/all/result/ResultState";
 import {GameSessionSavePopupComponent} from "./popups/save-popup/save-popup.component";
 import {WithFile} from "../../../main/dto/all/WithFile";

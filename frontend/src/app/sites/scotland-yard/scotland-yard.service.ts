@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Globals} from "../../main/classes/globals";
-import {GameSessionService} from "../all/game-session.service";
+import {GameSessionService} from "../all/services/http/game-session.service";
 import {GameConfig} from "./dto/game/GameConfig";
 import {GameState} from "./dto/game/GameState";
 import {HeatMapConfig} from "./dto/HeatMapConfig";

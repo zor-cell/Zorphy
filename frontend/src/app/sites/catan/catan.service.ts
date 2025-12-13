@@ -4,7 +4,7 @@ import {Globals} from "../../main/classes/globals";
 import {Observable} from "rxjs";
 import {GameState} from "./dto/game/GameState";
 import {GameConfig} from "./dto/game/GameConfig";
-import {GameSessionService} from "../all/game-session.service";
+import {GameSessionService} from "../all/services/http/game-session.service";
 import {environment} from "../../../environments/environment";
 
 @Injectable({

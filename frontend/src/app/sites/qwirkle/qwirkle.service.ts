@@ -7,7 +7,7 @@ import {Move} from "./dto/move/Move";
 import {Tile} from "./dto/tile/Tile";
 import {MoveGroup} from "./dto/move/MoveGroup";
 import {SelectionInfo} from "./dto/SelectionInfo";
-import {GameSessionService} from "../all/game-session.service";
+import {GameSessionService} from "../all/services/http/game-session.service";
 import {GameConfig} from "./dto/game/GameConfig";
 import {State} from "@popperjs/core";
 import {environment} from "../../../environments/environment";
