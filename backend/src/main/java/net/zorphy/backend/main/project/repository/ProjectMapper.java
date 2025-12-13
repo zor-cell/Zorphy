@@ -1,7 +1,7 @@
 package net.zorphy.backend.main.project.repository;
 
-import net.zorphy.backend.main.all.component.FileReaderComponent;
-import net.zorphy.backend.main.all.component.FileUrlComponent;
+import net.zorphy.backend.main.file.component.FileReaderComponent;
+import net.zorphy.backend.main.file.component.FileUrlComponent;
 import net.zorphy.backend.main.project.dto.ProjectDetails;
 import net.zorphy.backend.main.project.dto.ProjectMetadata;
 import net.zorphy.backend.main.project.entity.Project;

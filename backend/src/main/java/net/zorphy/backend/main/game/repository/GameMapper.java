@@ -1,6 +1,6 @@
 package net.zorphy.backend.main.game.repository;
 
-import net.zorphy.backend.main.all.component.FileUrlComponent;
+import net.zorphy.backend.main.file.component.FileUrlComponent;
 import net.zorphy.backend.main.game.dto.GameDetails;
 import net.zorphy.backend.main.game.dto.GameMetadata;
 import net.zorphy.backend.main.game.dto.GameType;

@@ -1,4 +1,4 @@
-package net.zorphy.backend.main.all.component;
+package net.zorphy.backend.main.file.component;
 
 import net.zorphy.backend.config.property.BaseUrlProperty;
 import org.mapstruct.Named;
