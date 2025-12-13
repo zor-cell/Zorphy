@@ -12,7 +12,7 @@ import {SILENT_ERROR_CONTEXT} from "../classes/interceptors";
     providedIn: 'root'
 })
 export class AuthService {
-    private readonly baseUri: string = environment.httpApiUrl;
+    private readonly baseUri: string = environment.httpApiUrl + '/auth';
     private httpClient = inject(HttpClient);
 
     public user: UserDetails | null = null;
@@ -26,7 +26,7 @@ export class AuthService {
     }
 
     loadUser(): Observable<UserDetails> {
-        return this.httpClient.get<UserDetails>(this.baseUri + '/users/me', {
+        return this.httpClient.get<UserDetails>(environment.httpApiUrl + '/users/me', {
             context: SILENT_ERROR_CONTEXT
         }).pipe(
             tap(user => this.user = user)

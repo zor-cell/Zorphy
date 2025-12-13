@@ -1,19 +1,19 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Globals} from "../classes/globals";
 import {Observable, tap} from "rxjs";
 import {PlayerDetails} from "../dto/all/PlayerDetails";
 import {PlayerCreate} from "../dto/all/PlayerCreate";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
     providedIn: 'root'
 })
 export class PlayerService {
-    private readonly baseUri: string;
+    private readonly baseUri: string = environment.httpApiUrl + '/players';
 
-    constructor(private httpClient: HttpClient, private globals: Globals) {
-        this.baseUri = this.globals.backendUri + '/players';
-    }
+    private httpClient = inject(HttpClient);
+    private globals = inject(Globals);
 
     getPlayers(): Observable<PlayerDetails[]> {
         return this.httpClient.get<PlayerDetails[]>(this.baseUri);

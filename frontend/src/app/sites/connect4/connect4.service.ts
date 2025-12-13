@@ -1,20 +1,18 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {Globals} from "../../main/classes/globals";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {MoveRequest, SolveRequest, UndoRequest} from "./dto/requests";
 import {MoveResponse, SolveResponse} from "./dto/responses";
+import {environment} from "../../../environments/environment";
 
 
 @Injectable({
     providedIn: 'root'
 })
 export class Connect4Service {
-    private readonly baseUri: string;
-
-    constructor(private httpClient: HttpClient, private globals: Globals) {
-        this.baseUri = this.globals.backendUri + '/connect4';
-    }
+    private readonly baseUri: string = environment.httpApiUrl + '/connect4';
+    private httpClient = inject(HttpClient);
 
     move(moveRequest: MoveRequest): Observable<MoveResponse> {
         return this.httpClient.post<MoveResponse>(this.baseUri + '/move', moveRequest);

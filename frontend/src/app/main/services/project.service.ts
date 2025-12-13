@@ -4,6 +4,7 @@ import {Globals} from "../classes/globals";
 import {Observable, tap} from "rxjs";
 import {ProjectMetadata} from "../dto/projects/ProjectMetadata";
 import {ProjectDetails} from "../dto/projects/ProjectDetails";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +13,7 @@ export class ProjectService {
     private httpClient = inject(HttpClient);
     private globals = inject(Globals);
 
-    private readonly baseUri = this.globals.backendUri + '/projects';
+    private readonly baseUri = environment.httpApiUrl + '/projects';
 
     getProjects(): Observable<ProjectMetadata[]> {
         return this.httpClient.get<ProjectMetadata[]>(this.baseUri);

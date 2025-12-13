@@ -6,16 +6,16 @@ import {Globals} from "../../main/classes/globals";
 import {HttpClient} from "@angular/common/http";
 import {RoundResult} from "./dto/RoundResult";
 import {tap} from "rxjs";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class JollyService extends GameSessionService<GameConfig, GameState> {
-  protected readonly baseUri: string;
+  protected readonly baseUri: string = environment.httpApiUrl + '/jolly';
 
   constructor(httpClient: HttpClient, globals: Globals) {
     super(httpClient, globals);
-    this.baseUri = this.globals.backendUri + '/jolly';
   }
 
   saveRound(results: RoundResult[], imageFile: File | null = null) {

@@ -19,7 +19,6 @@ public class SessionConfig implements BeanClassLoaderAware {
         return new WrapperGenericJackson2JsonRedisSerializer(redisObjectMapper());
     }
 
-    @Bean
     public ObjectMapper redisObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
 

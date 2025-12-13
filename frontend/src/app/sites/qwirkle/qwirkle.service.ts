@@ -10,16 +10,16 @@ import {SelectionInfo} from "./dto/SelectionInfo";
 import {GameSessionService} from "../all/game-session.service";
 import {GameConfig} from "./dto/game/GameConfig";
 import {State} from "@popperjs/core";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
     providedIn: 'root'
 })
 export class QwirkleService extends GameSessionService<GameConfig, GameState> {
-    protected readonly baseUri: string;
+    protected readonly baseUri: string = environment.httpApiUrl + '/qwirkle';
 
     constructor(httpClient: HttpClient, globals: Globals) {
         super(httpClient, globals);
-        this.baseUri = this.globals.backendUri + '/qwirkle';
     }
 
     clearHand(): Observable<GameState> {

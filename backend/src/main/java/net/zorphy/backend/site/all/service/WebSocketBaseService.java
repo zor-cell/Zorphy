@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.zorphy.backend.main.all.exception.InvalidSessionException;
 import net.zorphy.backend.site.all.dto.GameRoom;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -25,7 +24,7 @@ public class WebSocketBaseService {
 
     public  WebSocketBaseService(StringRedisTemplate redisTemplate,
                                  SimpMessagingTemplate messagingTemplate,
-                                 @Qualifier("redisObjectMapper") ObjectMapper mapper,
+                                 ObjectMapper mapper,
                                  @Value("${spring.session.redis.namespace}") String applicationNamespace
     ) {
         this.redisTemplate = redisTemplate;

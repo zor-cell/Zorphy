@@ -6,16 +6,16 @@ import {GameConfig} from "./dto/game/GameConfig";
 import {GameState} from "./dto/game/GameState";
 import {HeatMapConfig} from "./dto/HeatMapConfig";
 import {HeatMapEntry} from "./dto/HeatMapEntry";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ScotlandYardService extends GameSessionService<GameConfig, GameState> {
-  protected readonly baseUri: string;
+  protected readonly baseUri: string = environment.httpApiUrl + '/scotland-yard';
 
   constructor(httpClient: HttpClient, globals: Globals) {
     super(httpClient, globals);
-    this.baseUri = this.globals.backendUri + '/scotland-yard';
   }
 
   getHeatMap(heatMapConfig: HeatMapConfig) {

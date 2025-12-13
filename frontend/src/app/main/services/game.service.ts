@@ -6,6 +6,7 @@ import {Observable, tap} from "rxjs";
 import {GameMetadata} from "../dto/games/GameMetadata";
 import {GameFilters} from "../dto/games/GameFilters";
 import {GameStats} from "../dto/games/stats/GameStats";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class GameService {
   private httpClient = inject(HttpClient);
   private globals = inject(Globals);
 
-  private readonly baseUri = this.globals.backendUri + '/games';
+  private readonly baseUri = environment.httpApiUrl + '/games';
   
   getGames(): Observable<GameMetadata[]> {
     return this.httpClient.get<GameMetadata[]>(this.baseUri);

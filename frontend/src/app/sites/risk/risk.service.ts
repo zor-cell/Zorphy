@@ -1,19 +1,18 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Globals} from "../../main/classes/globals";
 import {SimulationConfig} from "./dto/SimulationConfig";
 import {DataEntry} from "./dto/DataEntry";
 import {Data} from "@angular/router";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class RiskService {
-  protected readonly baseUri: string;
+  protected readonly baseUri: string = environment.httpApiUrl + '/risk';
 
-  constructor(private httpClient: HttpClient, private globals: Globals) {
-    this.baseUri = this.globals.backendUri + '/risk';
-  }
+  private httpClient = inject(HttpClient);
 
   simulation(config: SimulationConfig) {
     return this.httpClient.post<DataEntry[]>(this.baseUri + '/simulation', config);

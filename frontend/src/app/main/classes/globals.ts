@@ -8,15 +8,6 @@ import {SILENT_ERROR_HANDLER} from "./interceptors";
 })
 export class Globals {
     private toastr = inject(ToastrService);
-    public readonly backendUri: string = this.getBackendUrl();
-
-    private getBackendUrl(): string {
-        if (window.location.port === '4200') { // local `ng serve`, backend at localhost:8080
-            return 'http://localhost:8080/api';
-        } else {
-            return 'https://server.zorphy.net/api';
-        }
-    }
 
     public get silentErrorContext(): HttpContext {
         return new HttpContext().set(SILENT_ERROR_HANDLER, true);
