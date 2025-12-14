@@ -3,13 +3,15 @@ package net.zorphy.backend.site.all.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.zorphy.backend.main.all.exception.InvalidSessionException;
-import net.zorphy.backend.site.all.dto.GameRoom;
-import net.zorphy.backend.site.all.dto.WebSocketError;
+import net.zorphy.backend.site.all.dto.ws.RoomMember;
+import net.zorphy.backend.site.all.dto.ws.WebSocketError;
+import net.zorphy.backend.site.nobodysperfect.dto.GameRoom;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -38,9 +40,14 @@ public class WebSocketBaseService {
     public void createRoom(String sessionId) {
         String roomId = UUID.randomUUID().toString();
 
+        var member = new RoomMember(
+          sessionId,
+          "username"
+        );
         GameRoom room = new GameRoom(
+                Instant.now(),
                 roomId,
-                new ArrayList<>(List.of(sessionId))
+                new ArrayList<>(List.of(member))
         );
 
         setRoom(room);
@@ -53,7 +60,10 @@ public class WebSocketBaseService {
 
     public void joinRoom(String sessionId, String roomId) {
         GameRoom room = getRoom(roomId);
-        room.members().add(sessionId);
+
+        var member = new RoomMember(sessionId, "username");
+
+        room.members().add(member);
         setRoom(room);
 
         messagingTemplate.convertAndSend("/topic/join", "Someone joined!");

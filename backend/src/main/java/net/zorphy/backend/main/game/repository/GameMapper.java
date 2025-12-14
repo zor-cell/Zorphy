@@ -5,7 +5,7 @@ import net.zorphy.backend.main.game.dto.GameDetails;
 import net.zorphy.backend.main.game.dto.GameMetadata;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.main.game.entity.Game;
-import net.zorphy.backend.site.all.dto.GameStateBase;
+import net.zorphy.backend.site.all.dto.http.GameStateBase;
 import net.zorphy.backend.site.all.service.GameSpecificMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

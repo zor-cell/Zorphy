@@ -1,4 +1,4 @@
-package net.zorphy.backend.site.all.dto;
+package net.zorphy.backend.site.all.dto.http;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

@@ -7,7 +7,7 @@ import net.zorphy.backend.main.game.dto.GameDetails;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.main.all.exception.InvalidSessionException;
 import net.zorphy.backend.site.all.controller.GameSessionSaveController;
-import net.zorphy.backend.site.all.dto.ResultState;
+import net.zorphy.backend.site.all.dto.http.ResultState;
 import net.zorphy.backend.site.jolly.dto.RoundResult;
 import net.zorphy.backend.site.jolly.dto.game.GameConfig;
 import net.zorphy.backend.site.jolly.dto.game.GameState;

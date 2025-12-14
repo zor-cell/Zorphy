@@ -1,6 +1,6 @@
 package net.zorphy.backend.site.jolly.dto.game;
 
-import net.zorphy.backend.site.all.dto.GameStateBase;
+import net.zorphy.backend.site.all.dto.http.GameStateBase;
 import net.zorphy.backend.site.jolly.dto.RoundInfo;
 
 import java.time.Instant;

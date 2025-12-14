@@ -5,9 +5,9 @@ import net.zorphy.backend.main.game.dto.GameFilters;
 import net.zorphy.backend.main.game.dto.GameMetadata;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.main.game.dto.stats.GameStats;
-import net.zorphy.backend.main.player.dto.TeamDetails;
-import net.zorphy.backend.site.all.dto.GameStateBase;
-import net.zorphy.backend.site.all.dto.ResultStateBase;
+import net.zorphy.backend.site.all.dto.http.TeamDetails;
+import net.zorphy.backend.site.all.dto.http.GameStateBase;
+import net.zorphy.backend.site.all.dto.http.ResultStateBase;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

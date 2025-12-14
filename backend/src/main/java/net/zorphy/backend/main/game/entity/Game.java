@@ -3,8 +3,8 @@ package net.zorphy.backend.main.game.entity;
 import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import net.zorphy.backend.main.player.entity.Player;
-import net.zorphy.backend.site.all.dto.GameStateBase;
-import net.zorphy.backend.site.all.dto.ResultStateBase;
+import net.zorphy.backend.site.all.dto.http.GameStateBase;
+import net.zorphy.backend.site.all.dto.http.ResultStateBase;
 import org.hibernate.annotations.Type;
 
 import java.time.Duration;

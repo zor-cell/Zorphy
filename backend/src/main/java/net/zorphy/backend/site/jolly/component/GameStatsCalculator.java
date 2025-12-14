@@ -5,7 +5,7 @@ import net.zorphy.backend.main.all.component.CustomObjectMapperComponent;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.main.game.dto.stats.correlation.CorrelationResult;
 import net.zorphy.backend.main.player.dto.PlayerDetails;
-import net.zorphy.backend.main.player.dto.TeamDetails;
+import net.zorphy.backend.site.all.dto.http.TeamDetails;
 import net.zorphy.backend.main.game.entity.Game;
 import net.zorphy.backend.main.game.service.metrics.DoubleArithmeticStrategy;
 import net.zorphy.backend.main.game.service.metrics.DurationArithmeticStrategy;

@@ -1,9 +1,9 @@
 package net.zorphy.backend.site.all.service;
 
 import net.zorphy.backend.main.game.dto.GameDetails;
-import net.zorphy.backend.site.all.dto.GameConfigBase;
-import net.zorphy.backend.site.all.dto.GameStateBase;
-import net.zorphy.backend.site.all.dto.ResultStateBase;
+import net.zorphy.backend.site.all.dto.http.GameConfigBase;
+import net.zorphy.backend.site.all.dto.http.GameStateBase;
+import net.zorphy.backend.site.all.dto.http.ResultStateBase;
 import org.springframework.web.multipart.MultipartFile;
 
 /**

@@ -1,7 +1,7 @@
 package net.zorphy.backend.site.qwirkle.service;
 
 import net.zorphy.backend.site.all.service.GameSessionSaveService;
-import net.zorphy.backend.site.all.dto.ResultState;
+import net.zorphy.backend.site.all.dto.http.ResultState;
 import net.zorphy.backend.site.qwirkle.dto.SelectionInfo;
 import net.zorphy.backend.site.qwirkle.dto.game.GameConfig;
 import net.zorphy.backend.site.qwirkle.dto.game.GameState;

@@ -1,4 +1,4 @@
-package net.zorphy.backend.site.all.dto;
+package net.zorphy.backend.site.all.dto.ws;
 
 public record WebSocketError(
         int status,

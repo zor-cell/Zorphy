@@ -1,7 +1,6 @@
-package net.zorphy.backend.site.all.dto;
+package net.zorphy.backend.site.all.dto.http;
 
 import jakarta.validation.Valid;
-import net.zorphy.backend.main.player.dto.TeamDetails;
 
 public record ResultTeamState(
         @Valid

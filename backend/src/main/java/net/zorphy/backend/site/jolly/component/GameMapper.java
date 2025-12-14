@@ -5,7 +5,7 @@ import net.zorphy.backend.main.all.component.CustomObjectMapperComponent;
 import net.zorphy.backend.main.file.component.FileUrlComponent;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.site.all.service.GameSpecificMapper;
-import net.zorphy.backend.site.all.dto.GameStateBase;
+import net.zorphy.backend.site.all.dto.http.GameStateBase;
 import net.zorphy.backend.site.jolly.dto.RoundInfo;
 import net.zorphy.backend.site.jolly.dto.game.GameState;
 import org.springframework.stereotype.Component;

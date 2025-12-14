@@ -5,8 +5,8 @@ import jakarta.validation.Valid;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.main.all.exception.InvalidSessionException;
 import net.zorphy.backend.site.all.service.GameSessionBaseService;
-import net.zorphy.backend.site.all.dto.GameConfigBase;
-import net.zorphy.backend.site.all.dto.GameStateBase;
+import net.zorphy.backend.site.all.dto.http.GameConfigBase;
+import net.zorphy.backend.site.all.dto.http.GameStateBase;
 import org.springframework.web.bind.annotation.*;
 
 /**
