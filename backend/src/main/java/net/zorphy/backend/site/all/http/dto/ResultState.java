@@ -1,4 +1,4 @@
-package net.zorphy.backend.site.all.dto.http;
+package net.zorphy.backend.site.all.http.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;

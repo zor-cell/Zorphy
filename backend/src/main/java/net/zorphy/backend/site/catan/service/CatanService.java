@@ -1,7 +1,7 @@
 package net.zorphy.backend.site.catan.service;
 
-import net.zorphy.backend.site.all.service.GameSessionSaveService;
-import net.zorphy.backend.site.all.dto.http.ResultState;
+import net.zorphy.backend.site.all.http.service.GameSessionSaveService;
+import net.zorphy.backend.site.all.http.dto.ResultState;
 import net.zorphy.backend.site.catan.dto.game.GameConfig;
 import net.zorphy.backend.site.catan.dto.game.GameState;
 

@@ -1,6 +1,6 @@
 package net.zorphy.backend.site.catan.dto.game;
 
-import net.zorphy.backend.site.all.dto.http.GameStateBase;
+import net.zorphy.backend.site.all.http.dto.GameStateBase;
 import net.zorphy.backend.site.catan.dto.DicePair;
 import net.zorphy.backend.site.catan.dto.DiceRoll;
 

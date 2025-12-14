@@ -1,9 +1,9 @@
 package net.zorphy.backend.site.nobodysperfect;
 
 import net.zorphy.backend.main.game.dto.GameType;
-import net.zorphy.backend.site.all.controller.WebSocketBaseController;
+import net.zorphy.backend.site.all.ws.controller.WebSocketBaseController;
 import net.zorphy.backend.site.all.dto.GameRoom;
-import net.zorphy.backend.site.all.service.WebSocketBaseService;
+import net.zorphy.backend.site.all.ws.service.WebSocketBaseService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;

@@ -3,7 +3,7 @@ package net.zorphy.backend.site.scotlandyard;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import net.zorphy.backend.main.game.dto.GameType;
-import net.zorphy.backend.site.all.controller.GameSessionBaseController;
+import net.zorphy.backend.site.all.http.controller.GameSessionBaseController;
 import net.zorphy.backend.site.scotlandyard.dto.HeatMapConfig;
 import net.zorphy.backend.site.scotlandyard.dto.HeatMapEntry;
 import net.zorphy.backend.site.scotlandyard.dto.game.GameConfig;

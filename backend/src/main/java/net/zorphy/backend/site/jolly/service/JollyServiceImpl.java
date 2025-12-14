@@ -5,7 +5,7 @@ import net.zorphy.backend.main.game.dto.GameDetails;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.main.file.service.FileStorageService;
 import net.zorphy.backend.main.game.service.GameService;
-import net.zorphy.backend.site.all.dto.http.ResultState;
+import net.zorphy.backend.site.all.http.dto.ResultState;
 import net.zorphy.backend.site.connect4.exception.InvalidOperationException;
 import net.zorphy.backend.site.jolly.dto.RoundInfo;
 import net.zorphy.backend.site.jolly.dto.RoundResult;

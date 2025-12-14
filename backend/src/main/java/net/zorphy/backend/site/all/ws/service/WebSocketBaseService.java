@@ -1,10 +1,10 @@
-package net.zorphy.backend.site.all.service;
+package net.zorphy.backend.site.all.ws.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.zorphy.backend.main.all.exception.InvalidSessionException;
-import net.zorphy.backend.site.all.dto.ws.RoomMember;
-import net.zorphy.backend.site.all.dto.ws.WebSocketError;
+import net.zorphy.backend.site.all.ws.dto.RoomMember;
+import net.zorphy.backend.site.all.ws.dto.WebSocketError;
 import net.zorphy.backend.site.nobodysperfect.dto.GameRoom;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;

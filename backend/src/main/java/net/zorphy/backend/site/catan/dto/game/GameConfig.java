@@ -4,8 +4,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import net.zorphy.backend.site.all.dto.http.TeamDetails;
-import net.zorphy.backend.site.all.dto.http.GameConfigBase;
+import net.zorphy.backend.site.all.http.dto.TeamDetails;
+import net.zorphy.backend.site.all.http.dto.GameConfigBase;
 import net.zorphy.backend.site.catan.dto.DiceConfig;
 import net.zorphy.backend.site.catan.dto.enums.GameMode;
 

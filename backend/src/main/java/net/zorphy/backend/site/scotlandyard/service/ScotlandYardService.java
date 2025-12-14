@@ -1,6 +1,6 @@
 package net.zorphy.backend.site.scotlandyard.service;
 
-import net.zorphy.backend.site.all.service.GameSessionBaseService;
+import net.zorphy.backend.site.all.http.service.GameSessionBaseService;
 import net.zorphy.backend.site.scotlandyard.dto.HeatMapConfig;
 import net.zorphy.backend.site.scotlandyard.dto.HeatMapEntry;
 import net.zorphy.backend.site.scotlandyard.dto.game.GameConfig;

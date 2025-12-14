@@ -1,7 +1,7 @@
-package net.zorphy.backend.site.all.controller;
+package net.zorphy.backend.site.all.ws.controller;
 
 import net.zorphy.backend.main.game.dto.GameType;
-import net.zorphy.backend.site.all.service.WebSocketBaseService;
+import net.zorphy.backend.site.all.ws.service.WebSocketBaseService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
