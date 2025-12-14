@@ -1,41 +1,30 @@
 package net.zorphy.backend.site.nobodysperfect;
 
+import net.zorphy.backend.main.game.dto.GameType;
+import net.zorphy.backend.site.all.controller.WebSocketBaseController;
 import net.zorphy.backend.site.all.dto.GameRoom;
 import net.zorphy.backend.site.all.service.WebSocketBaseService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.annotation.SendToUser;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 
 @Controller
-@MessageMapping("nobodys-perfect")
-public class NobodysPerfectController {
+@MessageMapping("nobody-is-perfect")
+public class NobodysPerfectController extends WebSocketBaseController {
     private final WebSocketBaseService socketService;
 
-    public NobodysPerfectController(WebSocketBaseService socketService) {
+    public NobodysPerfectController(WebSocketBaseService socketService, SimpMessagingTemplate messagingTemplate) {
+        super(socketService, messagingTemplate, GameType.NOBODY_IS_PERFECT);
         this.socketService = socketService;
     }
 
-    @MessageMapping("create")
-    @SendToUser("/queue/created")
-    public GameRoom createRoom(SimpMessageHeaderAccessor headerAccessor) {
-        String sessionId = headerAccessor.getSessionId();
-
-        return socketService.createRoom(sessionId);
+    @Secured("ROLE_ADMIN")
+    @MessageMapping("save/{roomId}")
+    public GameRoom saveRoom(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomId) {
+        return null;
     }
 
-    @MessageMapping("join/{roomId}")
-    public GameRoom joinRoom(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomId) {
-        String sessionId = headerAccessor.getSessionId();
-
-        return socketService.joinRoom(roomId, sessionId);
-    }
-
-    @MessageExceptionHandler()
-    @SendToUser("/queue/errors")
-    public String handleMessagingExceptions(Exception ex) {
-        return "ERROR: " + ex.getMessage();
-    }
 }

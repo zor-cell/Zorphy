@@ -7,5 +7,6 @@ public enum GameType {
     JOLLY,
     RISK,
     HASHI,
-    SCOTLAND_YARD
+    SCOTLAND_YARD,
+    NOBODY_IS_PERFECT
 }

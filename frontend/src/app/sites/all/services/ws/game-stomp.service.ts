@@ -1,18 +1,25 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable, OnDestroy} from '@angular/core';
 import {RxStompService} from "./rx-stomp.service";
-import {Subscription} from "rxjs";
+import {map, Observable, Subscription} from "rxjs";
+import {Globals} from "../../../../main/classes/globals";
+import {GameRoom} from "../../../nobody-is-perfect/dto/GameRoom";
+import {IMessage} from "@stomp/stompjs";
+import {WebSocketError} from "../../dto/WebSocketError";
 
 @Injectable({
   providedIn: 'root'
 })
-export abstract class GameStompService {
+export abstract class GameStompService implements OnDestroy {
+  private stompService = inject(RxStompService);
+  private globals = inject(Globals);
+
   protected abstract readonly gameType: string;
   protected readonly APP_PREFIX = '/app/';
 
   private subscriptions: Subscription[] = [];
 
-  protected constructor(protected stompService: RxStompService) {
-    this.subscribeDefaults();
+  ngOnDestroy(): void {
+    this.cleanup();
   }
 
   public createRoom() {
@@ -36,21 +43,33 @@ export abstract class GameStompService {
     }
   }
 
-  private subscribeDefaults() {
-    const createdSubscription = this.stompService.watch(`/user/queue/${this.gameType}/created`).subscribe(message => {
-      console.log(message);
+  protected subscribeDefaults() {
+    const createdSubscription = this.watchAndMap<GameRoom>('created').subscribe(room => {
+      this.globals.handleSuccess(`Room ${room.roomId} created`);
     });
     this.subscriptions.push(createdSubscription);
 
-    const joinedSubscription = this.stompService.watch(`/user/queue/${this.gameType}/joined`).subscribe(message => {
-      console.log(message);
+    const joinedSubscription = this.watchAndMap<GameRoom>('joined').subscribe(room => {
+      this.globals.handleSuccess(`Room ${room.roomId} joined`);
     });
     this.subscriptions.push(joinedSubscription);
 
-    const errorsSubscription = this.stompService.watch(`/user/queue/${this.gameType}/errors`).subscribe(message => {
-      console.log(message);
+    const errorsSubscription = this.watchAndMap<WebSocketError>('errors').subscribe(error => {
+      this.globals.handleError(error);
     });
     this.subscriptions.push(errorsSubscription);
+
+    const temp = this.stompService.watch(`/topic/test`).subscribe(error => {
+      console.log(error)
+    });
+    this.subscriptions.push(temp);
+  }
+
+  protected watchAndMap<T>(destination: string): Observable<T> {
+    return this.stompService.watch(`/user/queue/${this.gameType}/${destination}`)
+        .pipe(
+            map((message: IMessage) => JSON.parse(message.body) as T)
+        );
   }
 
 }

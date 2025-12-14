@@ -1,27 +1,29 @@
 import {Component, inject} from '@angular/core';
 import {NobodyIsPerfectService} from "../../nobody-is-perfect.service";
 import {RxStompService} from "../../../all/services/ws/rx-stomp.service";
+import {MainHeaderComponent} from "../../../../main/components/all/main-header/main-header.component";
+import {join} from "@angular/compiler-cli";
 
 @Component({
   selector: 'app-config',
-  imports: [],
+  imports: [
+    MainHeaderComponent
+  ],
   templateUrl: './config.component.html',
   styleUrl: './config.component.css'
 })
 export class NobodyIsPerfectConfigComponent {
-  private stompService = inject(RxStompService);
+  private stompService = inject(NobodyIsPerfectService);
 
-  ngOnInit() {
-    this.stompService.watch('/user/queue/created').subscribe(message => {
-      console.log(message);
-    });
+  create() {
+    this.stompService.createRoom();
+  }
 
-    this.stompService.watch('/user/queue/joined').subscribe(message => {
-      console.log(message);
-    });
+  join() {
+    this.stompService.joinRoom("123");
+  }
 
-    this.stompService.watch('/user/queue/errors').subscribe(message => {
-      console.log(message);
-    });
+  test() {
+    this.stompService.save();
   }
 }
