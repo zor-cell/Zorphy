@@ -3,10 +3,12 @@ package net.zorphy.backend.site.all.ws.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.zorphy.backend.main.all.exception.InvalidSessionException;
+import net.zorphy.backend.main.game.dto.GameType;
+import net.zorphy.backend.site.all.ws.dto.GameRoomBase;
+import net.zorphy.backend.site.all.ws.dto.GameRoomStateBase;
 import net.zorphy.backend.site.all.ws.dto.RoomMember;
 import net.zorphy.backend.site.all.ws.dto.WebSocketError;
 import net.zorphy.backend.site.nobodysperfect.dto.GameRoom;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -16,8 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Service
-public class WebSocketBaseService {
+public class GameRoomBaseService<Room extends GameRoomBase, State extends GameRoomStateBase> {
     private static final String ROOM_KEY_PREFIX = "rooms:";
     private static final String SESSION_USERNAME_KEY = "SESSION_USERNAME";
 
@@ -25,16 +26,18 @@ public class WebSocketBaseService {
     private final StringRedisTemplate redisTemplate;
     private final SimpMessagingTemplate messagingTemplate;
     private final ObjectMapper mapper;
+    private final GameType gameType;
 
-    public WebSocketBaseService(StringRedisTemplate redisTemplate,
-                                 SimpMessagingTemplate messagingTemplate,
-                                 ObjectMapper mapper,
-                                 @Value("${spring.session.redis.namespace}") String applicationNamespace
+    public GameRoomBaseService(StringRedisTemplate redisTemplate,
+                               SimpMessagingTemplate messagingTemplate,
+                               ObjectMapper mapper,
+                               GameType gameType
     ) {
         this.redisTemplate = redisTemplate;
         this.messagingTemplate = messagingTemplate;
         this.mapper = mapper;
-        this.applicationNamespace = applicationNamespace;
+        this.applicationNamespace = "zorphy";
+        this.gameType = gameType;
     }
 
     public void createRoom(String sessionId) {

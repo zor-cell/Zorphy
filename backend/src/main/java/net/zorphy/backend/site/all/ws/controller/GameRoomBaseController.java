@@ -1,26 +1,26 @@
 package net.zorphy.backend.site.all.ws.controller;
 
 import net.zorphy.backend.main.game.dto.GameType;
-import net.zorphy.backend.site.all.ws.service.WebSocketBaseService;
+import net.zorphy.backend.site.all.ws.dto.GameRoomBase;
+import net.zorphy.backend.site.all.ws.dto.GameRoomStateBase;
+import net.zorphy.backend.site.all.ws.service.GameRoomBaseService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
-public abstract class WebSocketBaseController {
-    protected final SimpMessagingTemplate messagingTemplate;
-    protected final GameType gameType;
-    private final WebSocketBaseService socketService;
+public abstract class GameRoomBaseController<Room extends GameRoomBase, State extends GameRoomStateBase> {
+    private final GameRoomBaseService<Room, State> socketService;
 
-    public WebSocketBaseController(
-           WebSocketBaseService socketService,
-            SimpMessagingTemplate messagingTemplate,
-            GameType gameType)
+    protected final SimpMessagingTemplate messagingTemplate;
+
+    public GameRoomBaseController(
+           GameRoomBaseService<Room, State> socketService,
+            SimpMessagingTemplate messagingTemplate)
     {
         this.socketService = socketService;
         this.messagingTemplate = messagingTemplate;
-        this.gameType = gameType;
     }
 
     @MessageMapping("create")
