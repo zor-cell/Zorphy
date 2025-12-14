@@ -1,6 +1,5 @@
 package net.zorphy.backend.site.all.ws.controller;
 
-import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.site.all.ws.dto.GameRoomBase;
 import net.zorphy.backend.site.all.ws.dto.GameRoomStateBase;
 import net.zorphy.backend.site.all.ws.service.GameRoomBaseService;

@@ -11,7 +11,6 @@ import net.zorphy.backend.site.all.ws.dto.WebSocketError;
 import net.zorphy.backend.site.nobodysperfect.dto.GameRoom;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.ArrayList;
