@@ -66,7 +66,7 @@ export abstract class GameStompService implements OnDestroy {
   }
 
   protected watchAndMap<T>(destination: string): Observable<T> {
-    return this.stompService.watch(`/user/queue/${this.gameType}/${destination}`)
+    return this.stompService.watch(`/user/queue/${destination}`)
         .pipe(
             map((message: IMessage) => JSON.parse(message.body) as T)
         );
