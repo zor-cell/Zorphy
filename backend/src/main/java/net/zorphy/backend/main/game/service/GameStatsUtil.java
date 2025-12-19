@@ -110,7 +110,7 @@ public class GameStatsUtil {
                 durationMetrics.update(game.getId(), curDuration);
 
                 //streaks
-                winStreaks.add(playerIsWinner, gameMapper.gameToGameDetails(game), currentPlayer.id());
+                winStreaks.add(playerIsWinner, game.getPlayedAt());
 
                 //player specific stats
                 gamesPlayed++;

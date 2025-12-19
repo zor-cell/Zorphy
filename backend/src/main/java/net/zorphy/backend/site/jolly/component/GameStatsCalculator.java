@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import net.zorphy.backend.main.all.component.CustomObjectMapperComponent;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.main.game.dto.stats.correlation.CorrelationResult;
+import net.zorphy.backend.main.game.service.streaks.GameStatsStreakAggregator;
 import net.zorphy.backend.main.player.dto.PlayerDetails;
 import net.zorphy.backend.site.all.http.dto.TeamDetails;
 import net.zorphy.backend.main.game.entity.Game;
@@ -44,6 +45,8 @@ public class GameStatsCalculator implements GameSpecificStatsCalculator {
 
         GameStatsMetricAggregator<Duration> roundDurationMetrics = new GameStatsMetricAggregator<>(new DurationArithmeticStrategy());
         GameStatsMetricAggregator<Double> roundScoreMetrics = new GameStatsMetricAggregator<>(new DoubleArithmeticStrategy());
+        GameStatsStreakAggregator outInOneStreak = new GameStatsStreakAggregator();
+        GameStatsStreakAggregator closedStreak = new GameStatsStreakAggregator();
 
         for(Game game : games) {
             try {
@@ -90,6 +93,10 @@ public class GameStatsCalculator implements GameSpecificStatsCalculator {
                     }
                     roundDurationMetrics.update(game.getId(), curDuration);
 
+                    //streaks
+                    outInOneStreak.add(result.outInOne(), round.endTime());
+                    closedStreak.add(result.hasClosed(), round.endTime());
+
                     roundsPlayed++;
                     if(curScore == roundMaxScore) {
                         roundsWon++;
@@ -106,7 +113,9 @@ public class GameStatsCalculator implements GameSpecificStatsCalculator {
                 roundScoreMetrics.aggregate(),
                 roundDurationMetrics.aggregate(),
                 GameStatsUtil.computeFraction(outInOneCount, roundsPlayed),
-                GameStatsUtil.computeFraction(closedCount, roundsPlayed)
+                GameStatsUtil.computeFraction(closedCount, roundsPlayed),
+                outInOneStreak.calculate().maxStreak(),
+                closedStreak.calculate().maxStreak()
         );
     }
 }

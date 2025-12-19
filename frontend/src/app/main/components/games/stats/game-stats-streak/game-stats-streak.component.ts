@@ -22,16 +22,16 @@ export class GameStatsStreakComponent {
 
     if(str.start && str.end) {
       return {
-        dateFrom: this.formatDateToInput(new Date(str.start.metadata.playedAt)),
-        dateTo: this.formatDateToInput(new Date(str.end.metadata.playedAt), 1),
-        players: [str.playerId],
-        gameTypes: [str.start.metadata.gameType]
+        dateFrom: this.formatDateToInput(new Date(str.start)),
+        dateTo: this.formatDateToInput(new Date(str.end), 1),
+        //players: [str.playerId],
+        //gameTypes: [str.start.metadata.gameType]
       };
     } else if(str.start) {
       return {
-        dateFrom: this.formatDateToInput(new Date(str.start.metadata.playedAt)),
-        players: [str.playerId],
-        gameTypes: [str.start.metadata.gameType]
+        dateFrom: this.formatDateToInput(new Date(str.start)),
+        //players: [str.playerId],
+        //gameTypes: [str.start.metadata.gameType]
       };
     } else return {};
   }

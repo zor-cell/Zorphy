@@ -1,13 +1,11 @@
 package net.zorphy.backend.main.game.dto.stats.streaks;
 
-import net.zorphy.backend.main.game.dto.GameDetails;
 
-import java.util.UUID;
+import java.time.Instant;
 
 public record GameStatsStreak(
         int streak,
-        GameDetails start,
-        GameDetails end,
-        UUID playerId
+        Instant start,
+        Instant end
 ) {
 }

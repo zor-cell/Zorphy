@@ -8,6 +8,9 @@ import {
 import {
     GameStatsSimpleComponent
 } from "../../../../main/components/games/stats/game-stats-simple/game-stats-simple.component";
+import {
+    GameStatsStreakComponent
+} from "../../../../main/components/games/stats/game-stats-streak/game-stats-streak.component";
 
 @Component({
   selector: 'jolly-game-stats',
@@ -15,7 +18,8 @@ import {
         DurationPipe,
         GameStatsMetaComponent,
         GameStatsMetricsComponent,
-        GameStatsSimpleComponent
+        GameStatsSimpleComponent,
+        GameStatsStreakComponent
     ],
   templateUrl: './game-stats.component.html',
   styleUrl: './game-stats.component.css',

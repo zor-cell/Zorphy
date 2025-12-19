@@ -9,6 +9,11 @@
 
     <div>
         <game-stats-simple label="Closed rate" [text]="(stats().closedRate * 100).toFixed(2) + '%'"/>
+        <game-stats-streak label="Max Closed Streak" [streak]="stats().maxClosedStreak"/>
+    </div>
+
+    <div>
         <game-stats-simple label="Out In One Rate" [text]="(stats().outInOneRate * 100).toFixed(2) + '%'"/>
+        <game-stats-streak label="Max Out In One Streak" [streak]="stats().maxOutInOneStreak"/>
     </div>
 </div>

@@ -1,8 +1,5 @@
-import {GameDetails} from "../GameDetails";
-
 export interface GameStatsStreak {
     streak: number;
-    start: GameDetails;
-    end: GameDetails;
-    playerId: string;
+    start: string;
+    end: string;
 }

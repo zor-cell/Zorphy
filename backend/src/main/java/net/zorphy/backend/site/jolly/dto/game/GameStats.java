@@ -2,6 +2,7 @@ package net.zorphy.backend.site.jolly.dto.game;
 
 import net.zorphy.backend.main.game.dto.stats.GameSpecificStats;
 import net.zorphy.backend.main.game.dto.stats.metrics.GameStatsMetrics;
+import net.zorphy.backend.main.game.dto.stats.streaks.GameStatsStreak;
 
 import java.time.Duration;
 
@@ -12,6 +13,8 @@ public record GameStats(
         GameStatsMetrics<Double> roundScoreMetrics,
         GameStatsMetrics<Duration> roundDurationMetrics,
         double outInOneRate,
-        double closedRate
+        double closedRate,
+        GameStatsStreak maxOutInOneStreak,
+        GameStatsStreak maxClosedStreak
 ) implements GameSpecificStats {
 }
