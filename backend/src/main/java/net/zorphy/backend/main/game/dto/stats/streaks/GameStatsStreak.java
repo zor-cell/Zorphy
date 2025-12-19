@@ -1,4 +1,4 @@
-package net.zorphy.backend.main.game.dto.stats.metrics;
+package net.zorphy.backend.main.game.dto.stats.streaks;
 
 import net.zorphy.backend.main.game.dto.GameDetails;
 

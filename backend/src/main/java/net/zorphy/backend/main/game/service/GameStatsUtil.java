@@ -1,7 +1,6 @@
 package net.zorphy.backend.main.game.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.zorphy.backend.main.game.dto.GameDetails;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.main.game.dto.stats.GameSpecificStats;
 import net.zorphy.backend.main.game.dto.stats.GameStats;
@@ -11,7 +10,7 @@ import net.zorphy.backend.main.game.dto.stats.correlation.CorrelationAxisType;
 import net.zorphy.backend.main.game.dto.stats.correlation.CorrelationDataPoint;
 import net.zorphy.backend.main.game.dto.stats.correlation.CorrelationMetadata;
 import net.zorphy.backend.main.game.dto.stats.correlation.CorrelationResult;
-import net.zorphy.backend.main.game.dto.stats.metrics.GameStatsStreak;
+import net.zorphy.backend.main.game.service.streaks.GameStatsStreakAggregator;
 import net.zorphy.backend.main.player.dto.PlayerDetails;
 import net.zorphy.backend.main.game.entity.Game;
 import net.zorphy.backend.main.game.repository.GameMapper;
@@ -60,16 +59,14 @@ public class GameStatsUtil {
         int gamesPlayed = 0;
         int gamesWon = 0;
 
-        //streaks
-        GameStatsStreak currentStreak = new GameStatsStreak(0, null, null, null);
-        GameStatsStreak maxStreak = new GameStatsStreak(0, null, null, null);
-
         //metrics
         GameStatsMetricAggregator<Double> scoreMetrics = new GameStatsMetricAggregator<>(new DoubleArithmeticStrategy());
         GameStatsMetricAggregator<Duration> durationMetrics = new GameStatsMetricAggregator<>(new DurationArithmeticStrategy());
 
-        var sortedGames = games.stream().sorted(Comparator.comparing(Game::getPlayedAt)).toList();
-        for (Game game : sortedGames) {
+        //streaks
+        GameStatsStreakAggregator winStreaks = new GameStatsStreakAggregator();
+
+        for (Game game : games) {
             try {
                 ResultState result = objectMapper.convertValue(game.getResult(), ResultState.class);
 
@@ -105,39 +102,19 @@ public class GameStatsUtil {
                     }
                 }
 
-                //player specific stats
-                //min + max + avg score
+                //metrics
                 int curScore = playerTeam.score();
                 scoreMetrics.update(game.getId(), (double) curScore);
 
-                //min + max + avg duration
                 Duration curDuration = game.getDuration();
                 durationMetrics.update(game.getId(), curDuration);
 
+                //streaks
+                winStreaks.add(playerIsWinner, gameMapper.gameToGameDetails(game), currentPlayer.id());
+
+                //player specific stats
                 gamesPlayed++;
                 if (playerIsWinner) gamesWon++;
-
-                //streaks
-                if(playerIsWinner) {
-                    GameDetails gameDetails = gameMapper.gameToGameDetails(game);
-                    if(currentStreak.streak() == 0) {
-                        currentStreak = new GameStatsStreak(1, gameDetails, null, currentPlayer.id());
-                    } else {
-                        currentStreak = new GameStatsStreak(
-                                currentStreak.streak() + 1,
-                                currentStreak.start(),
-                                gameDetails,
-                                currentStreak.playerId()
-                        );
-                    }
-
-                    if(currentStreak.streak() > maxStreak.streak()) {
-                        maxStreak = currentStreak;
-                    }
-
-                } else {
-                    currentStreak = new GameStatsStreak(0, null, null, null);
-                }
 
                 //correlation data
                 int playerStartPosition = result.teams().indexOf(playerTeam);
@@ -196,8 +173,7 @@ public class GameStatsUtil {
                 currentPlayer,
                 gamesPlayed,
                 computeFraction(gamesWon, gamesPlayed),
-                currentStreak,
-                maxStreak,
+                winStreaks.calculate(),
                 scoreMetrics.aggregate(),
                 durationMetrics.aggregate(),
                 nemesis,

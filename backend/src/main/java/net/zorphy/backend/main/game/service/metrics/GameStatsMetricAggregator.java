@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * A class that provides functionality to aggregate data to compute relevant statistics metrics
+ */
 public class GameStatsMetricAggregator<T extends Comparable<T>> {
     private final MetricArithmeticStrategy<T> arithmetic;
     private LinkedGameStats<T> min = new LinkedGameStats<>(null, null);
@@ -17,12 +20,18 @@ public class GameStatsMetricAggregator<T extends Comparable<T>> {
         this.arithmetic = arithmetic;
     }
 
+    /**
+     * Updates the internal stats with a {@code newValue}
+     */
     public void update(UUID gameId, T newValue) {
         entries.add(newValue);
         min = min.updateMin(gameId, newValue);
         max = max.updateMax(gameId, newValue);
     }
 
+    /**
+     * Returns all aggregated statistics
+     */
     public GameStatsMetrics<T> aggregate() {
         T total = entries.stream().reduce(arithmetic.getDefault(), arithmetic::add);
         T avg = arithmetic.divide(total, entries.size());

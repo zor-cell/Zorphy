@@ -2,14 +2,13 @@ import {PlayerDetails} from "../../all/PlayerDetails";
 import {CorrelationResult} from "./CorrelationResult";
 import {GameStatsMetrics} from "./GameStatsMetrics";
 import {ChartDataHistory} from "./ChartDataHistory";
-import {GameStatsStreak} from "./GameStatsStreak";
+import {GameStatsStreakResult} from "./GameStatsStreakResult";
 
 export interface GameStats {
     player: PlayerDetails;
     gamesPlayed: number;
     winRate: number;
-    currentWinStreak: GameStatsStreak;
-    maxWinStreak: GameStatsStreak;
+    winStreaks: GameStatsStreakResult;
     scoreMetrics: GameStatsMetrics<number>,
     durationMetrics: GameStatsMetrics<string>,
     nemesis: PlayerDetails | null;
