@@ -2,7 +2,6 @@ import {RxStompConfig} from "@stomp/rx-stomp";
 import SockJS from "sockjs-client";
 
 export const rxStompConfig: RxStompConfig = {
-    // 1. WebSocket Factory (using SockJS for reliable transport)
     webSocketFactory: () => {
         const WEBSOCKET_ENDPOINT = 'http://localhost:8080/api/ws';
         return new SockJS(WEBSOCKET_ENDPOINT) as WebSocket;
