@@ -1,72 +1,77 @@
 <game-session-game [sessionService]="catanService"
-                   [gameState]="gameState"
->
+  [gameState]="gameState"
+  >
 
-<div *ngIf="gameState" class="main-container">
-    <div>
+  @if (gameState) {
+    <div class="main-container">
+      <div>
         <section class="game-container">
-            <div class="players-container">
-                <ol>
-                    <ng-container *ngFor="let team of gameState.gameConfig.teams; let i = index">
-                        <li [id]="(i === gameState.currentPlayerTurn) ? 'current-player' : ''">{{ team.name }}</li>
-                    </ng-container>
-                </ol>
+          <div class="players-container">
+            <ol>
+              @for (team of gameState.gameConfig.teams; track team; let i = $index) {
+                <li [id]="(i === gameState.currentPlayerTurn) ? 'current-player' : ''">{{ team.name }}</li>
+              }
+            </ol>
+          </div>
+          <div class="dice-container">
+            <div class="card-info">
+              @if (gameState.gameConfig.classicDice.isBalanced && gameState.classicCards) {
+                <h3
+                class="dice-header card-info-text">{{ gameState.classicCards.length }} / 36</h3>
+              }
+              @if (gameState.gameConfig.eventDice.isBalanced && gameState.eventCards) {
+                <h3
+                class="dice-header card-info-text">{{ gameState.eventCards.length }} / 6</h3>
+              }
             </div>
-
-            <div class="dice-container">
-                <div class="card-info">
-                    <h3 *ngIf="gameState.gameConfig.classicDice.isBalanced && gameState.classicCards"
-                        class="dice-header card-info-text">{{ gameState.classicCards.length }} / 36</h3>
-                    <h3 *ngIf="gameState.gameConfig.eventDice.isBalanced && gameState.eventCards"
-                        class="dice-header card-info-text">{{ gameState.eventCards.length }} / 6</h3>
+            <button (click)="rollDice()" id="roll-button">Dice</button>
+            @if (gameState.gameConfig.gameMode === GameMode.CITIES_AND_KNIGHTS) {
+              <button (click)="rollDice(true)"
+                id="alchemist-button" class="small-btn">Alchemist
+              </button>
+            }
+          </div>
+          <div class="ship-actions">
+            <div class="ship-container">
+              <div class="current-roll">
+                <div id="current-roll-player">
+                  {{ lastPlayer ? lastPlayer!.name : '-' }}
                 </div>
-
-                <button (click)="rollDice()" id="roll-button">Dice</button>
-                <button *ngIf="gameState.gameConfig.gameMode === GameMode.CITIES_AND_KNIGHTS" (click)="rollDice(true)"
-                        id="alchemist-button" class="small-btn">Alchemist
-                </button>
-            </div>
-
-            <div class="ship-actions">
-                <div class="ship-container">
-                    <div class="current-roll">
-                        <div id="current-roll-player">
-                            {{ lastPlayer ? lastPlayer!.name : '-' }}
+                <b class="spacer">
+                  |
+                </b>
+                <catan-dice-roll class="flex-container" [gameMode]="gameState.gameConfig.gameMode"
+                  [diceRoll]="currentRoll"/>
+                </div>
+                @if (gameState.gameConfig.gameMode === GameMode.CITIES_AND_KNIGHTS) {
+                  <div class="ship-display">
+                    @for (_ of [].constructor(gameState.gameConfig.maxShipTurns); track _; let i = $index) {
+                      @if (i === gameState.currentShipTurn) {
+                        <img class="ship-tile-current" src="../../../../../assets/catan/e_2b.svg" alt="">
+                      } @else {
+                        <div [ngClass]="i === gameState.gameConfig.maxShipTurns - 1 ? 'ship-tile-last attack' : 'ship-tile attack'">
+                          {{ gameState.currentShipTurn === gameState.gameConfig.maxShipTurns - 1 ? attackText[i] : '' }}
                         </div>
-                        <b class="spacer">
-                            |
-                        </b>
-                        <catan-dice-roll class="flex-container" [gameMode]="gameState.gameConfig.gameMode"
-                                         [diceRoll]="currentRoll"/>
-                    </div>
-                    <div *ngIf="gameState.gameConfig.gameMode === GameMode.CITIES_AND_KNIGHTS" class="ship-display">
-                        <ng-container *ngFor="let _ of [].constructor(gameState.gameConfig.maxShipTurns); let i = index">
-                            @if (i === gameState.currentShipTurn) {
-                                <img class="ship-tile-current" src="../../../../../assets/catan/e_2b.svg" alt="">
-                            } @else {
-                                <div [ngClass]="i === gameState.gameConfig.maxShipTurns - 1 ? 'ship-tile-last attack' : 'ship-tile attack'">
-                                    {{ gameState.currentShipTurn === gameState.gameConfig.maxShipTurns - 1 ? attackText[i] : '' }}
-                                </div>
-                            }
-                        </ng-container>
-                    </div>
-                    <div *ngIf="gameState.gameConfig.classicDice.useEvents" class="current-roll-event">
-                        {{ currentRoll?.dicePair?.event }}
-                    </div>
-
-                </div>
-                <button class="small-btn" id="undo-button" (click)="undoRoll()" [disabled]="gameState.diceRolls.length === 0">Undo</button>
+                      }
+                    }
+                  </div>
+                }
+                @if (gameState.gameConfig.classicDice.useEvents) {
+                  <div class="current-roll-event">
+                    {{ currentRoll?.dicePair?.event }}
+                  </div>
+                }
+              </div>
+              <button class="small-btn" id="undo-button" (click)="undoRoll()" [disabled]="gameState.diceRolls.length === 0">Undo</button>
             </div>
-
-        </section>
-
-        <div class="game-actions">
+          </section>
+          <div class="game-actions">
             <button class="small-btn" (click)="toggleChart()">History</button>
+          </div>
         </div>
-    </div>
-
-    <div style="margin: 15rem auto 0 auto">
-        <catan-histogram [isVisible]="showChart" [diceRolls]="gameState.diceRolls" [gameMode]="gameState.gameConfig.gameMode"/>
-    </div>
-</div>
-</game-session-game>
+        <div style="margin: 15rem auto 0 auto">
+          <catan-histogram [isVisible]="showChart" [diceRolls]="gameState.diceRolls" [gameMode]="gameState.gameConfig.gameMode"/>
+        </div>
+      </div>
+    }
+  </game-session-game>

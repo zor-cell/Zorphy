@@ -1,5 +1,5 @@
 import {Component, effect, inject, input, output} from '@angular/core';
-import {NgForOf, NgStyle} from "@angular/common";
+import { NgStyle } from "@angular/common";
 import {QwirkleTileComponent} from "../tile/tile.component";
 import {Tile} from "../../dto/tile/Tile";
 import {QwirkleService} from "../../qwirkle.service";
@@ -9,10 +9,9 @@ import {GameState} from "../../dto/game/GameState";
 @Component({
     selector: 'qwirkle-hand',
     imports: [
-        NgForOf,
-        QwirkleTileComponent,
-        NgStyle
-    ],
+    QwirkleTileComponent,
+    NgStyle
+],
     templateUrl: './hand.component.html',
     standalone: true,
     styleUrl: './hand.component.css'

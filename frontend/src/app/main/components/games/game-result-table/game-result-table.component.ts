@@ -1,14 +1,11 @@
 import {Component, computed, input} from '@angular/core';
-import {NgForOf, NgIf} from "@angular/common";
+
 import {ResultTeamState} from "../../../dto/all/result/ResultTeamState";
 import {ResultState} from "../../../dto/all/result/ResultState";
 
 @Component({
   selector: 'game-result-table',
-    imports: [
-        NgForOf,
-        NgIf
-    ],
+    imports: [],
   templateUrl: './game-result-table.component.html',
     standalone: true,
   styleUrl: './game-result-table.component.css'

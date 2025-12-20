@@ -1,16 +1,18 @@
 <div class="flex-container align-items-start">
-    <!--<app-slider-checkbox [isChecked]="editMode"
-                         (checkedEvent)="changeEditMode($event)"
-    />-->
-    <!--TODO: update to slider checkbox again-->
-    <input type="checkbox" [checked]="editMode" (change)="changeEditMode($event)">
+  <!--<app-slider-checkbox [isChecked]="editMode"
+  (checkedEvent)="changeEditMode($event)"
+  />-->
+  <!--TODO: update to slider checkbox again-->
+  <input type="checkbox" [checked]="editMode" (change)="changeEditMode($event)">
 </div>
 <div class="highlighted-container stack-container">
-    <qwirkle-tile *ngFor="let stackTile of stack();let i = index"
-                  [isDisabled]="stackTile.count === 0"
-                  [tile]="stackTile.tile"
-                  [tileText]="stackTile.count"
-                  (click)="selectTile(i)"
-                  [class.selected]="selected.includes(stackTile.tile)"
+  @for (stackTile of stack(); track stackTile; let i = $index) {
+    <qwirkle-tile
+      [isDisabled]="stackTile.count === 0"
+      [tile]="stackTile.tile"
+      [tileText]="stackTile.count"
+      (click)="selectTile(i)"
+      [class.selected]="selected.includes(stackTile.tile)"
     ></qwirkle-tile>
+  }
 </div>

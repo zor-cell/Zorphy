@@ -1,23 +1,29 @@
 @if (project) {
-    <app-main-header>
-      <a *ngIf="project.metadata.githubUrl" class="btn btn-secondary" [href]="project.metadata.githubUrl" target="_blank"
-         rel="noopener noreferrer">
+  <app-main-header>
+    @if (project.metadata.githubUrl) {
+      <a class="btn btn-secondary" [href]="project.metadata.githubUrl" target="_blank"
+        rel="noopener noreferrer">
         <i class="bi bi-github"></i>
       </a>
-      <a *ngIf="project.metadata.hasWebsite" [routerLink]="['/projects', project.metadata.name]"
-         class="btn btn-primary">
+    }
+    @if (project.metadata.hasWebsite) {
+      <a [routerLink]="['/projects', project.metadata.name]"
+        class="btn btn-primary">
         <i class="bi bi-globe2"></i>
       </a>
-        <button *ngIf="authService.isAdmin()" class="btn btn-outline-warning" (click)="openUpdatePopup()">
-            <i class="bi bi-pencil-square"></i>
-        </button>
-      </app-main-header>
+    }
+    @if (authService.isAdmin()) {
+      <button class="btn btn-outline-warning" (click)="openUpdatePopup()">
+        <i class="bi bi-pencil-square"></i>
+      </button>
+    }
+  </app-main-header>
 
-    <div class="main-container">
-        <div [innerHTML]="project.content"></div>
-    </div>
+  <div class="main-container">
+    <div [innerHTML]="project.content"></div>
+  </div>
 
-    <project-update-popup #updatePopup [project]="project"
+  <project-update-popup #updatePopup [project]="project"
     (updateProjectEvent)="updateProject($event)"
     />
-}
+  }

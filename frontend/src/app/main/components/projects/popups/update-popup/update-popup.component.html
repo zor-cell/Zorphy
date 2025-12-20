@@ -1,88 +1,90 @@
 <ng-template #updatePopup let-formId="formId">
-    <form [formGroup]="projectForm" [id]="formId" novalidate class="form-container">
-        <div class="row">
-            @if(project()) {
-                <div class="col-6">
-                    <label>Name</label>
-                    <input class="form-control" formControlName="name" type="text">
-                </div>
-                <div class="col-6">
-                    <label>Created At</label>
-                    <input class="form-control" disabled type="date" [value]="projectForm.controls.createdAt.value | date:'yyyy-MM-dd'">
-                </div>
-            } @else {
-                <div class="col-12">
-                    <label>Name</label>
-                    <input class="form-control" formControlName="name" type="text">
-                </div>
-            }
+  <form [formGroup]="projectForm" [id]="formId" novalidate class="form-container">
+    <div class="row">
+      @if(project()) {
+        <div class="col-6">
+          <label>Name</label>
+          <input class="form-control" formControlName="name" type="text">
         </div>
-
-        <div class="row">
-            <div class="col-12">
-                <label>Title</label>
-                <input class="form-control" formControlName="title" type="text">
-            </div>
+        <div class="col-6">
+          <label>Created At</label>
+          <input class="form-control" disabled type="date" [value]="projectForm.controls.createdAt.value | date:'yyyy-MM-dd'">
         </div>
-
-        <div class="row">
-            <div class="col-12">
-                <label>Description</label>
-                <textarea class="form-control form-text area" formControlName="description"></textarea>
-            </div>
+      } @else {
+        <div class="col-12">
+          <label>Name</label>
+          <input class="form-control" formControlName="name" type="text">
         </div>
-
-        <div class="row">
-            <div class="col-12">
-                <label>Github URL</label>
-                <input class="form-control" formControlName="githubUrl" type="text">
-            </div>
-        </div>
-
-
-        <div class="row">
-            <div class="col-4 checkbox-container">
-                <label class="form-check-label">Has Website</label>
-                <input class="form-check-input" formControlName="hasWebsite" type="checkbox">
-            </div>
-
-            <div class="col-4 checkbox-container">
-                <label>Is Favorite</label>
-                <input class="form-check-input" formControlName="isFavorite" type="checkbox">
-            </div>
-        </div>
-
-        <div>
-            <label>File Path</label>
-            <div class="row">
-                <div class="col-4">
-                    <input class="form-control" disabled type="text" [value]="filePathPrefix">
-                </div>
-                <div class="col-8">
-                    <input class="form-control" formControlName="filePath" type="text">
-                </div>
-            </div>
-        </div>
-
-        @if(project()) {
-        <div>
-            <label>Image Path</label>
-            <div class="row">
-                <div class="col-4">
-                    <input class="form-control" disabled type="text" [value]="imagePathPrefix">
-                </div>
-                <div class="col-8">
-                    <input class="form-control" formControlName="imagePath" type="text">
-                </div>
-            </div>
-        </div>
-        } @else {
-            <div>
-                <app-file-upload (fileChangedEvent)="fileUpload.set($event)"/>
-            </div>
-        }
-    </form>
-    <div *ngIf="fileUpload().getFileUrl() as url" class="image-container">
-        <img [src]="url" alt="" width="300" height="300" class="image">
+      }
     </div>
+
+    <div class="row">
+      <div class="col-12">
+        <label>Title</label>
+        <input class="form-control" formControlName="title" type="text">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <label>Description</label>
+        <textarea class="form-control form-text area" formControlName="description"></textarea>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <label>Github URL</label>
+        <input class="form-control" formControlName="githubUrl" type="text">
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-4 checkbox-container">
+        <label class="form-check-label">Has Website</label>
+        <input class="form-check-input" formControlName="hasWebsite" type="checkbox">
+      </div>
+
+      <div class="col-4 checkbox-container">
+        <label>Is Favorite</label>
+        <input class="form-check-input" formControlName="isFavorite" type="checkbox">
+      </div>
+    </div>
+
+    <div>
+      <label>File Path</label>
+      <div class="row">
+        <div class="col-4">
+          <input class="form-control" disabled type="text" [value]="filePathPrefix">
+        </div>
+        <div class="col-8">
+          <input class="form-control" formControlName="filePath" type="text">
+        </div>
+      </div>
+    </div>
+
+    @if(project()) {
+      <div>
+        <label>Image Path</label>
+        <div class="row">
+          <div class="col-4">
+            <input class="form-control" disabled type="text" [value]="imagePathPrefix">
+          </div>
+          <div class="col-8">
+            <input class="form-control" formControlName="imagePath" type="text">
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div>
+        <app-file-upload (fileChangedEvent)="fileUpload.set($event)"/>
+      </div>
+    }
+  </form>
+  @if (fileUpload().getFileUrl(); as url) {
+    <div class="image-container">
+      <img [src]="url" alt="" width="300" height="300" class="image">
+    </div>
+  }
 </ng-template>

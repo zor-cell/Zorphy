@@ -1,72 +1,79 @@
 <div class="settings-container">
-    <div class="select-container">
-        <i *ngIf="authService.isAdmin()" class="bi bi-person-plus-fill default-color"
-           (click)="openPlayerPopup()"></i>
-        <i class="bi bi-arrow-repeat default-color" (click)="reorderPlayers()"></i>
-
-        <select [disabled]="!currentPlayer()" [value]="currentPlayer() ? currentPlayer()!.id : 'EMPTY'"
-                (change)="updateCurrentPlayer($event)">
-            @if (currentPlayer()) {
-                <option *ngFor="let player of availablePlayers()" [value]="player.id">
-                    {{ player.name }}
-                </option>
-            } @else {
-                <option>EMPTY</option>
-            }
-        </select>
-        <button [disabled]="!currentPlayer() || selectedTeams().length >= maxTeams()" class="small-btn"
-                (click)="addPlayer()">
-            Add
-        </button>
-
-    </div>
-
-
-    @if (selectedTeams().length === 0) {
-        <div>
-            <div class="fw-lighter">EMPTY</div>
-        </div>
-    } @else {
-        <div class="list-container">
-            <div cdkDropList
-                 [cdkDropListData]="selectedTeams()"
-                 (cdkDropListDropped)="drop($event)"
-                 [cdkDropListDisabled]="teamHostIndex() >= 0"
-                 class="drag-container"
-            >
-                <div *ngFor="let team of selectedTeams();let i = index" class="drag-element">
-                    <button cdkDrag
-                            (click)="mergeTeam(i)"
-                            [disabled]="teamHostIndex() === i"
-                            [ngClass]="{'highlighted' : teamHostIndex() >= 0 && i !== teamHostIndex()}"
-                            class="drag-player">
-                        <span class="player-number">{{ i + 1 }}. </span>
-                        <span class="player-name">{{ team.name }}</span>
-
-                        <!-- dragging preview -->
-                        <div *cdkDragPreview class="drag-player">
-                            <span class="player-number">{{ i + 1 }}. </span>
-                            <span class="player-name">{{ team.name }}</span>
-                        </div>
-                    </button>
-                </div>
-            </div>
-            <div class="drag-container">
-                <ng-container *ngFor="let _ of [].constructor(selectedTeams().length);let i = index">
-                    <div class="flex-container flex-row gap-2">
-                        <div *ngIf="allowTeams()" class="drag-element" (click)="makeHost(i)">
-                            <i class="bi default-color"
-                               [ngClass]="teamHostIndex() === i ? 'bi-people-fill' : 'bi-people'"></i>
-                        </div>
-                        <div class="drag-element" (click)="removePlayer(i)">
-                            <i class="bi bi-person-x-fill danger-color"></i>
-                        </div>
-                    </div>
-                </ng-container>
-            </div>
-        </div>
+  <div class="select-container">
+    @if (authService.isAdmin()) {
+      <i class="bi bi-person-plus-fill default-color"
+      (click)="openPlayerPopup()"></i>
     }
+    <i class="bi bi-arrow-repeat default-color" (click)="reorderPlayers()"></i>
+
+    <select [disabled]="!currentPlayer()" [value]="currentPlayer() ? currentPlayer()!.id : 'EMPTY'"
+      (change)="updateCurrentPlayer($event)">
+      @if (currentPlayer()) {
+        @for (player of availablePlayers(); track player) {
+          <option [value]="player.id">
+            {{ player.name }}
+          </option>
+        }
+      } @else {
+        <option>EMPTY</option>
+      }
+    </select>
+    <button [disabled]="!currentPlayer() || selectedTeams().length >= maxTeams()" class="small-btn"
+      (click)="addPlayer()">
+      Add
+    </button>
+
+  </div>
+
+
+  @if (selectedTeams().length === 0) {
+    <div>
+      <div class="fw-lighter">EMPTY</div>
+    </div>
+  } @else {
+    <div class="list-container">
+      <div cdkDropList
+        [cdkDropListData]="selectedTeams()"
+        (cdkDropListDropped)="drop($event)"
+        [cdkDropListDisabled]="teamHostIndex() >= 0"
+        class="drag-container"
+        >
+        @for (team of selectedTeams(); track team; let i = $index) {
+          <div class="drag-element">
+            <button cdkDrag
+              (click)="mergeTeam(i)"
+              [disabled]="teamHostIndex() === i"
+              [ngClass]="{'highlighted' : teamHostIndex() >= 0 && i !== teamHostIndex()}"
+              class="drag-player">
+              <span class="player-number">{{ i + 1 }}. </span>
+              <span class="player-name">{{ team.name }}</span>
+              <!-- dragging preview -->
+              <div *cdkDragPreview class="drag-player">
+                <span class="player-number">{{ i + 1 }}. </span>
+                <span class="player-name">{{ team.name }}</span>
+              </div>
+            </button>
+          </div>
+        }
+      </div>
+      <div class="drag-container">
+        @for (_ of [].constructor(selectedTeams().length); track _; let i = $index) {
+          <div class="flex-container flex-row gap-2">
+            @if (allowTeams()) {
+              <div class="drag-element" (click)="makeHost(i)">
+                <i class="bi default-color"
+                [ngClass]="teamHostIndex() === i ? 'bi-people-fill' : 'bi-people'"></i>
+              </div>
+            }
+            <div class="drag-element" (click)="removePlayer(i)">
+              <i class="bi bi-person-x-fill danger-color"></i>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
 </div>
 
 <app-new-player-popup #playerPopup
-                      (newPlayerEvent)="createPlayer($event)"/>
+  (newPlayerEvent)="createPlayer($event)"/>

@@ -2,17 +2,16 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Tile} from "../../dto/tile/Tile";
 import {Color} from "../../dto/enums/Color";
 import {SafeHtml} from "@angular/platform-browser";
-import {AsyncPipe, NgClass, NgIf} from "@angular/common";
+import { AsyncPipe, NgClass } from "@angular/common";
 import {ImageCacheService} from "../../../../main/services/image-cache.service";
 import {Observable} from "rxjs";
 
 @Component({
     selector: 'qwirkle-tile',
     imports: [
-        NgIf,
-        AsyncPipe,
-        NgClass
-    ],
+    AsyncPipe,
+    NgClass
+],
     templateUrl: './tile.component.html',
     standalone: true,
     styleUrl: './tile.component.css'

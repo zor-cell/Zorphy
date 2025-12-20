@@ -3,7 +3,7 @@ import {QwirkleService} from "../../qwirkle.service";
 import {GameConfig} from "../../dto/game/GameConfig";
 import {GameSessionConfigComponent} from "../../../all/components/game-session-config.component";
 import {FormsModule, NonNullableFormBuilder, ReactiveFormsModule} from "@angular/forms";
-import {NgForOf} from "@angular/common";
+
 import {PlayerSelectComponent} from "../../../../main/components/all/player-select/player-select.component";
 import {Team} from "../../../../main/dto/all/Team";
 import {CustomValidators} from "../../../../main/classes/validators";
@@ -11,12 +11,11 @@ import {CustomValidators} from "../../../../main/classes/validators";
 @Component({
     selector: 'qwirkle-game-config',
     imports: [
-        GameSessionConfigComponent,
-        FormsModule,
-        NgForOf,
-        PlayerSelectComponent,
-        ReactiveFormsModule,
-    ],
+    GameSessionConfigComponent,
+    FormsModule,
+    PlayerSelectComponent,
+    ReactiveFormsModule
+],
     templateUrl: './config.component.html',
     standalone: true,
     styleUrl: './config.component.css'

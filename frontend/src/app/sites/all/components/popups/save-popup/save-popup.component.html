@@ -1,23 +1,29 @@
 <ng-template #savePopup let-formId="formId">
-    <form [formGroup]="saveForm" [id]="formId" novalidate class="main-flex">
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col" class="text-center w-50">Team</th>
-                <th scope="col" class="text-center w-50">Score</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let team of teams(); let i = index" [formGroupName]="team.name">
-                <td><input type="text" readonly class="form-control" [value]="team.name"></td>
-                <td><input type="number" class="form-control" formControlName="score" [readonly]="scores() !== undefined"></td>
-            </tr>
-            </tbody>
-        </table>
+  <form [formGroup]="saveForm" [id]="formId" novalidate class="main-flex">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col" class="text-center w-50">Team</th>
+          <th scope="col" class="text-center w-50">Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (team of teams(); track team; let i = $index) {
+          <tr [formGroupName]="team.name">
+            <td><input type="text" readonly class="form-control" [value]="team.name"></td>
+            <td><input type="number" class="form-control" formControlName="score" [readonly]="scores() !== undefined"></td>
+          </tr>
+        }
+      </tbody>
+    </table>
 
-        <app-file-upload *ngIf="showFileUpload()" (fileChangedEvent)="fileUpload.set($event)"/>
-    </form>
-    <div *ngIf="showFileUpload() && fileUpload().getFileUrl() as url" class="image-container">
-        <img [src]="url" alt="" width="300" height="300" class="image">
+    @if (showFileUpload()) {
+      <app-file-upload (fileChangedEvent)="fileUpload.set($event)"/>
+    }
+  </form>
+  @if (showFileUpload() && fileUpload().getFileUrl(); as url) {
+    <div class="image-container">
+      <img [src]="url" alt="" width="300" height="300" class="image">
     </div>
+  }
 </ng-template>

@@ -1,34 +1,34 @@
 <div class="hand-container">
-    <div class="hand-actions">
-        <button class="small-btn">
-            <i class="bi bi-x-circle clear-icon" (click)="clearHand()"></i>
-        </button>
-    </div>
-    <div class="highlighted-container hand-wrapper">
-        <div class="hand">
-            <ng-container *ngFor="let tile of paddedHand;let i = index">
-                @if (tile) {
-                    @if (selectionInfo && selectionInfo.tiles[i] && !selectionInfo.tiles[i].valid && !selected.includes(tile)) {
-                        <qwirkle-tile
-                                [tile]="tile"
-                                [tileSize]="tileSize"
-                                [isDisabled]="true"
-                        />
-                    } @else {
-                        <qwirkle-tile
-                                [tile]="tile"
-                                [tileSize]="tileSize"
-                                [tileText]="selected.includes(tile) ? selected.indexOf(tile) + 1 : null"
-                                (click)="selectTile(i)"
-                                [class.selected]="selected.includes(tile)"
-                        />
-                    }
-                } @else {
-                    <div class="empty-tile"
-                         [ngStyle]="{width: tileSize + 'px', height: tileSize + 'px'}">
-                    </div>
-                }
-            </ng-container>
+  <div class="hand-actions">
+    <button class="small-btn">
+      <i class="bi bi-x-circle clear-icon" (click)="clearHand()"></i>
+    </button>
+  </div>
+  <div class="highlighted-container hand-wrapper">
+    <div class="hand">
+      @for (tile of paddedHand; track tile; let i = $index) {
+        @if (tile) {
+          @if (selectionInfo && selectionInfo.tiles[i] && !selectionInfo.tiles[i].valid && !selected.includes(tile)) {
+            <qwirkle-tile
+              [tile]="tile"
+              [tileSize]="tileSize"
+              [isDisabled]="true"
+              />
+            } @else {
+              <qwirkle-tile
+                [tile]="tile"
+                [tileSize]="tileSize"
+                [tileText]="selected.includes(tile) ? selected.indexOf(tile) + 1 : null"
+                (click)="selectTile(i)"
+                [class.selected]="selected.includes(tile)"
+                />
+              }
+            } @else {
+              <div class="empty-tile"
+                [ngStyle]="{width: tileSize + 'px', height: tileSize + 'px'}">
+              </div>
+            }
+          }
         </div>
+      </div>
     </div>
-</div>

@@ -1,5 +1,5 @@
 import {Component, inject, input, OnInit, output, signal, TemplateRef, viewChild} from '@angular/core';
-import {NgForOf, NgIf} from "@angular/common";
+
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Team} from "../../../../../main/dto/all/Team";
 import {PopupService} from "../../../../../main/services/popup.service";
@@ -17,11 +17,9 @@ interface SaveForm {
 @Component({
     selector: 'game-session-save-popup',
     imports: [
-        NgForOf,
-        ReactiveFormsModule,
-        NgIf,
-        FileUploadComponent
-    ],
+    ReactiveFormsModule,
+    FileUploadComponent
+],
     templateUrl: './save-popup.component.html',
     standalone: true,
     styleUrl: './save-popup.component.css'

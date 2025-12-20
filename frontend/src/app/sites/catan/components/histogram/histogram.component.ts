@@ -11,16 +11,15 @@ import {ClassicDiceChart} from "../../dto/charts/ClassicDiceChart";
 import {
     EventDiceChart,
 } from "../../dto/charts/EventDiceChart";
-import {NgIf} from "@angular/common";
+
 import {MoveTimeChart} from "../../dto/charts/MoveTimeChart";
 import {GameMode} from "../../dto/enums/GameMode";
 
 @Component({
     selector: 'catan-histogram',
     imports: [
-        BaseChartDirective,
-        NgIf
-    ],
+    BaseChartDirective
+],
     templateUrl: './histogram.component.html',
     standalone: true,
     styleUrl: './histogram.component.css'

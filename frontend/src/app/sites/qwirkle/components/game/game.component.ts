@@ -3,7 +3,7 @@ import {QwirkleHandComponent} from "../hand/hand.component";
 import {QwirkleStackComponent} from "../stack/stack.component";
 import {QwirkleService} from "../../qwirkle.service";
 import {GameState} from "../../dto/game/GameState";
-import {NgForOf, NgIf, NgStyle} from "@angular/common";
+import { NgStyle } from "@angular/common";
 import {QwirkleTileComponent} from "../tile/tile.component";
 import {Position} from "../../../../main/dto/all/Position";
 import {Move} from "../../dto/move/Move";
@@ -18,16 +18,14 @@ import {GameSessionGameComponent} from "../../../all/components/game-session-gam
 @Component({
     selector: 'qwirkle-game',
     imports: [
-        QwirkleHandComponent,
-        QwirkleStackComponent,
-        NgIf,
-        QwirkleTileComponent,
-        NgForOf,
-        NgStyle,
-        PanContainerComponent,
-        ImageInputComponent,
-        GameSessionGameComponent
-    ],
+    QwirkleHandComponent,
+    QwirkleStackComponent,
+    QwirkleTileComponent,
+    NgStyle,
+    PanContainerComponent,
+    ImageInputComponent,
+    GameSessionGameComponent
+],
     templateUrl: './game.component.html',
     standalone: true,
     styleUrl: './game.component.css'

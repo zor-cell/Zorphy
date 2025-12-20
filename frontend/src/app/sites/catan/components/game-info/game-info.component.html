@@ -1,48 +1,51 @@
-<div *ngIf="metadata() && resultState() && gameState()" class="info-container">
+@if (metadata() && resultState() && gameState()) {
+  <div class="info-container">
     <div class="game-info">
-        <game-result-table [resultState]="resultState()" [maxTeamSize]="4"/>
-
-        <div class="meta">
-            <div class="config">
-                <div class="meta-entry">
-                    <div class="meta-label">Gamemode</div>
-                    <div class="meta-text">{{ getGameModeName(gameState().gameConfig.gameMode) }}</div>
-                </div>
-                <div class="meta-entry">
-                    <div class="meta-label">Classic Cards</div>
-                    <input [checked]="gameState().gameConfig.classicDice.isBalanced" class="form-check-input"
-                           type="checkbox" disabled>
-                </div>
-                <div *ngIf="gameState().gameConfig.gameMode === GameMode.CITIES_AND_KNIGHTS" class="meta-entry">
-                    <div class="meta-label">Event Cards</div>
-                    <input [checked]="gameState().gameConfig.eventDice.isBalanced" class="form-check-input"
-                           type="checkbox" disabled>
-                </div>
-                <div *ngIf="gameState().gameConfig.classicDice.isBalanced" class="meta-entry">
-                    <div class="meta-label">Classic Card Events</div>
-                    <input [checked]="gameState().gameConfig.classicDice.useEvents" class="form-check-input"
-                           type="checkbox" disabled>
-                </div>
+      <game-result-table [resultState]="resultState()" [maxTeamSize]="4"/>
+      <div class="meta">
+        <div class="config">
+          <div class="meta-entry">
+            <div class="meta-label">Gamemode</div>
+            <div class="meta-text">{{ getGameModeName(gameState().gameConfig.gameMode) }}</div>
+          </div>
+          <div class="meta-entry">
+            <div class="meta-label">Classic Cards</div>
+            <input [checked]="gameState().gameConfig.classicDice.isBalanced" class="form-check-input"
+              type="checkbox" disabled>
             </div>
-
-            <div>
+            @if (gameState().gameConfig.gameMode === GameMode.CITIES_AND_KNIGHTS) {
+              <div class="meta-entry">
+                <div class="meta-label">Event Cards</div>
+                <input [checked]="gameState().gameConfig.eventDice.isBalanced" class="form-check-input"
+                  type="checkbox" disabled>
+                </div>
+              }
+              @if (gameState().gameConfig.classicDice.isBalanced) {
                 <div class="meta-entry">
-                    <div class="meta-label">Mean</div>
-                    <div class="meta-text">{{ mean.toFixed(2) }}</div>
+                  <div class="meta-label">Classic Card Events</div>
+                  <input [checked]="gameState().gameConfig.classicDice.useEvents" class="form-check-input"
+                    type="checkbox" disabled>
+                  </div>
+                }
+              </div>
+              <div>
+                <div class="meta-entry">
+                  <div class="meta-label">Mean</div>
+                  <div class="meta-text">{{ mean.toFixed(2) }}</div>
                 </div>
                 <div class="meta-entry">
-                    <div class="meta-label">Variance</div>
-                    <div class="meta-text">{{ variance.toFixed(2) }}</div>
+                  <div class="meta-label">Variance</div>
+                  <div class="meta-text">{{ variance.toFixed(2) }}</div>
                 </div>
                 <div class="meta-entry">
-                    <div class="meta-label">Skew</div>
-                    <div class="meta-text">{{ skew.toFixed(2) }}</div>
+                  <div class="meta-label">Skew</div>
+                  <div class="meta-text">{{ skew.toFixed(2) }}</div>
                 </div>
+              </div>
             </div>
+          </div>
+          <div>
+            <catan-histogram [diceRolls]="gameState().diceRolls" [gameMode]="gameState().gameConfig.gameMode"/>
+          </div>
         </div>
-    </div>
-
-    <div>
-        <catan-histogram [diceRolls]="gameState().diceRolls" [gameMode]="gameState().gameConfig.gameMode"/>
-    </div>
-</div>
+      }

@@ -1,11 +1,13 @@
 <div class="tile-wrapper" [class.disabled]="isDisabled">
-    <div [innerHTML]="svgContent | async"
-         [ngClass]="tileText !== null ? 'tile-soft-image' : 'tile-image'"
-         [class.interactive]="isInteractive && !isDisabled"
+  <div [innerHTML]="svgContent | async"
+    [ngClass]="tileText !== null ? 'tile-soft-image' : 'tile-image'"
+    [class.interactive]="isInteractive && !isDisabled"
     >
-    </div>
+  </div>
 
-    <div *ngIf="tileText !== null && tileText > 0" class="tile-text">
-        {{ tileText }}
+  @if (tileText !== null && tileText > 0) {
+    <div class="tile-text">
+      {{ tileText }}
     </div>
+  }
 </div>

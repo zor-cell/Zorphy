@@ -1,10 +1,11 @@
-<div *ngIf="metadata() && resultState() && gameState()" class="info-container">
+@if (metadata() && resultState() && gameState()) {
+  <div class="info-container">
     <game-result-table [resultState]="resultState()" [maxTeamSize]="6"/>
-
     <div class="flex-container">
-        <div class="fw-bolder fs-4">Rounds</div>
-        <div class="w-100">
-            <jolly-round-table [gameState]="gameState()!" [showImages]="true"/>
-        </div>
+      <div class="fw-bolder fs-4">Rounds</div>
+      <div class="w-100">
+        <jolly-round-table [gameState]="gameState()!" [showImages]="true"/>
+      </div>
     </div>
-</div>
+  </div>
+}

@@ -1,7 +1,9 @@
 <div class="meta-entry">
-    <div class="meta-label">
-        {{ label() }} <span *ngIf="subLabel()" class="fw-normal">{{ subLabel() }}</span>
-    </div>
+  <div class="meta-label">
+    {{ label() }} @if (subLabel()) {
+    <span class="fw-normal">{{ subLabel() }}</span>
+  }
+</div>
 
-    <ng-content/>
+<ng-content/>
 </div>

@@ -1,16 +1,15 @@
 import {Component, inject, signal, TemplateRef} from '@angular/core';
 import {ReactiveFormsModule} from "@angular/forms";
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
-import {NgIf, NgTemplateOutlet} from "@angular/common";
+import { NgTemplateOutlet } from "@angular/common";
 import {PopupResultType} from "../../../../dto/all/PopupResultType";
 
 @Component({
     selector: 'app-popup-dialog',
     imports: [
-        ReactiveFormsModule,
-        NgTemplateOutlet,
-        NgIf
-    ],
+    ReactiveFormsModule,
+    NgTemplateOutlet
+],
     templateUrl: './popup-dialog.component.html',
     standalone: true,
     styleUrl: './popup-dialog.component.css'

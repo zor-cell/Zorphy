@@ -1,88 +1,94 @@
 <form [formGroup]="searchForm" class="search-form" (ngSubmit)="submit()">
-    <div class="search-input-group" >
-        <div class="input-group">
-            <button class="btn btn-primary search-button" type="submit">
-                <i class="bi bi-search"></i>
-            </button>
-            <input class="form-control search-input" formControlName="text" type="text" placeholder="Search...">
-        </div>
-        <button class="btn btn-secondary filter-button"
-                #searchPopover="ngbPopover"
-                popoverClass="wide-popover"
-                popoverTitle="Filters"
-                [ngbPopover]="searchFilters"
-                [popperOptions]="popperOptions"
-                [autoClose]="'outside'"
-                (shown)="popOverOpen()"
-                (hidden)="popOverClose()"
-                [class.active]="isPopoverOpen"
-                type="button"
-        >
-            <i class="bi bi-funnel"></i>
-        </button>
+  <div class="search-input-group" >
+    <div class="input-group">
+      <button class="btn btn-primary search-button" type="submit">
+        <i class="bi bi-search"></i>
+      </button>
+      <input class="form-control search-input" formControlName="text" type="text" placeholder="Search...">
     </div>
+    <button class="btn btn-secondary filter-button"
+      #searchPopover="ngbPopover"
+      popoverClass="wide-popover"
+      popoverTitle="Filters"
+      [ngbPopover]="searchFilters"
+      [popperOptions]="popperOptions"
+      [autoClose]="'outside'"
+      (shown)="popOverOpen()"
+      (hidden)="popOverClose()"
+      [class.active]="isPopoverOpen"
+      type="button"
+      >
+      <i class="bi bi-funnel"></i>
+    </button>
+  </div>
 </form>
 
 <ng-template #searchFilters>
-    <form [formGroup]="searchForm" class="form-container" (ngSubmit)="submit(searchPopover)">
-        <div class="row">
-            <div class="col-6">
-                <label>From</label>
-                <input class="form-control" formControlName="dateFrom" type="date">
-            </div>
-            <div class="col-6">
-                <label>To</label>
-                <input class="form-control" formControlName="dateTo" type="date">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-6">
-                <label>Min Players</label>
-                <input class="form-control" formControlName="minPlayers" type="number">
-            </div>
-            <div class="col-6">
-                <label>Max Players</label>
-                <input class="form-control" formControlName="maxPlayers" type="number">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-6">
-                <label>Min Duration</label>
-                <input class="form-control" formControlName="minDuration" type="time" step="1">
-            </div>
-            <div class="col-6">
-                <label>Max Duration</label>
-                <input class="form-control" formControlName="maxDuration" type="time" step="1">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <label>Game Types</label>
-                <select class="form-select" formControlName="gameTypes" [multiple]="showMultiGameTypes()">
-                    <option *ngIf="!showMultiGameTypes()" value="">-- Select a game type --</option>
-                    <option *ngFor="let type of allGameTypes" [value]="type">{{ type }}</option>
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <label>Players</label>
-                <select class="form-select" formControlName="players" multiple>
-                    <option *ngFor="let player of players()" [value]="player.id">{{ player.name }}</option>
-                </select>
-            </div>
-        </div>
-        <div class="row justify-content-between mt-4">
-            <div class="col-auto">
-                <button class="btn btn-outline-danger" type="button" (click)="clear()">
-                    <i class="bi bi-x-lg"></i>
-                </button>
-            </div>
-            <div class="col-auto">
-                <button class="btn btn-primary" [disabled]="searchForm.invalid" type="submit">
-                    <i class="bi bi-search"></i>
-                </button>
-            </div>
-        </div>
-    </form>
+  <form [formGroup]="searchForm" class="form-container" (ngSubmit)="submit(searchPopover)">
+    <div class="row">
+      <div class="col-6">
+        <label>From</label>
+        <input class="form-control" formControlName="dateFrom" type="date">
+      </div>
+      <div class="col-6">
+        <label>To</label>
+        <input class="form-control" formControlName="dateTo" type="date">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <label>Min Players</label>
+        <input class="form-control" formControlName="minPlayers" type="number">
+      </div>
+      <div class="col-6">
+        <label>Max Players</label>
+        <input class="form-control" formControlName="maxPlayers" type="number">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <label>Min Duration</label>
+        <input class="form-control" formControlName="minDuration" type="time" step="1">
+      </div>
+      <div class="col-6">
+        <label>Max Duration</label>
+        <input class="form-control" formControlName="maxDuration" type="time" step="1">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <label>Game Types</label>
+        <select class="form-select" formControlName="gameTypes" [multiple]="showMultiGameTypes()">
+          @if (!showMultiGameTypes()) {
+            <option value="">-- Select a game type --</option>
+          }
+          @for (type of allGameTypes; track type) {
+            <option [value]="type">{{ type }}</option>
+          }
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <label>Players</label>
+        <select class="form-select" formControlName="players" multiple>
+          @for (player of players(); track player) {
+            <option [value]="player.id">{{ player.name }}</option>
+          }
+        </select>
+      </div>
+    </div>
+    <div class="row justify-content-between mt-4">
+      <div class="col-auto">
+        <button class="btn btn-outline-danger" type="button" (click)="clear()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-primary" [disabled]="searchForm.invalid" type="submit">
+          <i class="bi bi-search"></i>
+        </button>
+      </div>
+    </div>
+  </form>
 </ng-template>

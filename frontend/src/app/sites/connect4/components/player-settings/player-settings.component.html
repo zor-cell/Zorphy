@@ -1,44 +1,52 @@
 <div id="settings" class="flex-container gap-2 m-2 p-2">
+  <div class="grid-container">
+    <p class="m-0">Player {{ "Red" }}</p>
+    <!--<app-slider-checkbox
+    [isChecked]="localIsAi"
+    [unCheckedText]="'HU'"
+    [checkedText]="'AI'"
+    (checkedEvent)="updateIsAi($event)"
+    />-->
+  </div>
+
+  @if (localIsAi && localVersion != Version.PERFECT) {
     <div class="grid-container">
-        <p class="m-0">Player {{ "Red" }}</p>
-        <!--<app-slider-checkbox
-                [isChecked]="localIsAi"
-                [unCheckedText]="'HU'"
-                [checkedText]="'AI'"
-                (checkedEvent)="updateIsAi($event)"
-        />-->
-    </div>
+      <label for="max-time-input">Max Time (ms)</label>
+      <input id="max-time-input" class="custom-form-input" type="number" min="0" max="60000" step="500"
+        placeholder="Time in ms"
+        [(ngModel)]="localMaxTime"
+        (change)="sendConfig()">
+      </div>
+    }
 
-    <div *ngIf="localIsAi && localVersion != Version.PERFECT" class="grid-container">
-        <label for="max-time-input">Max Time (ms)</label>
-        <input id="max-time-input" class="custom-form-input" type="number" min="0" max="60000" step="500"
-               placeholder="Time in ms"
-               [(ngModel)]="localMaxTime"
-               (change)="sendConfig()">
-    </div>
-
-    <div *ngIf="localIsAi && localVersion == Version.V2_1" class="grid-container">
+    @if (localIsAi && localVersion == Version.V2_1) {
+      <div class="grid-container">
         <label for="max-memory-input">Table Size (MB)</label>
         <input id="max-memory-input" class="custom-form-input" type="number" min="0" max="256" step="1"
-               placeholder="Table size in MB"
-               [(ngModel)]="localMaxMemory"
-               (change)="sendConfig()">
-    </div>
+          placeholder="Table size in MB"
+          [(ngModel)]="localMaxMemory"
+          (change)="sendConfig()">
+        </div>
+      }
 
-    <div *ngIf="localIsAi" class="grid-container">
-        <label for="version-select">Version</label>
-        <select id="version-select" class="custom-form-input"
-                [(ngModel)]="localVersion"
-                (change)="sendConfig()">
+      @if (localIsAi) {
+        <div class="grid-container">
+          <label for="version-select">Version</label>
+          <select id="version-select" class="custom-form-input"
+            [(ngModel)]="localVersion"
+            (change)="sendConfig()">
             <option [ngValue]="Version.V1_0">v1.0 (2D)</option>
             <option [ngValue]="Version.V2_0">v2.0 (BB)</option>
             <option [ngValue]="Version.V2_1">v2.1 (BB+T)</option>
             <option [ngValue]="Version.PERFECT">PERFECT</option>
-        </select>
+          </select>
+        </div>
+      }
+
+
+      @if (localIsAi) {
+        <button [disabled]="!canStart" class="btn btn-primary mt-2" (click)="sendMakeMove()">
+          <i class="bi bi-play-circle"></i> Play
+        </button>
+      }
     </div>
-
-
-    <button *ngIf="localIsAi" [disabled]="!canStart" class="btn btn-primary mt-2" (click)="sendMakeMove()">
-        <i class="bi bi-play-circle"></i> Play
-    </button>
-</div>

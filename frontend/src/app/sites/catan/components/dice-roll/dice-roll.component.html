@@ -1,12 +1,18 @@
-<div *ngIf="diceRoll() as roll" class="roll">
+@if (diceRoll(); as roll) {
+  <div class="roll">
     <img class="dice" [src]="'assets/catan/' + roll.dicePair.dice1 + '.svg'" width="20" alt=""/>
     <img class="dice"
-         [src]="'assets/catan/' + roll.dicePair.dice2 + (gameMode() === GameMode.CITIES_AND_KNIGHTS ? '_red' : '') + '.svg'"
-         width="20" alt=""/>
-    <img *ngIf="gameMode() === GameMode.CITIES_AND_KNIGHTS" class="dice"
-         [src]="'assets/catan/' + roll.diceEvent + '.svg'" width="20" alt=""/>
-</div>
+      [src]="'assets/catan/' + roll.dicePair.dice2 + (gameMode() === GameMode.CITIES_AND_KNIGHTS ? '_red' : '') + '.svg'"
+      width="20" alt=""/>
+      @if (gameMode() === GameMode.CITIES_AND_KNIGHTS) {
+        <img class="dice"
+          [src]="'assets/catan/' + roll.diceEvent + '.svg'" width="20" alt=""/>
+      }
+    </div>
+  }
 
-<div *ngIf="!diceRoll()">
-    <p></p>
-</div>
+  @if (!diceRoll()) {
+    <div>
+      <p></p>
+    </div>
+  }

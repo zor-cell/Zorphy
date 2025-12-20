@@ -1,12 +1,16 @@
 <app-main-header>
-    <button *ngIf="authService.isAdmin()" class="btn btn-primary" (click)="openCreatePopup()">
-        <i class="bi bi-plus-circle"></i>
+  @if (authService.isAdmin()) {
+    <button class="btn btn-primary" (click)="openCreatePopup()">
+      <i class="bi bi-plus-circle"></i>
     </button>
+  }
 </app-main-header>
 
 <div class="main-container projects-container">
-    <project-card *ngFor="let project of projects" [project]="project"></project-card>
+  @for (project of projects; track project) {
+    <project-card [project]="project"></project-card>
+  }
 </div>
 
 <project-update-popup #createPopup
-                      (updateProjectEvent)="createProject($event)"/>
+  (updateProjectEvent)="createProject($event)"/>

@@ -2,7 +2,7 @@ import {Component, inject, OnInit, viewChild} from '@angular/core';
 import {ProjectDetails} from "../../../dto/projects/ProjectDetails";
 import {ActivatedRoute, RouterLink} from "@angular/router";
 import {ProjectService} from "../../../services/project.service";
-import {NgIf} from "@angular/common";
+
 import {MainHeaderComponent} from "../../all/main-header/main-header.component";
 import {ProjectUpdatePopupComponent} from "../popups/update-popup/update-popup.component";
 import {AuthService} from "../../../services/auth.service";
@@ -11,11 +11,10 @@ import {WithFile} from "../../../dto/all/WithFile";
 @Component({
     selector: 'project-info',
     imports: [
-        NgIf,
-        RouterLink,
-        MainHeaderComponent,
-        ProjectUpdatePopupComponent
-    ],
+    RouterLink,
+    MainHeaderComponent,
+    ProjectUpdatePopupComponent
+],
     templateUrl: './project-info.component.html',
     standalone: true,
     styleUrl: './project-info.component.css'

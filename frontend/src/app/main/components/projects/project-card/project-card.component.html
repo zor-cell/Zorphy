@@ -1,30 +1,34 @@
 <div class="project-card">
-    <div class="project-card-image">
-        <img [src]="project().imagePath ? project().imagePath : ''" alt="image"/>
-    </div>
+  <div class="project-card-image">
+    <img [src]="project().imagePath ? project().imagePath : ''" alt="image"/>
+  </div>
 
-    <div class="project-card-content">
-        <div class="project-card-header">
-            <h2 class="project-card-title">{{ project().title }}</h2>
-            <i [class]="'favorite-icon bi ' + (project().isFavorite ? 'bi-star-fill' : 'bi-star')"></i>
-        </div>
-        <div class="project-card-meta">
-            <span class="tag">{{ project().createdAt |  date:'yyyy-MM-dd' }}</span>
-        </div>
-        <p class="project-card-description">{{ project().description }}</p>
-        <div class="project-card-buttons">
-            <div class="project-card-icons">
-                <a *ngIf="project().githubUrl" class="btn btn-secondary" [href]="project().githubUrl" target="_blank"
-                   rel="noopener noreferrer">
-                    <i class="bi bi-github"></i>
-                </a>
-                <a *ngIf="project().hasWebsite" [routerLink]="project().name" class="btn btn-primary">
-                    <i class="bi bi-globe2"></i>
-                </a>
-            </div>
-            <div class="project-card-more">
-                <a [routerLink]="[project().name, 'info']"><small>Read more</small></a>
-            </div>
-        </div>
+  <div class="project-card-content">
+    <div class="project-card-header">
+      <h2 class="project-card-title">{{ project().title }}</h2>
+      <i [class]="'favorite-icon bi ' + (project().isFavorite ? 'bi-star-fill' : 'bi-star')"></i>
     </div>
+    <div class="project-card-meta">
+      <span class="tag">{{ project().createdAt |  date:'yyyy-MM-dd' }}</span>
+    </div>
+    <p class="project-card-description">{{ project().description }}</p>
+    <div class="project-card-buttons">
+      <div class="project-card-icons">
+        @if (project().githubUrl) {
+          <a class="btn btn-secondary" [href]="project().githubUrl" target="_blank"
+            rel="noopener noreferrer">
+            <i class="bi bi-github"></i>
+          </a>
+        }
+        @if (project().hasWebsite) {
+          <a [routerLink]="project().name" class="btn btn-primary">
+            <i class="bi bi-globe2"></i>
+          </a>
+        }
+      </div>
+      <div class="project-card-more">
+        <a [routerLink]="[project().name, 'info']"><small>Read more</small></a>
+      </div>
+    </div>
+  </div>
 </div>

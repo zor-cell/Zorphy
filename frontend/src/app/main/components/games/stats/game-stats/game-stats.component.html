@@ -1,74 +1,69 @@
 <app-main-header>
-    <game-search class="w-100" ngProjectAs="middle" [showMultiGameTypes]="false"
-                 (changeFiltersEvent)="searchFiltersChanged($event)"/>
-</app-main-header>
+  <game-search class="w-100" ngProjectAs="middle" [showMultiGameTypes]="false"
+    (changeFiltersEvent)="searchFiltersChanged($event)"/>
+  </app-main-header>
 
-<div class="main-container">
+  <div class="main-container">
     @if (gameStats().length > 0 && gameType()) {
-        <div class="card w-100 mb-5" *ngFor="let stats of gameStats();let i = index">
-            <div class="card-header">
-                Stats for {{ stats.player.name }} - {{ gameType() }}
-            </div>
-            <div class="card-body stats-body">
-                @if (stats.gamesPlayed === 0) {
-                    No games found
-                } @else {
-                    <div>
-                        <div class="stats-header">Default Stats</div>
-                        <div class="meta">
-                            <div>
-                                <game-stats-simple label="Games Played" [text]="stats.gamesPlayed.toString()"/>
-                                <game-stats-simple label="Win Rate" [text]="(stats.winRate * 100).toFixed(2) + '%'"/>
-                                <game-stats-streak label="Current Win Streak" [streak]="stats.winStreaks.currentStreak"/>
-                                <game-stats-streak label="Max Win Streak" [streak]="stats.winStreaks.maxStreak"/>
-                            </div>
-
-                            <game-stats-metrics [metric]="stats.scoreMetrics" label="Score"/>
-                            <game-stats-metrics [metric]="stats.durationMetrics" label="Duration" [pipe]="DurationPipe" />
-
-                            <div>
-                                <game-stats-simple label="Nemesis" subLabel="(Worst win rate)" [text]="stats.nemesis?.name"/>
-                                <game-stats-simple label="Victim" subLabel="(Best win rate)" [text]="stats.victim?.name"/>
-                                <game-stats-simple label="Rival" subLabel="(Most played against)" [text]="stats.rival?.name"/>
-                                <game-stats-simple label="Companion" subLabel="(Most played with)" [text]="stats.companion?.name"/>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- show data charts -->
-                    @for(chartData of stats.chartData; track $index) {
-                        <game-data-chart [chartData]="chartData"/>
-                    }
-
-                    <!-- dynamically render game specific stats -->
-                    <div>
-                        <div class="stats-header">Game Specific Stats</div>
-                        <ng-container *ngIf="gameStatsComponent() as comp">
+      @for (stats of gameStats(); track stats; let i = $index) {
+        <div class="card w-100 mb-5">
+          <div class="card-header">
+            Stats for {{ stats.player.name }} - {{ gameType() }}
+          </div>
+          <div class="card-body stats-body">
+            @if (stats.gamesPlayed === 0) {
+              No games found
+            } @else {
+              <div>
+                <div class="stats-header">Default Stats</div>
+                <div class="meta">
+                  <div>
+                    <game-stats-simple label="Games Played" [text]="stats.gamesPlayed.toString()"/>
+                    <game-stats-simple label="Win Rate" [text]="(stats.winRate * 100).toFixed(2) + '%'"/>
+                    <game-stats-streak label="Current Win Streak" [streak]="stats.winStreaks.currentStreak"/>
+                    <game-stats-streak label="Max Win Streak" [streak]="stats.winStreaks.maxStreak"/>
+                  </div>
+                  <game-stats-metrics [metric]="stats.scoreMetrics" label="Score"/>
+                  <game-stats-metrics [metric]="stats.durationMetrics" label="Duration" [pipe]="DurationPipe" />
+                  <div>
+                    <game-stats-simple label="Nemesis" subLabel="(Worst win rate)" [text]="stats.nemesis?.name"/>
+                    <game-stats-simple label="Victim" subLabel="(Best win rate)" [text]="stats.victim?.name"/>
+                    <game-stats-simple label="Rival" subLabel="(Most played against)" [text]="stats.rival?.name"/>
+                    <game-stats-simple label="Companion" subLabel="(Most played with)" [text]="stats.companion?.name"/>
+                  </div>
+                </div>
+              </div>
+              <!-- show data charts -->
+              @for(chartData of stats.chartData; track $index) {
+                <game-data-chart [chartData]="chartData"/>
+              }
+              <!-- dynamically render game specific stats -->
+              <div>
+                <div class="stats-header">Game Specific Stats</div>
+                @if (gameStatsComponent(); as comp) {
                             <ng-container *ngComponentOutlet="comp;
                             inputs: {
                                 stats: stats.gameSpecific
                             }"
-                            />
-                        </ng-container>
-                    </div>
-
-                    <!-- show correlation charts -->
-                    <!--<div>
-                        <div class="stats-header">Correlation Stats</div>
-                        <div class="correlations">
-                            <div *ngFor="let correlation of stats.correlations">
-                                <game-correlation-chart [correlationData]="correlation"/>
-                            </div>
-                        </div>
-                    </div>-->
-
-
-                }
-            </div>
+                    />
+                  }
+                </div>
+                <!-- show correlation charts -->
+                <!--<div>
+                <div class="stats-header">Correlation Stats</div>
+                <div class="correlations">
+                  <div *ngFor="let correlation of stats.correlations">
+                    <game-correlation-chart [correlationData]="correlation"/>
+                  </div>
+                </div>
+              </div>-->
+            }
+          </div>
         </div>
+      }
     } @else {
-        <b class="flex-container text-center">
-            Select a game type and at least one player for some game stats
-        </b>
+      <b class="flex-container text-center">
+        Select a game type and at least one player for some game stats
+      </b>
     }
-</div>
+  </div>

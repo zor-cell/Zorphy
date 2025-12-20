@@ -1,6 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {GameState} from "../../dto/game/GameState";
-import {NgClass, NgForOf, NgIf} from "@angular/common";
+import { NgClass } from "@angular/common";
 import {CatanService} from "../../catan.service";
 import {CatanDiceRollComponent} from "../dice-roll/dice-roll.component";
 import {DiceRoll} from "../../dto/DiceRoll";
@@ -15,14 +15,12 @@ import {GameSessionGameComponent} from "../../../all/components/game-session-gam
 @Component({
     selector: 'catan-game',
     imports: [
-        NgIf,
-        NgForOf,
-        NgClass,
-        CatanDiceRollComponent,
-        CatanHistogramComponent,
-        ReactiveFormsModule,
-        GameSessionGameComponent
-    ],
+    NgClass,
+    CatanDiceRollComponent,
+    CatanHistogramComponent,
+    ReactiveFormsModule,
+    GameSessionGameComponent
+],
     templateUrl: './game.component.html',
     standalone: true,
     styleUrl: './game.component.css'

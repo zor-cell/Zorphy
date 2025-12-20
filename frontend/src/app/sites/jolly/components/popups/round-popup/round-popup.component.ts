@@ -11,7 +11,7 @@ import {
 import {Team} from "../../../../../main/dto/all/Team";
 import {PopupService} from "../../../../../main/services/popup.service";
 import {PopupResultType} from "../../../../../main/dto/all/PopupResultType";
-import {NgForOf, NgIf} from "@angular/common";
+
 import {RoundResult} from "../../../dto/RoundResult";
 import {FileUpload} from "../../../../../main/dto/all/FileUpload";
 import {FileUploadComponent} from "../../../../../main/components/all/file-upload/file-upload.component";
@@ -28,11 +28,9 @@ interface RoundForm {
 @Component({
   selector: 'jolly-round-popup',
   imports: [
-    NgForOf,
-    NgIf,
     ReactiveFormsModule,
     FileUploadComponent
-  ],
+],
   templateUrl: './round-popup.component.html',
   standalone: true,
   styleUrl: './round-popup.component.css'

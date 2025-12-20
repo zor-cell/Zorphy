@@ -1,7 +1,7 @@
 import {Component, effect, inject, input, output} from '@angular/core';
 import {StackTile} from "../../dto/tile/StackTile";
 import {QwirkleTileComponent} from "../tile/tile.component";
-import {NgForOf} from "@angular/common";
+
 import {Tile} from "../../dto/tile/Tile";
 import {FormsModule} from "@angular/forms";
 import {QwirkleService} from "../../qwirkle.service";
@@ -11,10 +11,9 @@ import {SelectionInfo} from "../../dto/SelectionInfo";
 @Component({
     selector: 'qwirkle-stack',
     imports: [
-        QwirkleTileComponent,
-        NgForOf,
-        FormsModule,
-    ],
+    QwirkleTileComponent,
+    FormsModule
+],
     templateUrl: './stack.component.html',
     standalone: true,
     styleUrl: './stack.component.css'

@@ -1,28 +1,30 @@
 <game-session-config [sessionService]="scotlandYardService"
-                     [projectName]="projectName"
-                     [(gameConfig)]="gameConfig"
-                     [isValidConfig]="configForm.valid"
->
-    <form class="main-container" [formGroup]="configForm">
-        <section class="config-container">
-            <div class="config-grid-container">
-                <h3 class="config-header">Players</h3>
-                <app-player-select [maxTeams]="6" formControlName="teams"></app-player-select>
-            </div>
+  [projectName]="projectName"
+  [(gameConfig)]="gameConfig"
+  [isValidConfig]="configForm.valid"
+  >
+  <form class="main-container" [formGroup]="configForm">
+    <section class="config-container">
+      <div class="config-grid-container">
+        <h3 class="config-header">Players</h3>
+        <app-player-select [maxTeams]="6" formControlName="teams"></app-player-select>
+      </div>
 
-            <div class="config-grid-container">
-                <h3 class="config-header">Settings</h3>
+      <div class="config-grid-container">
+        <h3 class="config-header">Settings</h3>
 
-                <div>
-                    Map Type
-                    <div class="select-container">
-                        <select formControlName="mapType">
-                            <option *ngFor="let mode of mapTypes" [ngValue]="mode">{{ mode }}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </form>
+        <div>
+          Map Type
+          <div class="select-container">
+            <select formControlName="mapType">
+              @for (mode of mapTypes; track mode) {
+                <option [ngValue]="mode">{{ mode }}
+                </option>
+              }
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+  </form>
 </game-session-config>

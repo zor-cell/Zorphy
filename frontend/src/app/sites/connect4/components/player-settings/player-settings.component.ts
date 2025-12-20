@@ -1,14 +1,13 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {PlayerConfig, Version} from "../../dto/data";
-import {NgIf} from "@angular/common";
+
 import {FormsModule} from "@angular/forms";
 
 @Component({
     selector: 'connect4-player-settings',
     imports: [
-        NgIf,
-        FormsModule
-    ],
+    FormsModule
+],
     templateUrl: './player-settings.component.html',
     standalone: true,
     styleUrl: './player-settings.component.css'

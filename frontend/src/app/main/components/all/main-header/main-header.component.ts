@@ -1,11 +1,9 @@
 import {Component, inject, input} from '@angular/core';
-import {Location, NgIf} from "@angular/common";
+import { Location } from "@angular/common";
 
 @Component({
     selector: 'app-main-header',
-    imports: [
-        NgIf
-    ],
+    imports: [],
     templateUrl: './main-header.component.html',
     standalone: true,
     styleUrl: './main-header.component.css'

@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {CellComponent} from "./cell/cell.component";
-import {NgForOf, NgIf} from "@angular/common";
+
 import {Connect4Service} from "../connect4.service";
 import {MoveRequest, SolveRequest, UndoRequest} from "../dto/requests";
 import {GameState, PlayerConfig} from "../dto/data";
@@ -11,11 +11,9 @@ import {DelayLoader} from "../../../main/classes/delay-loader";
 @Component({
     selector: 'app-connect4',
     imports: [
-        CellComponent,
-        NgForOf,
-        PlayerSettingsComponent,
-        NgIf
-    ],
+    CellComponent,
+    PlayerSettingsComponent
+],
     templateUrl: './connect4.component.html',
     standalone: true,
     styleUrl: './connect4.component.css'

@@ -1,6 +1,6 @@
 import {Component, effect, inject, input, signal, viewChild} from "@angular/core";
 import {MainHeaderComponent} from "../../../main/components/all/main-header/main-header.component";
-import {NgIf} from "@angular/common";
+
 import {AuthService} from "../../../main/services/auth.service";
 import {GameStateBase} from "../dto/GameStateBase";
 import {GameConfigBase} from "../dto/GameConfigBase";
@@ -12,28 +12,30 @@ import {WithFile} from "../../../main/dto/all/WithFile";
 @Component({
     selector: 'game-session-game',
     imports: [
-        MainHeaderComponent,
-        NgIf,
-        GameSessionSavePopupComponent
-    ],
+    MainHeaderComponent,
+    GameSessionSavePopupComponent
+],
     standalone: true,
     template: `
         <app-main-header>
-            <button *ngIf="authService.isAdmin()" [disabled]="isSaved()" class="btn btn-primary" (click)="openSavePopup()">
-                <i class="bi bi-floppy"></i>
+          @if (authService.isAdmin()) {
+            <button [disabled]="isSaved()" class="btn btn-primary" (click)="openSavePopup()">
+              <i class="bi bi-floppy"></i>
             </button>
+          }
         </app-main-header>
-
+        
         <ng-content></ng-content>
-
-        <game-session-save-popup #savePopup
-                                 *ngIf="gameState()"
-                                 [teams]="gameState().gameConfig.teams"
-                                 [showFileUpload]="showFileUpload()"
-                                 [scores]="scores()"
-                                 (saveSessionEvent)="saveSession($event)"
-        />
-    `
+        
+        @if (gameState()) {
+          <game-session-save-popup #savePopup
+            [teams]="gameState().gameConfig.teams"
+            [showFileUpload]="showFileUpload()"
+            [scores]="scores()"
+            (saveSessionEvent)="saveSession($event)"
+            />
+        }
+        `
 })
 export class GameSessionGameComponent {
     protected authService = inject(AuthService);

@@ -1,15 +1,17 @@
 <div class="file-container">
-    <input hidden #cameraInput type="file" accept="image/*" capture="environment" (change)="onFileChanged($event)">
-    <input hidden #galleryInput type="file" accept="image/*" (change)="onFileChanged($event)">
+  <input hidden #cameraInput type="file" accept="image/*" capture="environment" (change)="onFileChanged($event)">
+  <input hidden #galleryInput type="file" accept="image/*" (change)="onFileChanged($event)">
 
-    <button class="btn btn-outline-primary" (click)="galleryInput.click()" (change)="onFileChanged($event)">
-        Upload image <i class="bi bi-images"></i>
-    </button>
-    <div>OR</div>
-    <button class="btn btn-outline-primary" (click)="cameraInput.click()">
-        Take photo <i class="bi bi-camera"></i>
-    </button>
+  <button class="btn btn-outline-primary" (click)="galleryInput.click()" (change)="onFileChanged($event)">
+    Upload image <i class="bi bi-images"></i>
+  </button>
+  <div>OR</div>
+  <button class="btn btn-outline-primary" (click)="cameraInput.click()">
+    Take photo <i class="bi bi-camera"></i>
+  </button>
 </div>
 <div class="flex-container">
-<img *ngIf="processedFileUrl" class="file-image" [src]="processedFileUrl" alt="" width="400" height="400"/>
+  @if (processedFileUrl) {
+    <img class="file-image" [src]="processedFileUrl" alt="" width="400" height="400"/>
+  }
 </div>

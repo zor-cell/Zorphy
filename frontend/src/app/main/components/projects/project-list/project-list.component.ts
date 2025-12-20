@@ -1,7 +1,7 @@
 import {Component, inject, OnInit, viewChild} from '@angular/core';
 import {ProjectService} from "../../../services/project.service";
 import {ProjectMetadata} from "../../../dto/projects/ProjectMetadata";
-import {NgForOf, NgIf} from "@angular/common";
+
 import {ProjectCardComponent} from "../project-card/project-card.component";
 import {MainHeaderComponent} from '../../all/main-header/main-header.component';
 import {AuthService} from "../../../services/auth.service";
@@ -11,7 +11,7 @@ import {WithFile} from "../../../dto/all/WithFile";
 
 @Component({
     selector: 'project-list',
-    imports: [NgForOf, ProjectCardComponent, MainHeaderComponent, NgIf, ProjectUpdatePopupComponent],
+    imports: [ProjectCardComponent, MainHeaderComponent, ProjectUpdatePopupComponent],
     templateUrl: './project-list.component.html',
     standalone: true,
     styleUrl: './project-list.component.css'

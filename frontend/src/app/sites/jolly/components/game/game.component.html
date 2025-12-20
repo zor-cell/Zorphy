@@ -1,24 +1,22 @@
-<ng-container *ngIf="gameState() as state">
-    <game-session-game [sessionService]="jollyService"
-                       [gameState]="state"
-                       [showFileUpload]="false"
-                       [scores]="saveScores()"
+@if (gameState(); as state) {
+  <game-session-game [sessionService]="jollyService"
+    [gameState]="state"
+    [showFileUpload]="false"
+    [scores]="saveScores()"
     >
-        <div class="main-container flex-container">
-            <section class="flex-container game-container">
-                <button class="btn btn-primary" [disabled]="roundLimitReached()" (click)="openRoundPopup()">
-                    Add Round <i class="bi bi-plus-circle"></i>
-                </button>
-
-                <div class="w-100">
-                    <jolly-round-table [gameState]="state" [isEditable]="true" (updateRounds)="updatedRounds($event)"/>
-                </div>
-            </section>
+    <div class="main-container flex-container">
+      <section class="flex-container game-container">
+        <button class="btn btn-primary" [disabled]="roundLimitReached()" (click)="openRoundPopup()">
+          Add Round <i class="bi bi-plus-circle"></i>
+        </button>
+        <div class="w-100">
+          <jolly-round-table [gameState]="state" [isEditable]="true" (updateRounds)="updatedRounds($event)"/>
         </div>
-    </game-session-game>
-
-    <jolly-round-popup #roundPopup
-                       [teams]="state.gameConfig.teams"
-                       (addRoundEvent)="addRound($event)"
+      </section>
+    </div>
+  </game-session-game>
+  <jolly-round-popup #roundPopup
+    [teams]="state.gameConfig.teams"
+    (addRoundEvent)="addRound($event)"
     />
-</ng-container>
+  }

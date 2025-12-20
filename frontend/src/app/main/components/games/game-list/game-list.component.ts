@@ -1,6 +1,6 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {GameService} from "../../../services/game.service";
-import {DatePipe, NgForOf, NgIf} from "@angular/common";
+import { DatePipe } from "@angular/common";
 import {DurationPipe} from "../../../pipes/DurationPipe";
 import {GameMetadata} from "../../../dto/games/GameMetadata";
 import {Router} from "@angular/router";
@@ -12,13 +12,11 @@ import {AuthService} from "../../../services/auth.service";
 @Component({
   selector: 'game-list',
   imports: [
-    NgForOf,
     DatePipe,
     DurationPipe,
-    NgIf,
     MainHeaderComponent,
     GameSearchComponent
-  ],
+],
   templateUrl: './game-list.component.html',
   standalone: true,
   styleUrl: './game-list.component.css'

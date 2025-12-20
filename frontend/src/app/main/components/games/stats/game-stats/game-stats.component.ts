@@ -3,7 +3,7 @@ import {MainHeaderComponent} from "../../../all/main-header/main-header.componen
 import {GameSearchComponent} from "../../game-search/game-search.component";
 import {GameFilters} from "../../../../dto/games/GameFilters";
 import {GameStats} from "../../../../dto/games/stats/GameStats";
-import {NgComponentOutlet, NgForOf, NgIf} from "@angular/common";
+import { NgComponentOutlet } from "@angular/common";
 import {GameService} from "../../../../services/game.service";
 import {GameComponentRegistryService} from "../../../../services/game-component-registry.service";
 import {CorrelationChartComponent} from "../correlation-chart/correlation-chart.component";
@@ -17,20 +17,18 @@ import {GameStatsSimpleComponent} from "../game-stats-simple/game-stats-simple.c
 @Component({
     selector: 'game-stats',
     imports: [
-        MainHeaderComponent,
-        GameSearchComponent,
-        NgForOf,
-        NgIf,
-        NgComponentOutlet,
-        CorrelationChartComponent,
-        CorrelationChartComponent,
-        GameStatsMetaComponent,
-        DurationPipe,
-        GameStatsMetricsComponent,
-        DataChartComponent,
-        GameStatsStreakComponent,
-        GameStatsSimpleComponent
-    ],
+    MainHeaderComponent,
+    GameSearchComponent,
+    NgComponentOutlet,
+    CorrelationChartComponent,
+    CorrelationChartComponent,
+    GameStatsMetaComponent,
+    DurationPipe,
+    GameStatsMetricsComponent,
+    DataChartComponent,
+    GameStatsStreakComponent,
+    GameStatsSimpleComponent
+],
     templateUrl: './game-stats.component.html',
     standalone: true,
     styleUrl: './game-stats.component.css'

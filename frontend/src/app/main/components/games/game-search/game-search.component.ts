@@ -5,7 +5,7 @@ import {GameFilters} from "../../../dto/games/GameFilters";
 import {Options} from "@popperjs/core";
 import {GameType} from "../../../dto/games/GameType";
 import {DurationPipe} from "../../../pipes/DurationPipe";
-import {NgForOf, NgIf} from "@angular/common";
+
 import {PlayerService} from "../../../services/player.service";
 import {PlayerDetails} from "../../../dto/all/PlayerDetails";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -14,10 +14,8 @@ import {ActivatedRoute, Router} from "@angular/router";
   selector: 'game-search',
   imports: [
     NgbPopover,
-    ReactiveFormsModule,
-    NgForOf,
-    NgIf
-  ],
+    ReactiveFormsModule
+],
   templateUrl: './game-search.component.html',
   standalone: true,
   styleUrl: './game-search.component.css'

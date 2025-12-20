@@ -1,131 +1,144 @@
 <game-session-game [sessionService]="qwirkleService"
-                   [gameState]="gameState"
->
-@if (gameState) {
+  [gameState]="gameState"
+  >
+  @if (gameState) {
     <div class="main-container">
-        <div class="game-container">
-            <div class="config">
-                <qwirkle-hand [hand]="gameState.hand"
-                              (handCleared)="clearedHand($event)"
-                              (tilesSelected)="selectedInHand($event)"
-                              ></qwirkle-hand>
-                <qwirkle-stack [stack]="gameState.stack"
-                               (tileDrawn)="drewTile($event)"
-                               (tileSelected)="selectedInStack($event)"
-                               (editModeChanged)="editMode = $event"
-                ></qwirkle-stack>
-            </div>
-
-
-            <div class="board-container">
-                <div class="board-actions">
-                    <button class="small-btn" [disabled]="gameState.moves.length === 0" (click)="undoMove()">
-                        <i class="bi bi-arrow-left-square"></i>
-                    </button>
-                    <button class="small-btn">
-                        <i class="bi bi-pencil-square"></i>
-                    </button>
-                </div>
-                <app-pan-container #board class="board"
-                                   [centerPosition]="center">
-                    <!--board tiles-->
-                    <qwirkle-tile *ngFor="let boardTile of gameState.board"
-                                  [tile]="boardTile.tile"
-                                  [tileSize]="tileSize"
-                                  [ngStyle]="getTilePositionStyle(boardTile.position)"
-                                  [isInteractive]="false"
-                                  class="board-tile"
-                    >
-                    </qwirkle-tile>
-
-                    <!--open positions-->
-                    <div *ngIf="gameState.board.length === 0"
-                         [ngStyle]="getTilePositionStyle({x: 0, y: 0})"
-                         class="board-tile open-position">
-                    </div>
-                    <ng-container *ngFor="let posInfo of gameState.openPositions">
-                        <div *ngIf="!posInfo.isDead"
-                             [ngStyle]="getTilePositionStyle(posInfo.position)"
-                             class="board-tile open-position">
-                        </div>
-                    </ng-container>
-
-                    <!--best move highlight-->
-                    <ng-container *ngIf="!selectedMove">
-                        <div *ngFor="let move of bestMoves;let i = index" (click)="makeBestMove(i)" class="tile-group">
-                            <!--add grouping-->
-                            <ng-container *ngFor="let boardTile of move.groupInfos[0].boardTiles;let j = index">
-                                <qwirkle-tile
-                                        [ngStyle]="getTilePositionStyle(boardTile.position)"
-                                        [tile]="boardTile.tile"
-                                        [tileText]="move.groupInfos[0].score"
-                                        [tileSize]="tileSize"
-                                        [isInteractive]="false"
-                                        class="board-tile highlighted-move"
-                                >
-                                </qwirkle-tile>
-                            </ng-container>
-                        </div>
-                    </ng-container>
-
-                    <!--valid move tiles-->
-                    <ng-container *ngFor="let move of selectionInfo?.moves;let i = index">
-                        <div *ngIf="!(selectedMove && selectedMove.position.y == move.position.y && selectedMove.position.x == move.position.x)"
-                             [ngStyle]="getValidMoveGroupStyle(move)"
-                             (click)="chooseValidMove(i)"
-                             class="board-tile valid-move"
-                        >
-                        </div>
-                    </ng-container>
-
-
-                    <!--specific valid move tile highlight-->
-                    <ng-container *ngIf="selectedMove">
-                        <!--draw first tile without clickable if there are many configurations-->
-                        <qwirkle-tile
-                                *ngIf="selectedMove.groupInfos.length > 1"
-                                [ngStyle]="getTilePositionStyle(selectedMove.position)"
-                                [tile]="selectedMove.tiles[0]"
-                                [tileSize]="tileSize"
-                                [isInteractive]="false"
-                                class="board-tile highlighted-move"
-                        >
-                        </qwirkle-tile>
-
-                        <div *ngFor="let groupInfo of selectedMove.groupInfos;let i = index"
-                             (click)="makeSelectedMove(groupInfo.direction)"
-                             class="tile-group">
-                            <!--add grouping-->
-                            <ng-container *ngFor="let boardTile of groupInfo.boardTiles">
-                                @if (boardTile.position.y == selectedMove.position.y && boardTile.position.x == selectedMove.position.x) {
-                                    <!--draw first tile as clickable if theres only one configuration-->
-                                    <qwirkle-tile
-                                            *ngIf="selectedMove.groupInfos.length == 1"
-                                            [ngStyle]="getTilePositionStyle(boardTile.position)"
-                                            [tile]="boardTile.tile"
-                                            [tileSize]="tileSize"
-                                            [isInteractive]="false"
-                                            class="board-tile highlighted-move"
-                                    >
-                                    </qwirkle-tile>
-                                } @else {
-                                    <!--draw other tiles-->
-                                    <qwirkle-tile
-                                            [ngStyle]="getTilePositionStyle(boardTile.position)"
-                                            [tile]="boardTile.tile"
-                                            [tileSize]="tileSize"
-                                            [isInteractive]="false"
-                                            class="board-tile highlighted-move"
-                                    >
-                                    </qwirkle-tile>
-                                }
-                            </ng-container>
-                        </div>
-                    </ng-container>
-                </app-pan-container>
-            </div>
+      <div class="game-container">
+        <div class="config">
+          <qwirkle-hand [hand]="gameState.hand"
+            (handCleared)="clearedHand($event)"
+            (tilesSelected)="selectedInHand($event)"
+          ></qwirkle-hand>
+          <qwirkle-stack [stack]="gameState.stack"
+            (tileDrawn)="drewTile($event)"
+            (tileSelected)="selectedInStack($event)"
+            (editModeChanged)="editMode = $event"
+          ></qwirkle-stack>
         </div>
-        <qwirkle-image-input></qwirkle-image-input>
+
+
+        <div class="board-container">
+          <div class="board-actions">
+            <button class="small-btn" [disabled]="gameState.moves.length === 0" (click)="undoMove()">
+              <i class="bi bi-arrow-left-square"></i>
+            </button>
+            <button class="small-btn">
+              <i class="bi bi-pencil-square"></i>
+            </button>
+          </div>
+          <app-pan-container #board class="board"
+            [centerPosition]="center">
+            <!--board tiles-->
+            @for (boardTile of gameState.board; track boardTile) {
+              <qwirkle-tile
+                [tile]="boardTile.tile"
+                [tileSize]="tileSize"
+                [ngStyle]="getTilePositionStyle(boardTile.position)"
+                [isInteractive]="false"
+                class="board-tile"
+                >
+              </qwirkle-tile>
+            }
+
+            <!--open positions-->
+            @if (gameState.board.length === 0) {
+              <div
+                [ngStyle]="getTilePositionStyle({x: 0, y: 0})"
+                class="board-tile open-position">
+              </div>
+            }
+            @for (posInfo of gameState.openPositions; track posInfo) {
+              @if (!posInfo.isDead) {
+                <div
+                  [ngStyle]="getTilePositionStyle(posInfo.position)"
+                  class="board-tile open-position">
+                </div>
+              }
+            }
+
+            <!--best move highlight-->
+            @if (!selectedMove) {
+              @for (move of bestMoves; track move; let i = $index) {
+                <div (click)="makeBestMove(i)" class="tile-group">
+                  <!--add grouping-->
+                  @for (boardTile of move.groupInfos[0].boardTiles; track boardTile; let j = $index) {
+                    <qwirkle-tile
+                      [ngStyle]="getTilePositionStyle(boardTile.position)"
+                      [tile]="boardTile.tile"
+                      [tileText]="move.groupInfos[0].score"
+                      [tileSize]="tileSize"
+                      [isInteractive]="false"
+                      class="board-tile highlighted-move"
+                      >
+                    </qwirkle-tile>
+                  }
+                </div>
+              }
+            }
+
+            <!--valid move tiles-->
+            @for (move of selectionInfo?.moves; track move; let i = $index) {
+              @if (!(selectedMove && selectedMove.position.y == move.position.y && selectedMove.position.x == move.position.x)) {
+                <div
+                  [ngStyle]="getValidMoveGroupStyle(move)"
+                  (click)="chooseValidMove(i)"
+                  class="board-tile valid-move"
+                  >
+                </div>
+              }
+            }
+
+
+            <!--specific valid move tile highlight-->
+            @if (selectedMove) {
+              <!--draw first tile without clickable if there are many configurations-->
+              @if (selectedMove.groupInfos.length > 1) {
+                <qwirkle-tile
+                  [ngStyle]="getTilePositionStyle(selectedMove.position)"
+                  [tile]="selectedMove.tiles[0]"
+                  [tileSize]="tileSize"
+                  [isInteractive]="false"
+                  class="board-tile highlighted-move"
+                  >
+                </qwirkle-tile>
+              }
+              @for (groupInfo of selectedMove.groupInfos; track groupInfo; let i = $index) {
+                <div
+                  (click)="makeSelectedMove(groupInfo.direction)"
+                  class="tile-group">
+                  <!--add grouping-->
+                  @for (boardTile of groupInfo.boardTiles; track boardTile) {
+                    @if (boardTile.position.y == selectedMove.position.y && boardTile.position.x == selectedMove.position.x) {
+                      <!--draw first tile as clickable if theres only one configuration-->
+                      @if (selectedMove.groupInfos.length == 1) {
+                        <qwirkle-tile
+                          [ngStyle]="getTilePositionStyle(boardTile.position)"
+                          [tile]="boardTile.tile"
+                          [tileSize]="tileSize"
+                          [isInteractive]="false"
+                          class="board-tile highlighted-move"
+                          >
+                        </qwirkle-tile>
+                      }
+                    } @else {
+                      <!--draw other tiles-->
+                      <qwirkle-tile
+                        [ngStyle]="getTilePositionStyle(boardTile.position)"
+                        [tile]="boardTile.tile"
+                        [tileSize]="tileSize"
+                        [isInteractive]="false"
+                        class="board-tile highlighted-move"
+                        >
+                      </qwirkle-tile>
+                    }
+                  }
+                </div>
+              }
+            }
+          </app-pan-container>
+        </div>
+      </div>
+      <qwirkle-image-input></qwirkle-image-input>
     </div>
-}
+  }
 </game-session-game>

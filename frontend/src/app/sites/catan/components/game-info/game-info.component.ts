@@ -2,7 +2,7 @@ import {Component, input, Input, OnInit} from '@angular/core';
 import {GameMetadata} from "../../../../main/dto/games/GameMetadata";
 import {GameState} from "../../dto/game/GameState";
 import {ResultState} from "../../../../main/dto/all/result/ResultState";
-import {NgForOf, NgIf} from "@angular/common";
+
 import {CatanHistogramComponent} from "../histogram/histogram.component";
 import {GameMode, getGameModeName} from "../../dto/enums/GameMode";
 import {GameResultTableComponent} from "../../../../main/components/games/game-result-table/game-result-table.component";
@@ -11,10 +11,9 @@ import {GameResultTableComponent} from "../../../../main/components/games/game-r
   standalone: true,
   selector: 'catan-game-info',
   imports: [
-    NgIf,
     CatanHistogramComponent,
     GameResultTableComponent
-  ],
+],
   templateUrl: './game-info.component.html',
   styleUrl: './game-info.component.css'
 })

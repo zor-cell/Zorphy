@@ -1,6 +1,6 @@
 import {Component, effect, inject, signal} from '@angular/core';
 import {SliderCheckboxComponent} from "../../../../main/components/all/slider-checkbox/slider-checkbox.component";
-import {NgForOf, NgOptimizedImage} from "@angular/common";
+import { NgOptimizedImage } from "@angular/common";
 import {FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {GameConfig} from "../../dto/game/GameConfig";
 import {CatanService} from "../../catan.service";
@@ -13,15 +13,14 @@ import {CustomValidators} from "../../../../main/classes/validators";
 @Component({
     selector: 'catan-game-settings',
     imports: [
-        SliderCheckboxComponent,
-        NgOptimizedImage,
-        FormsModule,
-        NgForOf,
-        PlayerSelectComponent,
-        GameSessionConfigComponent,
-        GameSessionConfigComponent,
-        ReactiveFormsModule
-    ],
+    SliderCheckboxComponent,
+    NgOptimizedImage,
+    FormsModule,
+    PlayerSelectComponent,
+    GameSessionConfigComponent,
+    GameSessionConfigComponent,
+    ReactiveFormsModule
+],
     templateUrl: './config.component.html',
     standalone: true,
     styleUrl: './config.component.css'

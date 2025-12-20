@@ -1,57 +1,69 @@
 <div id="container" class="flex-container">
-    <div id="settings-container" class="flex-container">
-        <connect4-player-settings
-                [playerValue]="1"
-                [canStart]="currentPlayer !== undefined && currentPlayer.value === 1 && !delayLoader.isLoading && !gameOver && (moves.length === 0 || isUndoing)"
-                [isAi]="false"
-                (settingsEvent)="initPlayer1($event)"
-                (makeMoveEvent)="solve($event)"
+  <div id="settings-container" class="flex-container">
+    <connect4-player-settings
+      [playerValue]="1"
+      [canStart]="currentPlayer !== undefined && currentPlayer.value === 1 && !delayLoader.isLoading && !gameOver && (moves.length === 0 || isUndoing)"
+      [isAi]="false"
+      (settingsEvent)="initPlayer1($event)"
+      (makeMoveEvent)="solve($event)"
+      />
+      <connect4-player-settings
+        [playerValue]="-1"
+        [canStart]="currentPlayer !== undefined && currentPlayer.value === -1 && !delayLoader.isLoading && !gameOver && (moves.length === 0 || isUndoing)"
+        [isAi]="true"
+        (settingsEvent)="initPlayer2($event)"
+        (makeMoveEvent)="solve($event)"
         />
-        <connect4-player-settings
-                [playerValue]="-1"
-                [canStart]="currentPlayer !== undefined && currentPlayer.value === -1 && !delayLoader.isLoading && !gameOver && (moves.length === 0 || isUndoing)"
-                [isAi]="true"
-                (settingsEvent)="initPlayer2($event)"
-                (makeMoveEvent)="solve($event)"
-        />
-    </div>
+      </div>
 
-    <div id="board-container">
+      <div id="board-container">
         <div id="buttons" class="flex-container">
-            <div>
-                <button class="btn btn-primary" [disabled]="delayLoader.isLoading || moves.length === 0"
-                        (click)="undoMove(moves[moves.length - 1])">
-                    <i class="bi bi-arrow-left-circle"></i> Undo
-                </button>
-                <button class="btn btn-success" [disabled]="delayLoader.isLoading" (click)="refresh()">
-                    <i class="bi bi-arrow-repeat"></i> New
-                </button>
-            </div>
+          <div>
+            <button class="btn btn-primary" [disabled]="delayLoader.isLoading || moves.length === 0"
+              (click)="undoMove(moves[moves.length - 1])">
+              <i class="bi bi-arrow-left-circle"></i> Undo
+            </button>
+            <button class="btn btn-success" [disabled]="delayLoader.isLoading" (click)="refresh()">
+              <i class="bi bi-arrow-repeat"></i> New
+            </button>
+          </div>
         </div>
 
         <div id="board">
-            <div class="board-row" *ngFor="let row of board; let rowIndex = index">
-                <div *ngFor="let cellValue of row; let colIndex = index">
-                    <connect4-cell
-                            [isLastMove]="isLastMove(rowIndex, colIndex)"
-                            [cellPosition]="{i: rowIndex, j: colIndex}"
-                            [cellValue]="cellValue"
-                            (clickEvent)="makeMove($event)"
+          @for (row of board; track row; let rowIndex = $index) {
+            <div class="board-row">
+              @for (cellValue of row; track cellValue; let colIndex = $index) {
+                <div>
+                  <connect4-cell
+                    [isLastMove]="isLastMove(rowIndex, colIndex)"
+                    [cellPosition]="{i: rowIndex, j: colIndex}"
+                    [cellValue]="cellValue"
+                    (clickEvent)="makeMove($event)"
                     />
-                </div>
-            </div>
+                  </div>
+                }
+              </div>
+            }
 
-            <div *ngIf="delayLoader.isLoading " class="board-overlay">
+            @if (delayLoader.isLoading ) {
+              <div class="board-overlay">
                 <img src="loading.gif" alt="Loading" width="30" height="30"/>
-            </div>
-            <div *ngIf="gameOver" class="board-overlay">
+              </div>
+            }
+            @if (gameOver) {
+              <div class="board-overlay">
                 <span id="game-over-screen">Game Over! {{ gameOverText }}</span>
-            </div>
+              </div>
+            }
+          </div>
         </div>
-    </div>
 
-    <div class="flex-container mt-3 mb-4">
-        <p *ngIf="winDistance < 0" class="m-0"><b>Score:</b> {{ score }}</p>
-        <p *ngIf="winDistance >= 0" class="m-0">Player x wins in {{ Math.ceil(winDistance / 2) }} moves!</p>
-    </div>
-</div>
+        <div class="flex-container mt-3 mb-4">
+          @if (winDistance < 0) {
+            <p class="m-0"><b>Score:</b> {{ score }}</p>
+          }
+          @if (winDistance >= 0) {
+            <p class="m-0">Player x wins in {{ Math.ceil(winDistance / 2) }} moves!</p>
+          }
+        </div>
+      </div>

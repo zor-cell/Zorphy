@@ -1,48 +1,70 @@
 <table class="table">
-    <thead>
+  <thead>
     <tr>
-        <th scope="col">#</th>
-        <th scope="col" *ngFor="let team of gameState().gameConfig.teams">{{ team.name }}</th>
-        <th scope="col">Duration</th>
-        <th scope="col" *ngIf="showImages()">Image</th>
-        <th scope="col" *ngIf="isEditable()">Actions</th>
+      <th scope="col">#</th>
+      @for (team of gameState().gameConfig.teams; track team) {
+        <th scope="col">{{ team.name }}</th>
+      }
+      <th scope="col">Duration</th>
+      @if (showImages()) {
+        <th scope="col">Image</th>
+      }
+      @if (isEditable()) {
+        <th scope="col">Actions</th>
+      }
     </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let roundInfo of gameState().rounds;let i = index;">
+  </thead>
+  <tbody>
+    @for (roundInfo of gameState().rounds; track roundInfo; let i = $index) {
+      <tr>
         <th scope="row">{{ i + 1 }}</th>
-        <td *ngFor="let round of roundInfo.results" class="score-cell">
+        @for (round of roundInfo.results; track round) {
+          <td class="score-cell">
             <span [class.closed]="round.hasClosed">{{ round.score }}</span>
-            <span *ngIf="round.outInOne" class="out-in-one">•</span>
-        </td>
+            @if (round.outInOne) {
+              <span class="out-in-one">•</span>
+            }
+          </td>
+        }
         <td>{{ getDuration(i) }}</td>
-        <td *ngIf="showImages()">
+        @if (showImages()) {
+          <td>
             <div [lightbox]="i" [gallery]="galleryName">
-                <img [ngSrc]="roundInfo.imageUrl" width="20" height="20" alt="" loading="lazy">
+              <img [ngSrc]="roundInfo.imageUrl" width="20" height="20" alt="" loading="lazy">
             </div>
-        </td>
-        <td *ngIf="isEditable()" style="width: 20px">
+          </td>
+        }
+        @if (isEditable()) {
+          <td style="width: 20px">
             <button class="btn btn-sm btn-primary" (click)="openRoundPopup(i)">
-                <i class="bi bi-pencil-square"></i>
+              <i class="bi bi-pencil-square"></i>
             </button>
-        </td>
-    </tr>
-    </tbody>
-    <tfoot>
+          </td>
+        }
+      </tr>
+    }
+  </tbody>
+  <tfoot>
     <tr class="table-light fw-bold">
-        <th scope="row">Total</th>
-        <td *ngFor="let team of gameState().gameConfig.teams">
-            {{ getTotalScore(team) }}
+      <th scope="row">Total</th>
+      @for (team of gameState().gameConfig.teams; track team) {
+        <td>
+          {{ getTotalScore(team) }}
         </td>
-        <td>{{ getTotalDuration() }}</td>
-        <td *ngIf="showImages()">-</td>
-        <td *ngIf="isEditable()">-</td>
+      }
+      <td>{{ getTotalDuration() }}</td>
+      @if (showImages()) {
+        <td>-</td>
+      }
+      @if (isEditable()) {
+        <td>-</td>
+      }
     </tr>
-    </tfoot>
+  </tfoot>
 </table>
 
 <jolly-round-popup #updateRoundPopup
-                   [teams]="gameState().gameConfig.teams"
-                   [rounds]="gameState().rounds"
-                   (updateRoundEvent)="updateRound($event)"
-/>
+  [teams]="gameState().gameConfig.teams"
+  [rounds]="gameState().rounds"
+  (updateRoundEvent)="updateRound($event)"
+  />

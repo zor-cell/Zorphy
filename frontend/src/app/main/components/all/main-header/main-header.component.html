@@ -1,11 +1,13 @@
 <div class="main-header header-container">
-    <button *ngIf="showBack()" class="btn-back" (click)="routeBack()">
-        <i class="bi bi-arrow-left-circle"></i>
+  @if (showBack()) {
+    <button class="btn-back" (click)="routeBack()">
+      <i class="bi bi-arrow-left-circle"></i>
     </button>
+  }
   <div class="header-middle">
     <ng-content select="middle"></ng-content>
   </div>
-    <div class="header-icons">
-        <ng-content></ng-content>
-    </div>
+  <div class="header-icons">
+    <ng-content></ng-content>
+  </div>
 </div>

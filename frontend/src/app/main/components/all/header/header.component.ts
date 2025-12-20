@@ -23,7 +23,7 @@ export class HeaderComponent implements OnInit {
 
     // Close menu when clicking outside
     @HostListener('document:click', ['$event'])
-    private handleOutsideClick(event: MouseEvent) {
+    protected handleOutsideClick(event: MouseEvent) {
         const target = event.target as HTMLElement;
         const header = document.querySelector('header');
         if (this.mobileMenuOpen && header && !header.contains(target)) {

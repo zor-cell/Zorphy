@@ -1,5 +1,5 @@
 import {Component, effect, inject, input, model, OnInit, output, viewChild} from '@angular/core';
-import {DatePipe, NgClass, NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
+import { DatePipe, NgClass, NgOptimizedImage } from "@angular/common";
 import {GameState} from "../../dto/game/GameState";
 import {Team} from "../../../../main/dto/all/Team";
 import {LightboxDirective} from "ng-gallery/lightbox";
@@ -13,12 +13,10 @@ import {JollyService} from "../../jolly.service";
 @Component({
   selector: 'jolly-round-table',
   imports: [
-    NgForOf,
-    NgIf,
     LightboxDirective,
     NgOptimizedImage,
     RoundPopupComponent
-  ],
+],
   templateUrl: './round-table.component.html',
   styleUrl: './round-table.component.css'
 })
