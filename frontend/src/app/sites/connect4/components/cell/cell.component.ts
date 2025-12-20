@@ -8,7 +8,7 @@ import {Position} from "../../dto/data";
         NgClass
     ],
     templateUrl: './cell.component.html',
-    standalone: true,
+    
     styleUrl: './cell.component.css'
 })
 export class CellComponent {

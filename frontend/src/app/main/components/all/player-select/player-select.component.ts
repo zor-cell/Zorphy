@@ -22,7 +22,7 @@ import {PlayerCreate} from "../../../dto/all/PlayerCreate";
     NewPlayerPopupComponent
 ],
     templateUrl: './player-select.component.html',
-    standalone: true,
+    
     styleUrl: './player-select.component.css',
     providers: [
         {

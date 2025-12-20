@@ -13,7 +13,7 @@ import {JollyRoundTableComponent} from "../rounds-table/round-table.component";
     JollyRoundTableComponent
 ],
   templateUrl: './game-info.component.html',
-  standalone: true,
+  
   styleUrl: './game-info.component.css'
 })
 export class JollyGameInfoComponent {

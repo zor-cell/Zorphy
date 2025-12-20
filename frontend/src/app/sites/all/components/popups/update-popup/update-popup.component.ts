@@ -6,7 +6,7 @@ import {PopupResultType} from "../../../../../main/dto/all/PopupResultType";
     selector: 'game-session-update-popup',
     imports: [],
     templateUrl: './update-popup.component.html',
-    standalone: true,
+    
     styleUrl: './update-popup.component.css'
 })
 export class GameSessionUpdatePopupComponent {

@@ -6,7 +6,7 @@ import {PopupResultType} from "../../../../../main/dto/all/PopupResultType";
     selector: 'game-session-clear-popup',
     imports: [],
     templateUrl: './clear-popup.component.html',
-    standalone: true,
+    
     styleUrl: './clear-popup.component.css'
 })
 export class GameSessionClearPopupComponent {

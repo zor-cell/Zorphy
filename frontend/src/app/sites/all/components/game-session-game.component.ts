@@ -15,7 +15,7 @@ import {WithFile} from "../../../main/dto/all/WithFile";
     MainHeaderComponent,
     GameSessionSavePopupComponent
 ],
-    standalone: true,
+    
     template: `
         <app-main-header>
           @if (authService.isAdmin()) {

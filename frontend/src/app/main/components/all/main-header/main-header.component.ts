@@ -5,7 +5,7 @@ import { Location } from "@angular/common";
     selector: 'app-main-header',
     imports: [],
     templateUrl: './main-header.component.html',
-    standalone: true,
+    
     styleUrl: './main-header.component.css'
 })
 export class MainHeaderComponent {

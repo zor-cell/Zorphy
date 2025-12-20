@@ -28,7 +28,7 @@ type ProjectForm = FormGroup<{
     FileUploadComponent
 ],
     templateUrl: './update-popup.component.html',
-    standalone: true,
+    
     styleUrl: './update-popup.component.css'
 })
 export class ProjectUpdatePopupComponent implements OnInit {

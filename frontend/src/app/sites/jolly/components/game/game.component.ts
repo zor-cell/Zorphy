@@ -20,7 +20,7 @@ import {WithFile} from "../../../../main/dto/all/WithFile";
     JollyRoundTableComponent
 ],
   templateUrl: './game.component.html',
-  standalone: true,
+  
   styleUrl: './game.component.css'
 })
 export class JollyGameComponent implements OnInit {

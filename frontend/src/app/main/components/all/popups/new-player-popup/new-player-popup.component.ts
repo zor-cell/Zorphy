@@ -14,7 +14,7 @@ import {PlayerCreate} from "../../../../dto/all/PlayerCreate";
         ReactiveFormsModule
     ],
     templateUrl: './new-player-popup.component.html',
-    standalone: true,
+    
     styleUrl: './new-player-popup.component.css'
 })
 export class NewPlayerPopupComponent {

@@ -6,7 +6,7 @@ import {QwirkleService} from "../../qwirkle.service";
   selector: 'qwirkle-image-input',
   imports: [],
   templateUrl: './image-input.component.html',
-  standalone: true,
+  
   styleUrl: './image-input.component.css'
 })
 export class ImageInputComponent {

@@ -5,7 +5,7 @@ import {FileUpload} from "../../../dto/all/FileUpload";
   selector: 'app-file-upload',
   imports: [],
   templateUrl: './file-upload.component.html',
-  standalone: true,
+  
   styleUrl: './file-upload.component.css'
 })
 export class FileUploadComponent {

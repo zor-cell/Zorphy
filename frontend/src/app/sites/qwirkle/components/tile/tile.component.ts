@@ -13,7 +13,7 @@ import {Observable} from "rxjs";
     NgClass
 ],
     templateUrl: './tile.component.html',
-    standalone: true,
+    
     styleUrl: './tile.component.css'
 })
 export class QwirkleTileComponent implements OnInit {

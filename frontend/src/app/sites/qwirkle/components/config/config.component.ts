@@ -17,7 +17,7 @@ import {CustomValidators} from "../../../../main/classes/validators";
     ReactiveFormsModule
 ],
     templateUrl: './config.component.html',
-    standalone: true,
+    
     styleUrl: './config.component.css'
 })
 export class QwirkleConfigComponent {

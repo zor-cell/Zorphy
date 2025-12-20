@@ -7,7 +7,7 @@ import {GameMode} from "../../dto/enums/GameMode";
     selector: 'catan-dice-roll',
     imports: [],
     templateUrl: './dice-roll.component.html',
-    standalone: true,
+    
     styleUrl: './dice-roll.component.css'
 })
 export class CatanDiceRollComponent {

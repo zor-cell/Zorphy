@@ -11,7 +11,7 @@ import {PopupResultType} from "../../../../dto/all/PopupResultType";
     NgTemplateOutlet
 ],
     templateUrl: './popup-dialog.component.html',
-    standalone: true,
+    
     styleUrl: './popup-dialog.component.css'
 })
 export class PopupDialogComponent {

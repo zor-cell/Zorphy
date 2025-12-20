@@ -16,7 +16,7 @@ import {WithFile} from "../../../dto/all/WithFile";
     ProjectUpdatePopupComponent
 ],
     templateUrl: './project-info.component.html',
-    standalone: true,
+    
     styleUrl: './project-info.component.css'
 })
 export class ProjectInfoComponent implements OnInit {

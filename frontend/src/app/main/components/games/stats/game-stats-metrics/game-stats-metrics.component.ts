@@ -14,7 +14,7 @@ import {DurationPipe} from "../../../../pipes/DurationPipe";
   ],
   providers: [DurationPipe],
   templateUrl: './game-stats-metrics.component.html',
-  standalone: true,
+  
   styleUrl: './game-stats-metrics.component.css'
 })
 export class GameStatsMetricsComponent {

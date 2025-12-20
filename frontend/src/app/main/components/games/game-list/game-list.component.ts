@@ -18,7 +18,7 @@ import {AuthService} from "../../../services/auth.service";
     GameSearchComponent
 ],
   templateUrl: './game-list.component.html',
-  standalone: true,
+  
   styleUrl: './game-list.component.css'
 })
 export class GameListComponent implements OnInit {

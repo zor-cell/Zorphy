@@ -10,7 +10,7 @@ import {RouterLink} from "@angular/router";
     DatePipe
 ],
     templateUrl: './project-card.component.html',
-    standalone: true,
+    
     styleUrl: './project-card.component.css'
 })
 export class ProjectCardComponent {

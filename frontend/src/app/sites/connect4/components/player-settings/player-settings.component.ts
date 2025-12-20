@@ -9,7 +9,7 @@ import {FormsModule} from "@angular/forms";
     FormsModule
 ],
     templateUrl: './player-settings.component.html',
-    standalone: true,
+    
     styleUrl: './player-settings.component.css'
 })
 export class PlayerSettingsComponent implements OnInit {

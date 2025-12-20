@@ -13,7 +13,7 @@ import {GameState} from "../../dto/game/GameState";
     NgStyle
 ],
     templateUrl: './hand.component.html',
-    standalone: true,
+    
     styleUrl: './hand.component.css'
 })
 export class QwirkleHandComponent {

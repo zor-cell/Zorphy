@@ -21,7 +21,7 @@ interface SaveForm {
     FileUploadComponent
 ],
     templateUrl: './save-popup.component.html',
-    standalone: true,
+    
     styleUrl: './save-popup.component.css'
 })
 export class GameSessionSavePopupComponent implements OnInit {

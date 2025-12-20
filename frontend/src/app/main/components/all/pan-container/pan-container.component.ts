@@ -8,7 +8,7 @@ import {Position} from "../../../dto/all/Position";
         NgStyle
     ],
     templateUrl: './pan-container.component.html',
-    standalone: true,
+    
     styleUrl: './pan-container.component.css'
 })
 export class PanContainerComponent {

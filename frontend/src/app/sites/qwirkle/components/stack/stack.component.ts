@@ -15,7 +15,7 @@ import {SelectionInfo} from "../../dto/SelectionInfo";
     FormsModule
 ],
     templateUrl: './stack.component.html',
-    standalone: true,
+    
     styleUrl: './stack.component.css'
 })
 export class QwirkleStackComponent {

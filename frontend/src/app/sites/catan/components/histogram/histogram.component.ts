@@ -21,7 +21,7 @@ import {GameMode} from "../../dto/enums/GameMode";
     BaseChartDirective
 ],
     templateUrl: './histogram.component.html',
-    standalone: true,
+    
     styleUrl: './histogram.component.css'
 })
 export class CatanHistogramComponent implements AfterViewInit {

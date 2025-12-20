@@ -13,7 +13,7 @@ import {WithFile} from "../../../dto/all/WithFile";
     selector: 'project-list',
     imports: [ProjectCardComponent, MainHeaderComponent, ProjectUpdatePopupComponent],
     templateUrl: './project-list.component.html',
-    standalone: true,
+    
     styleUrl: './project-list.component.css'
 })
 export class ProjectListComponent implements OnInit {

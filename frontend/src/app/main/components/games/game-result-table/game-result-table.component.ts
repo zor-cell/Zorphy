@@ -7,7 +7,7 @@ import {ResultState} from "../../../dto/all/result/ResultState";
   selector: 'game-result-table',
     imports: [],
   templateUrl: './game-result-table.component.html',
-    standalone: true,
+    
   styleUrl: './game-result-table.component.css'
 })
 export class GameResultTableComponent {

@@ -17,7 +17,7 @@ import {LightboxDirective} from "ng-gallery/lightbox";
 import {Gallery, GalleryItem, ImageItem} from "ng-gallery";
 
 @Component({
-    standalone: true,
+    
     selector: 'game-info',
     imports: [
         NgIf,

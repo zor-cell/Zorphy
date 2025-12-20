@@ -32,7 +32,7 @@ interface RoundForm {
     FileUploadComponent
 ],
   templateUrl: './round-popup.component.html',
-  standalone: true,
+  
   styleUrl: './round-popup.component.css'
 })
 export class RoundPopupComponent implements OnInit {

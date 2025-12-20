@@ -5,7 +5,7 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from "@angular/forms";
     selector: 'app-slider-checkbox',
     imports: [],
     templateUrl: './slider-checkbox.component.html',
-    standalone: true,
+    
     styleUrl: './slider-checkbox.component.css',
     providers: [
         {

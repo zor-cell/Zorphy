@@ -8,7 +8,7 @@ import {GameMode, getGameModeName} from "../../dto/enums/GameMode";
 import {GameResultTableComponent} from "../../../../main/components/games/game-result-table/game-result-table.component";
 
 @Component({
-  standalone: true,
+  
   selector: 'catan-game-info',
   imports: [
     CatanHistogramComponent,

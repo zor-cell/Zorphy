@@ -22,7 +22,7 @@ import {GameSessionGameComponent} from "../../../all/components/game-session-gam
     GameSessionGameComponent
 ],
     templateUrl: './game.component.html',
-    standalone: true,
+    
     styleUrl: './game.component.css'
 })
 export class CatanGameComponent implements OnInit {

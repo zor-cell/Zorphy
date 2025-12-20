@@ -17,7 +17,7 @@ import {ActivatedRoute, Router} from "@angular/router";
     ReactiveFormsModule
 ],
   templateUrl: './game-search.component.html',
-  standalone: true,
+  
   styleUrl: './game-search.component.css'
 })
 export class GameSearchComponent implements OnInit {

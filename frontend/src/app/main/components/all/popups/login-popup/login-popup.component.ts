@@ -16,7 +16,7 @@ import {PopupResultType} from "../../../../dto/all/PopupResultType";
         ReactiveFormsModule
     ],
     templateUrl: './login-popup.component.html',
-    standalone: true,
+    
     styleUrl: './login-popup.component.css'
 })
 export class LoginPopupComponent {

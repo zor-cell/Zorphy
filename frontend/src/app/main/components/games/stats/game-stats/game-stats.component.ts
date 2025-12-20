@@ -30,7 +30,7 @@ import {GameStatsSimpleComponent} from "../game-stats-simple/game-stats-simple.c
     GameStatsSimpleComponent
 ],
     templateUrl: './game-stats.component.html',
-    standalone: true,
+    
     styleUrl: './game-stats.component.css'
 })
 export class GameStatsComponent {

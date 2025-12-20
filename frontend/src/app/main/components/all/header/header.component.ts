@@ -10,7 +10,7 @@ import {UserLoginDetails} from "../../../dto/all/UserLoginDetails";
         RouterLink,
         LoginPopupComponent
     ],
-    standalone: true,
+    
     templateUrl: './header.component.html',
     styleUrl: './header.component.css'
 })

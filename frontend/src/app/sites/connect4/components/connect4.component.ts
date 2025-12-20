@@ -15,7 +15,7 @@ import {DelayLoader} from "../../../main/classes/delay-loader";
     PlayerSettingsComponent
 ],
     templateUrl: './connect4.component.html',
-    standalone: true,
+    
     styleUrl: './connect4.component.css'
 })
 export class Connect4Component {
