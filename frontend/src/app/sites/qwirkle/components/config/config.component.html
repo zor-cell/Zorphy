@@ -1,32 +1,29 @@
 <game-session-config [sessionService]="qwirkleService"
-  [projectName]="projectName"
-  [(gameConfig)]="gameConfig"
-  [isValidConfig]="configForm.valid"
-  >
-  <div class="main-container" [formGroup]="configForm">
-    <section class="config-container">
-      <div class="config-grid-container">
-        <h3 class="config-header">Players</h3>
-        <app-player-select formControlName="teams"></app-player-select>
-      </div>
-      <div class="config-grid-container">
-        <h3 class="config-header">Settings</h3>
-        <div class="flex-container temp">
-          <label>Solve for: </label>
-          <select formControlName="playingTeam">
-            @if(configForm.controls.teams.value.length === 0) {
-              <option>EMPTY</option>
-            } @else {
-              @for (team of configForm.controls.teams.value; track team; let i = $index) {
-                <option [value]="i">
-                  {{team.name}}
-                </option>
-              }
-            }
-          </select>
-        </div>
-      </div>
-
-    </section>
-  </div>
+                     [projectName]="projectName"
+                     [(gameConfig)]="gameConfig"
+                     [isValidConfig]="configForm.valid"
+>
+    <div class="main-container" [formGroup]="configForm">
+        <section class="config-container">
+            <div class="config-grid-container">
+                <h3 class="config-header">Players</h3>
+                <app-player-select formControlName="teams"></app-player-select>
+            </div>
+            <div class="config-grid-container">
+                <h3 class="config-header">Settings</h3>
+                <div class="flex-container temp">
+                    <label>Solve for: </label>
+                    <select formControlName="playingTeam">
+                        @for (team of configForm.controls.teams.value; track team; let i = $index) {
+                            <option [value]="i">
+                                {{ team.name }}
+                            </option>
+                        } @empty {
+                            <option>EMPTY</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </section>
+    </div>
 </game-session-config>
