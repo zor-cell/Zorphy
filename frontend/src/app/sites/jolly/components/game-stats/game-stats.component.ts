@@ -1,7 +1,6 @@
 import {Component, input} from '@angular/core';
 import {GameStats} from "../../dto/game/GameStats";
 import {DurationPipe} from "../../../../main/pipes/DurationPipe";
-import {GameStatsMetaComponent} from "../../../../main/components/games/stats/game-stats-meta/game-stats-meta.component";
 import {
     GameStatsMetricsComponent
 } from "../../../../main/components/games/stats/game-stats-metrics/game-stats-metrics.component";
@@ -15,8 +14,6 @@ import {
 @Component({
   selector: 'jolly-game-stats',
     imports: [
-        DurationPipe,
-        GameStatsMetaComponent,
         GameStatsMetricsComponent,
         GameStatsSimpleComponent,
         GameStatsStreakComponent

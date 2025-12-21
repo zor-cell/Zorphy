@@ -1,5 +1,5 @@
-import {Component, effect, inject, input, model, OnInit, output, viewChild} from '@angular/core';
-import { DatePipe, NgClass, NgOptimizedImage } from "@angular/common";
+import {Component, inject, input, OnInit, output, viewChild} from '@angular/core';
+import {NgOptimizedImage} from "@angular/common";
 import {GameState} from "../../dto/game/GameState";
 import {Team} from "../../../../main/dto/all/Team";
 import {LightboxDirective} from "ng-gallery/lightbox";

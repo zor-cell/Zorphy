@@ -3,7 +3,7 @@ import {PopupService} from "../../../../services/popup.service";
 import {PopupResultType} from "../../../../dto/all/PopupResultType";
 import {ProjectDetails} from "../../../../dto/projects/ProjectDetails";
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import { DatePipe } from "@angular/common";
+import {DatePipe} from "@angular/common";
 import {FileUpload} from "../../../../dto/all/FileUpload";
 import {FileUploadComponent} from "../../../all/file-upload/file-upload.component";
 import {WithFile} from "../../../../dto/all/WithFile";

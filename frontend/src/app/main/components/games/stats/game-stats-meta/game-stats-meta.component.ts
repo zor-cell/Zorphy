@@ -1,9 +1,4 @@
-import {Component, inject, Injector, input, PipeTransform, ProviderToken, Type} from '@angular/core';
-import {LinkedGameStats} from "../../../../dto/games/stats/LinkedGameStats";
-import {RouterLink} from "@angular/router";
-
-import {DurationPipe} from "../../../../pipes/DurationPipe";
-import {GameStatsStreak} from "../../../../dto/games/stats/GameStatsStreak";
+import {Component, input} from '@angular/core';
 
 @Component({
   selector: 'game-stats-meta',

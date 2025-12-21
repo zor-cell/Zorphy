@@ -1,4 +1,4 @@
-import {Component, input, Input} from '@angular/core';
+import {Component, input} from '@angular/core';
 import {DiceRoll} from "../../dto/DiceRoll";
 
 import {GameMode} from "../../dto/enums/GameMode";

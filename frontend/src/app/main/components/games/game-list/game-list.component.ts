@@ -1,6 +1,6 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {GameService} from "../../../services/game.service";
-import { DatePipe } from "@angular/common";
+import {DatePipe} from "@angular/common";
 import {DurationPipe} from "../../../pipes/DurationPipe";
 import {GameMetadata} from "../../../dto/games/GameMetadata";
 import {Router} from "@angular/router";

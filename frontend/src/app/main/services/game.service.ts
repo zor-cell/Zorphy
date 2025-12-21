@@ -1,19 +1,19 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {Globals} from "../classes/globals";
 import {GameDetails} from "../dto/games/GameDetails";
 import {Observable, tap} from "rxjs";
 import {GameMetadata} from "../dto/games/GameMetadata";
 import {GameFilters} from "../dto/games/GameFilters";
 import {GameStats} from "../dto/games/stats/GameStats";
 import {environment} from "../../../environments/environment";
+import {NotificationService} from "./notification.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
   private httpClient = inject(HttpClient);
-  private globals = inject(Globals);
+  private notification = inject(NotificationService);
 
   private readonly baseUri = environment.httpApiUrl + '/games';
   
@@ -44,7 +44,7 @@ export class GameService {
   deleteGame(id: string) {
     return this.httpClient.delete<GameDetails>(this.baseUri + '/' + id).pipe(
         tap(() => {
-          this.globals.handleSuccess('Deleted game data');
+          this.notification.handleSuccess('Deleted game data');
         }));
   }
 

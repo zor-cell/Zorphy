@@ -1,9 +1,5 @@
-import {Component, inject, OnInit, output, TemplateRef, viewChild} from '@angular/core';
-import {
-    NonNullableFormBuilder,
-    ReactiveFormsModule,
-    Validators
-} from "@angular/forms";
+import {Component, inject, output, TemplateRef, viewChild} from '@angular/core';
+import {NonNullableFormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {PopupService} from "../../../../services/popup.service";
 import {PopupResultType} from "../../../../dto/all/PopupResultType";
 import {PlayerCreate} from "../../../../dto/all/PlayerCreate";

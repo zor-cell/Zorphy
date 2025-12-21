@@ -2,7 +2,6 @@ import {Component, input} from '@angular/core';
 import {GameStatsMetaComponent} from "../game-stats-meta/game-stats-meta.component";
 import {GameStatsStreak} from "../../../../dto/games/stats/GameStatsStreak";
 import {Params, RouterLink} from "@angular/router";
-import {start} from "@popperjs/core";
 
 @Component({
   selector: 'game-stats-streak',

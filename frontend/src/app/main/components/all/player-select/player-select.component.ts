@@ -1,7 +1,7 @@
 import {Component, computed, effect, forwardRef, inject, input, OnInit, signal, viewChild} from '@angular/core';
 import {PlayerService} from "../../../services/player.service";
 import {PlayerDetails} from "../../../dto/all/PlayerDetails";
-import { NgClass } from "@angular/common";
+import {NgClass} from "@angular/common";
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from "@angular/forms";
 import {CdkDrag, CdkDragDrop, CdkDragPreview, CdkDropList, moveItemInArray} from "@angular/cdk/drag-drop";
 import {Team} from "../../../dto/all/Team";

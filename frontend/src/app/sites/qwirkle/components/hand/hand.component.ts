@@ -1,5 +1,5 @@
 import {Component, effect, inject, input, output} from '@angular/core';
-import { NgStyle } from "@angular/common";
+import {NgStyle} from "@angular/common";
 import {QwirkleTileComponent} from "../tile/tile.component";
 import {Tile} from "../../dto/tile/Tile";
 import {QwirkleService} from "../../qwirkle.service";

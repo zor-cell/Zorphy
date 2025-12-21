@@ -1,26 +1,20 @@
-import {
-    AfterViewInit,
-    Component, computed,
-    inject, signal,
-    viewChild,
-} from '@angular/core';
+import {AfterViewInit, Component, computed, inject, signal, viewChild,} from '@angular/core';
 import {GameService} from "../../../services/game.service";
 import {GameDetails} from "../../../dto/games/GameDetails";
 import {ActivatedRoute} from "@angular/router";
-import {DatePipe, Location, NgComponentOutlet, NgIf} from "@angular/common";
+import {DatePipe, Location, NgComponentOutlet} from "@angular/common";
 import {MainHeaderComponent} from "../../all/main-header/main-header.component";
 import {DurationPipe} from "../../../pipes/DurationPipe";
 import {AuthService} from "../../../services/auth.service";
 import {DeletePopupComponent} from "../delete-popup/delete-popup.component";
 import {GameComponentRegistryService} from "../../../services/game-component-registry.service";
 import {LightboxDirective} from "ng-gallery/lightbox";
-import {Gallery, GalleryItem, ImageItem} from "ng-gallery";
+import {Gallery, ImageItem} from "ng-gallery";
 
 @Component({
     
     selector: 'game-info',
     imports: [
-        NgIf,
         MainHeaderComponent,
         DurationPipe,
         DatePipe,

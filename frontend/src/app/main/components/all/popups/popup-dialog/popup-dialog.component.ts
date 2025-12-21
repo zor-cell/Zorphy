@@ -1,7 +1,7 @@
 import {Component, inject, signal, TemplateRef} from '@angular/core';
 import {ReactiveFormsModule} from "@angular/forms";
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
-import { NgTemplateOutlet } from "@angular/common";
+import {NgTemplateOutlet} from "@angular/common";
 import {PopupResultType} from "../../../../dto/all/PopupResultType";
 
 @Component({

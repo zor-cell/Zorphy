@@ -1,4 +1,4 @@
-import {inject, Injectable, Type} from '@angular/core';
+import {Injectable, Type} from '@angular/core';
 import {GameType} from "../dto/games/GameType";
 import {CatanGameInfoComponent} from "../../sites/catan/components/game-info/game-info.component";
 import {CatanGameStatsComponent} from "../../sites/catan/components/game-stats/game-stats.component";

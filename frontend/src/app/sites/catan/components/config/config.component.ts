@@ -1,7 +1,7 @@
 import {Component, effect, inject, signal} from '@angular/core';
 import {SliderCheckboxComponent} from "../../../../main/components/all/slider-checkbox/slider-checkbox.component";
-import { NgOptimizedImage } from "@angular/common";
-import {FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
+import {NgOptimizedImage} from "@angular/common";
+import {FormsModule, NonNullableFormBuilder, ReactiveFormsModule} from "@angular/forms";
 import {GameConfig} from "../../dto/game/GameConfig";
 import {CatanService} from "../../catan.service";
 import {PlayerSelectComponent} from "../../../../main/components/all/player-select/player-select.component";

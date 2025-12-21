@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Globals} from "../../main/classes/globals";
 import {Observable} from "rxjs";
 import {GameState} from "./dto/game/GameState";
 import {Move} from "./dto/move/Move";
@@ -9,8 +8,8 @@ import {MoveGroup} from "./dto/move/MoveGroup";
 import {SelectionInfo} from "./dto/SelectionInfo";
 import {GameSessionService} from "../all/services/http/game-session.service";
 import {GameConfig} from "./dto/game/GameConfig";
-import {State} from "@popperjs/core";
 import {environment} from "../../../environments/environment";
+import {NotificationService} from "../../main/services/notification.service";
 
 @Injectable({
     providedIn: 'root'
@@ -18,8 +17,8 @@ import {environment} from "../../../environments/environment";
 export class QwirkleService extends GameSessionService<GameConfig, GameState> {
     protected readonly baseUri: string = environment.httpApiUrl + '/qwirkle';
 
-    constructor(httpClient: HttpClient, globals: Globals) {
-        super(httpClient, globals);
+    constructor(httpClient: HttpClient, notification: NotificationService) {
+        super(httpClient, notification);
     }
 
     clearHand(): Observable<GameState> {

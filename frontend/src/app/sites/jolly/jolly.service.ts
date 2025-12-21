@@ -2,11 +2,11 @@ import {Injectable} from '@angular/core';
 import {GameConfig} from "./dto/game/GameConfig";
 import {GameState} from "./dto/game/GameState";
 import {GameSessionService} from "../all/services/http/game-session.service";
-import {Globals} from "../../main/classes/globals";
 import {HttpClient} from "@angular/common/http";
 import {RoundResult} from "./dto/RoundResult";
 import {tap} from "rxjs";
 import {environment} from "../../../environments/environment";
+import {NotificationService} from "../../main/services/notification.service";
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +14,9 @@ import {environment} from "../../../environments/environment";
 export class JollyService extends GameSessionService<GameConfig, GameState> {
   protected readonly baseUri: string = environment.httpApiUrl + '/jolly';
 
-  constructor(httpClient: HttpClient, globals: Globals) {
-    super(httpClient, globals);
+
+  constructor(httpClient: HttpClient, notification: NotificationService) {
+    super(httpClient, notification);
   }
 
   saveRound(results: RoundResult[], imageFile: File | null = null) {
@@ -23,7 +24,7 @@ export class JollyService extends GameSessionService<GameConfig, GameState> {
 
     return this.httpClient.post<GameState>(this.baseUri + '/round', formData).pipe(
         tap(() => {
-          this.globals.handleSuccess('Saved round results');
+          this.notification.handleSuccess('Saved round results');
         }));
   }
 
@@ -32,7 +33,7 @@ export class JollyService extends GameSessionService<GameConfig, GameState> {
 
     return this.httpClient.put<GameState>(this.baseUri + '/round', formData).pipe(
         tap(() => {
-          this.globals.handleSuccess('Updated round results');
+          this.notification.handleSuccess('Updated round results');
         }));
   }
 

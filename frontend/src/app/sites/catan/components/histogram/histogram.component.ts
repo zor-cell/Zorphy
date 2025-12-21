@@ -1,16 +1,8 @@
-import {
-    AfterViewInit,
-    Component,
-    effect,
-    input,
-    viewChildren,
-} from '@angular/core';
+import {AfterViewInit, Component, effect, input, viewChildren,} from '@angular/core';
 import {BaseChartDirective} from "ng2-charts";
 import {DiceRoll} from "../../dto/DiceRoll";
 import {ClassicDiceChart} from "../../dto/charts/ClassicDiceChart";
-import {
-    EventDiceChart,
-} from "../../dto/charts/EventDiceChart";
+import {EventDiceChart,} from "../../dto/charts/EventDiceChart";
 
 import {MoveTimeChart} from "../../dto/charts/MoveTimeChart";
 import {GameMode} from "../../dto/enums/GameMode";

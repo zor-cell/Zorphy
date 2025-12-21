@@ -4,7 +4,6 @@ import {CellComponent} from "./cell/cell.component";
 import {Connect4Service} from "../connect4.service";
 import {MoveRequest, SolveRequest, UndoRequest} from "../dto/requests";
 import {GameState, PlayerConfig} from "../dto/data";
-import {Globals} from "../../../main/classes/globals";
 import {PlayerSettingsComponent} from "./player-settings/player-settings.component";
 import {DelayLoader} from "../../../main/classes/delay-loader";
 
@@ -72,7 +71,7 @@ export class Connect4Component {
         }
     }
 
-    constructor(private globals: Globals, private connect4Service: Connect4Service) {
+    constructor(private connect4Service: Connect4Service) {
         this.refresh();
     }
 

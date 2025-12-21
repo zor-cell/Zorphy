@@ -1,14 +1,12 @@
-import {Component, computed, effect, inject, signal} from '@angular/core';
+import {Component, computed, inject, signal} from '@angular/core';
 import {MainHeaderComponent} from "../../../all/main-header/main-header.component";
 import {GameSearchComponent} from "../../game-search/game-search.component";
 import {GameFilters} from "../../../../dto/games/GameFilters";
 import {GameStats} from "../../../../dto/games/stats/GameStats";
-import { NgComponentOutlet } from "@angular/common";
+import {NgComponentOutlet} from "@angular/common";
 import {GameService} from "../../../../services/game.service";
 import {GameComponentRegistryService} from "../../../../services/game-component-registry.service";
-import {CorrelationChartComponent} from "../correlation-chart/correlation-chart.component";
 import {DurationPipe} from "../../../../pipes/DurationPipe";
-import {GameStatsMetaComponent} from "../game-stats-meta/game-stats-meta.component";
 import {GameStatsMetricsComponent} from "../game-stats-metrics/game-stats-metrics.component";
 import {DataChartComponent} from "../data-chart/data-chart.component";
 import {GameStatsStreakComponent} from "../game-stats-streak/game-stats-streak.component";
@@ -17,18 +15,14 @@ import {GameStatsSimpleComponent} from "../game-stats-simple/game-stats-simple.c
 @Component({
     selector: 'game-stats',
     imports: [
-    MainHeaderComponent,
-    GameSearchComponent,
-    NgComponentOutlet,
-    CorrelationChartComponent,
-    CorrelationChartComponent,
-    GameStatsMetaComponent,
-    DurationPipe,
-    GameStatsMetricsComponent,
-    DataChartComponent,
-    GameStatsStreakComponent,
-    GameStatsSimpleComponent
-],
+        MainHeaderComponent,
+        GameSearchComponent,
+        NgComponentOutlet,
+        GameStatsMetricsComponent,
+        DataChartComponent,
+        GameStatsStreakComponent,
+        GameStatsSimpleComponent
+    ],
     templateUrl: './game-stats.component.html',
     
     styleUrl: './game-stats.component.css'

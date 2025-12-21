@@ -1,13 +1,11 @@
 import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import {GameState} from "../../dto/game/GameState";
-import { NgClass } from "@angular/common";
+import {NgClass} from "@angular/common";
 import {CatanService} from "../../catan.service";
 import {CatanDiceRollComponent} from "../dice-roll/dice-roll.component";
-import {DiceRoll} from "../../dto/DiceRoll";
 import {CatanHistogramComponent} from "../histogram/histogram.component";
 import {ReactiveFormsModule} from "@angular/forms";
 import {Router} from "@angular/router";
-import {Team} from "../../../../main/dto/all/Team";
 import {AuthService} from "../../../../main/services/auth.service";
 import {GameMode} from "../../dto/enums/GameMode";
 import {GameSessionGameComponent} from "../../../all/components/game-session-game.component";

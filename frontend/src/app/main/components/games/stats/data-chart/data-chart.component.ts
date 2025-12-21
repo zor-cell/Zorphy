@@ -1,10 +1,6 @@
 import {AfterViewInit, Component, input, viewChildren} from '@angular/core';
-import {ChartData} from "chart.js";
 import {BaseChartDirective} from "ng2-charts";
 import {ScoreChart} from "../../../../dto/games/charts/ScoreChart";
-import {ClassicDiceChart} from "../../../../../sites/catan/dto/charts/ClassicDiceChart";
-import {EventDiceChart} from "../../../../../sites/catan/dto/charts/EventDiceChart";
-import {MoveTimeChart} from "../../../../../sites/catan/dto/charts/MoveTimeChart";
 import {ChartDataHistory} from "../../../../dto/games/stats/ChartDataHistory";
 
 @Component({

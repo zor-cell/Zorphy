@@ -2,7 +2,6 @@ import {ChartData, ChartOptions} from "chart.js";
 import {BaseChart} from "./BaseChart";
 import {DiceRoll} from "../DiceRoll";
 import {GameMode} from "../enums/GameMode";
-import {signal} from "@angular/core";
 
 export class MoveTimeChart extends BaseChart {
     static override data : ChartData<any, number[], number> = {

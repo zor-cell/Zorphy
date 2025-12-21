@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {GameStompService} from "../all/services/ws/game-stomp.service";
 
 @Injectable({

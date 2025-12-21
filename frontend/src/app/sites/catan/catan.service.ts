@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Globals} from "../../main/classes/globals";
 import {Observable} from "rxjs";
 import {GameState} from "./dto/game/GameState";
 import {GameConfig} from "./dto/game/GameConfig";
 import {GameSessionService} from "../all/services/http/game-session.service";
 import {environment} from "../../../environments/environment";
+import {NotificationService} from "../../main/services/notification.service";
 
 @Injectable({
     providedIn: 'root'
@@ -13,8 +13,8 @@ import {environment} from "../../../environments/environment";
 export class CatanService extends GameSessionService<GameConfig, GameState> {
     protected readonly baseUri: string = environment.httpApiUrl + '/catan';
 
-    constructor(httpClient: HttpClient, globals: Globals) {
-        super(httpClient, globals);
+    constructor(httpClient: HttpClient, notification: NotificationService) {
+        super(httpClient, notification);
     }
 
     rollDice(isAlchemist: boolean): Observable<GameState> {

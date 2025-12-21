@@ -2,16 +2,14 @@ import {Component, inject, Injector, input, PipeTransform, ProviderToken, Type} 
 import {GameStatsMetrics} from "../../../../dto/games/stats/GameStatsMetrics";
 import {GameStatsMetaComponent} from "../game-stats-meta/game-stats-meta.component";
 import {RouterLink} from "@angular/router";
-import {GameStatsSimpleComponent} from "../game-stats-simple/game-stats-simple.component";
 import {DurationPipe} from "../../../../pipes/DurationPipe";
 
 @Component({
   selector: 'game-stats-metrics',
-  imports: [
-    GameStatsMetaComponent,
-    RouterLink,
-    GameStatsSimpleComponent
-  ],
+    imports: [
+        GameStatsMetaComponent,
+        RouterLink
+    ],
   providers: [DurationPipe],
   templateUrl: './game-stats-metrics.component.html',
   

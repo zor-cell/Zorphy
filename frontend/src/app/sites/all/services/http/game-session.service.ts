@@ -1,26 +1,24 @@
-import {inject, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {finalize, Observable, tap} from "rxjs";
-import {Globals} from "../../../../main/classes/globals";
 import {ResultState} from "../../../../main/dto/all/result/ResultState";
 import {GameDetails} from "../../../../main/dto/games/GameDetails";
 import {GameConfigBase} from "../../dto/GameConfigBase";
 import {GameStateBase} from "../../dto/GameStateBase";
-import {ToastrService} from "ngx-toastr";
+import {NotificationService} from "../../../../main/services/notification.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export abstract class GameSessionService<Config extends GameConfigBase, State extends GameStateBase> {
   protected abstract readonly baseUri: string;
-  private toastr = inject(ToastrService);
 
   //constructor necessary for base classes
-  protected constructor(protected httpClient: HttpClient, protected globals: Globals) {}
+  protected constructor(protected httpClient: HttpClient, protected notification: NotificationService) {}
 
   getSession(): Observable<State> {
     return this.httpClient.get<State>(this.baseUri + '/session', {
-      context: this.globals.silentErrorContext
+      context: this.notification.silentErrorContext
     });
   }
 
@@ -31,14 +29,14 @@ export abstract class GameSessionService<Config extends GameConfigBase, State ex
   updateSession(config: Config): Observable<State> {
     return this.httpClient.put<State>(this.baseUri + '/session', config).pipe(
         tap(() => {
-          this.globals.handleSuccess('Updated session data');
+          this.notification.handleSuccess('Updated session data');
         }));
   }
 
   clearSession(): Observable<void> {
     return this.httpClient.delete<void>(this.baseUri + '/session').pipe(
         tap(() => {
-          this.globals.handleSuccess('Cleared session data');
+          this.notification.handleSuccess('Cleared session data');
         }));
   }
   
@@ -49,14 +47,13 @@ export abstract class GameSessionService<Config extends GameConfigBase, State ex
       formData.append('image', imageFile, imageFile.name);
     }
 
-    const loadingToast = this.toastr.info('Saving session...', '', { disableTimeOut: true });
+    const loadingRef = this.notification.handleLoading('Saving session...');
     return this.httpClient.post<GameDetails>(this.baseUri + '/session/save', formData).pipe(
         tap(() => {
-            this.toastr.remove(loadingToast.toastId);
-            this.globals.handleSuccess('Saved session data');
+            this.notification.handleSuccess('Saved session data');
         }),
         finalize(() => {
-            this.toastr.remove(loadingToast.toastId);
+            loadingRef.dismiss();
         })
     );
   }

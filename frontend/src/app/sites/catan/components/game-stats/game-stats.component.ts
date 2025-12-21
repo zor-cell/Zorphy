@@ -1,7 +1,6 @@
 import {Component, input} from '@angular/core';
 import {GameStats} from "../../dto/game/GameStats";
 import {CatanHistogramComponent} from "../histogram/histogram.component";
-import {GameStatsMetaComponent} from "../../../../main/components/games/stats/game-stats-meta/game-stats-meta.component";
 import {DurationPipe} from "../../../../main/pipes/DurationPipe";
 import {
     GameStatsMetricsComponent
@@ -14,8 +13,6 @@ import {
     selector: 'catan-game-stats',
     imports: [
         CatanHistogramComponent,
-        GameStatsMetaComponent,
-        DurationPipe,
         GameStatsMetricsComponent,
         GameStatsSimpleComponent
     ],

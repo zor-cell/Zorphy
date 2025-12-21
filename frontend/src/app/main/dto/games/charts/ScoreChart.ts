@@ -1,8 +1,5 @@
 import {BaseChart} from "../../../../sites/catan/dto/charts/BaseChart";
 import {ChartData, ChartOptions} from "chart.js";
-import {DiceRoll} from "../../../../sites/catan/dto/DiceRoll";
-import {GameMode} from "../../../../sites/catan/dto/enums/GameMode";
-import {MoveTimeChart} from "../../../../sites/catan/dto/charts/MoveTimeChart";
 import {ChartDataHistory} from "../stats/ChartDataHistory";
 
 export class ScoreChart extends BaseChart {

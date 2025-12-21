@@ -1,11 +1,13 @@
-import {Component, computed, input, Input, OnInit, signal} from '@angular/core';
+import {Component, computed, input} from '@angular/core';
 import {GameMetadata} from "../../../../main/dto/games/GameMetadata";
 import {GameState} from "../../dto/game/GameState";
 import {ResultState} from "../../../../main/dto/all/result/ResultState";
 
 import {CatanHistogramComponent} from "../histogram/histogram.component";
 import {GameMode, getGameModeName} from "../../dto/enums/GameMode";
-import {GameResultTableComponent} from "../../../../main/components/games/game-result-table/game-result-table.component";
+import {
+    GameResultTableComponent
+} from "../../../../main/components/games/game-result-table/game-result-table.component";
 
 @Component({
   

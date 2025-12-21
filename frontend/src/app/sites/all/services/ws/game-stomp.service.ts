@@ -1,17 +1,17 @@
 import {inject, Injectable, OnDestroy} from '@angular/core';
 import {RxStompService} from "./rx-stomp.service";
 import {map, Observable, Subscription} from "rxjs";
-import {Globals} from "../../../../main/classes/globals";
 import {GameRoom} from "../../../nobody-is-perfect/dto/GameRoom";
 import {IMessage} from "@stomp/stompjs";
 import {WebSocketError} from "../../dto/WebSocketError";
+import {NotificationService} from "../../../../main/services/notification.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export abstract class GameStompService implements OnDestroy {
   private stompService = inject(RxStompService);
-  private globals = inject(Globals);
+  private notification = inject(NotificationService);
 
   protected abstract readonly gameType: string;
   protected readonly APP_PREFIX = '/app/';
@@ -45,17 +45,17 @@ export abstract class GameStompService implements OnDestroy {
 
   protected subscribeDefaults() {
     const createdSubscription = this.watchAndMap<GameRoom>('created').subscribe(room => {
-      this.globals.handleSuccess(`Room ${room.roomId} created`);
+      this.notification.handleSuccess(`Room ${room.roomId} created`);
     });
     this.subscriptions.push(createdSubscription);
 
     const joinedSubscription = this.watchAndMap<GameRoom>('joined').subscribe(room => {
-      this.globals.handleSuccess(`Room ${room.roomId} joined`);
+      this.notification.handleSuccess(`Room ${room.roomId} joined`);
     });
     this.subscriptions.push(joinedSubscription);
 
     const errorsSubscription = this.watchAndMap<WebSocketError>('errors').subscribe(error => {
-      this.globals.handleError(error);
+      this.notification.handleError(error);
     });
     this.subscriptions.push(errorsSubscription);
 

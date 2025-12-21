@@ -2,7 +2,9 @@ import {Component, input} from '@angular/core';
 import {GameMetadata} from "../../../../main/dto/games/GameMetadata";
 import {GameState} from "../../dto/game/GameState";
 import {ResultState} from "../../../../main/dto/all/result/ResultState";
-import {GameResultTableComponent} from "../../../../main/components/games/game-result-table/game-result-table.component";
+import {
+    GameResultTableComponent
+} from "../../../../main/components/games/game-result-table/game-result-table.component";
 
 import {JollyRoundTableComponent} from "../rounds-table/round-table.component";
 
