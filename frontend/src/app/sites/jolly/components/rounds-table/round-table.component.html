@@ -15,10 +15,10 @@
     </tr>
   </thead>
   <tbody>
-    @for (roundInfo of gameState().rounds; track roundInfo; let i = $index) {
+    @for (roundInfo of gameState().rounds; track roundInfo.endTime; let i = $index) {
       <tr>
         <th scope="row">{{ i + 1 }}</th>
-        @for (round of roundInfo.results; track round) {
+        @for (round of roundInfo.results; track $index) {
           <td class="score-cell">
             <span [class.closed]="round.hasClosed">{{ round.score }}</span>
             @if (round.outInOne) {
@@ -47,7 +47,7 @@
   <tfoot>
     <tr class="table-light fw-bold">
       <th scope="row">Total</th>
-      @for (team of gameState().gameConfig.teams; track team) {
+      @for (team of gameState().gameConfig.teams; track team.name) {
         <td>
           {{ getTotalScore(team) }}
         </td>

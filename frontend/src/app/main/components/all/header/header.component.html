@@ -19,7 +19,7 @@
         @if (!authService.isAuthenticated()) {
             <button class="btn btn-primary text-white" (click)="openLoginPopup()">Login</button>
         } @else {
-            <a>Hello, <b>{{ authService.user!.username }}</b>!</a>
+            <a>Hello, <b>{{ authService.user()!.username }}</b>!</a>
             <button class="btn btn-primary" (click)="logout()">Logout</button>
         }
     </nav>

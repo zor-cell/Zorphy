@@ -1,4 +1,4 @@
-import {inject, Injectable} from '@angular/core';
+import {computed, inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Globals} from "../classes/globals";
 import {Observable, tap} from "rxjs";
@@ -15,7 +15,15 @@ export class AuthService {
     private readonly baseUri: string = environment.httpApiUrl + '/auth';
     private httpClient = inject(HttpClient);
 
-    public user: UserDetails | null = null;
+    public user = signal<UserDetails | null>(null);
+
+    public isAdmin = computed(() => {
+        return this.user()?.roles.includes(Role.ADMIN) ?? false;
+    });
+
+    public isAuthenticated = computed(() => {
+        return !!this.user();
+    });
 
     login(credentials: UserLoginDetails): Observable<void> {
         return this.httpClient.post<void>(this.baseUri + '/login', credentials);
@@ -29,15 +37,7 @@ export class AuthService {
         return this.httpClient.get<UserDetails>(environment.httpApiUrl + '/users/me', {
             context: SILENT_ERROR_CONTEXT
         }).pipe(
-            tap(user => this.user = user)
+            tap(user => this.user.set(user))
         );
-    }
-
-    isAdmin(): boolean {
-        return this.user?.roles.includes(Role.ADMIN) ?? false;
-    }
-
-    isAuthenticated(): boolean {
-        return !!this.user;
     }
 }

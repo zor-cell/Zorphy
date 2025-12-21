@@ -33,11 +33,7 @@ export class HeaderComponent implements OnInit {
     ngOnInit() {
         this.mobileMenuOpen.set(false);
 
-        this.authService.loadUser().subscribe({
-            next: res => {
-
-            }
-        })
+        this.authService.loadUser().subscribe();
     }
 
     protected toggleMobileMenu() {
