@@ -6,7 +6,6 @@ import {provideHttpClient, withInterceptors} from "@angular/common/http";
 import {provideCharts, withDefaultRegisterables} from 'ng2-charts';
 import {credentialInterceptor, errorInterceptor} from "./main/classes/interceptors";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {ToastrModule} from "ngx-toastr";
 import {LIGHTBOX_CONFIG, LightboxConfig} from "ng-gallery/lightbox";
 import {GALLERY_CONFIG, GalleryConfig} from "ng-gallery";
 import {RxStompService} from "./sites/all/services/ws/rx-stomp.service";
@@ -32,14 +31,9 @@ const lightBoxProvider: {provide: any, useValue: LightboxConfig} = {
 
 export const appConfig: ApplicationConfig = {
     providers: [
-        //provideZoneChangeDetection({eventCoalescing: true}),
         provideZonelessChangeDetection(),
         provideRouter(routes),
         provideHttpClient(withInterceptors([credentialInterceptor, errorInterceptor])),
-        importProvidersFrom(
-            BrowserAnimationsModule,
-            ToastrModule.forRoot({closeButton: true})
-        ),
         provideCharts(withDefaultRegisterables()),
         galleryProvider,
         lightBoxProvider,
