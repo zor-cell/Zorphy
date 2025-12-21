@@ -2,14 +2,15 @@ import {ChartData, ChartOptions} from "chart.js";
 import {BaseChart} from "./BaseChart";
 import {DiceRoll} from "../DiceRoll";
 import {GameMode} from "../enums/GameMode";
+import {signal} from "@angular/core";
 
 export class MoveTimeChart extends BaseChart {
-    static override data: ChartData<any, number[], number> = {
+    static override data : ChartData<any, number[], number> = {
         labels: [1, 2, 3],
         datasets: []
-    }
+    };
 
-    static override options: ChartOptions = {
+    static override options : ChartOptions = {
         ...BaseChart.options,
         scales: {
             x: {
@@ -80,7 +81,7 @@ export class MoveTimeChart extends BaseChart {
                 radius: 3,
             }
         },
-    }
+    };
 
     static refresh(diceRolls: DiceRoll[], gameMode: GameMode | null) {
         //team datasets
@@ -133,6 +134,6 @@ export class MoveTimeChart extends BaseChart {
             ...MoveTimeChart.data,
             labels: newLabels,
             datasets: [...datasets]
-        };
+        }
     }
 }
