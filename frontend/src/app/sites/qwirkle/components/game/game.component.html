@@ -1,15 +1,15 @@
+@if(gameState(); as state) {
 <game-session-game [sessionService]="qwirkleService"
-  [gameState]="gameState"
+  [gameState]="state"
   >
-  @if (gameState) {
     <div class="main-container">
       <div class="game-container">
         <div class="config">
-          <qwirkle-hand [hand]="gameState.hand"
+          <qwirkle-hand [hand]="state.hand"
             (handCleared)="clearedHand($event)"
             (tilesSelected)="selectedInHand($event)"
           ></qwirkle-hand>
-          <qwirkle-stack [stack]="gameState.stack"
+          <qwirkle-stack [stack]="state.stack"
             (tileDrawn)="drewTile($event)"
             (tileSelected)="selectedInStack($event)"
             (editModeChanged)="editMode = $event"
@@ -19,7 +19,7 @@
 
         <div class="board-container">
           <div class="board-actions">
-            <button class="small-btn" [disabled]="gameState.moves.length === 0" (click)="undoMove()">
+            <button class="small-btn" [disabled]="state.moves.length === 0" (click)="undoMove()">
               <i class="bi bi-arrow-left-square"></i>
             </button>
             <button class="small-btn">
@@ -29,7 +29,7 @@
           <app-pan-container #board class="board"
             [centerPosition]="center">
             <!--board tiles-->
-            @for (boardTile of gameState.board; track boardTile) {
+            @for (boardTile of state.board; track boardTile.position.x + '-' + boardTile.position.y) {
               <qwirkle-tile
                 [tile]="boardTile.tile"
                 [tileSize]="tileSize"
@@ -41,13 +41,13 @@
             }
 
             <!--open positions-->
-            @if (gameState.board.length === 0) {
+            @if (state.board.length === 0) {
               <div
                 [ngStyle]="getTilePositionStyle({x: 0, y: 0})"
                 class="board-tile open-position">
               </div>
             }
-            @for (posInfo of gameState.openPositions; track posInfo) {
+            @for (posInfo of state.openPositions; track posInfo.position.x + '-' + posInfo.position.y) {
               @if (!posInfo.isDead) {
                 <div
                   [ngStyle]="getTilePositionStyle(posInfo.position)"
@@ -57,11 +57,11 @@
             }
 
             <!--best move highlight-->
-            @if (!selectedMove) {
-              @for (move of bestMoves; track move; let i = $index) {
+            @if (!selectedMove()) {
+              @for (move of bestMoves(); track $index; let i = $index) {
                 <div (click)="makeBestMove(i)" class="tile-group">
                   <!--add grouping-->
-                  @for (boardTile of move.groupInfos[0].boardTiles; track boardTile; let j = $index) {
+                  @for (boardTile of move.groupInfos[0].boardTiles; track $index; let j = $index) {
                     <qwirkle-tile
                       [ngStyle]="getTilePositionStyle(boardTile.position)"
                       [tile]="boardTile.tile"
@@ -77,40 +77,42 @@
             }
 
             <!--valid move tiles-->
-            @for (move of selectionInfo?.moves; track move; let i = $index) {
-              @if (!(selectedMove && selectedMove.position.y == move.position.y && selectedMove.position.x == move.position.x)) {
-                <div
-                  [ngStyle]="getValidMoveGroupStyle(move)"
-                  (click)="chooseValidMove(i)"
-                  class="board-tile valid-move"
-                  >
-                </div>
+              @if(selectedMove(); as selected) {
+                @for (move of selectionInfo?.moves; track move.position.x + '-' + move.position.y; let i = $index) {
+                  @if (!(selected && selected.position.y == move.position.y && selected.position.x == move.position.x)) {
+                    <div
+                      [ngStyle]="getValidMoveGroupStyle(move)"
+                      (click)="chooseValidMove(i)"
+                      class="board-tile valid-move"
+                      >
+                    </div>
+                  }
+                }
               }
-            }
 
 
             <!--specific valid move tile highlight-->
-            @if (selectedMove) {
+            @if (selectedMove(); as selected) {
               <!--draw first tile without clickable if there are many configurations-->
-              @if (selectedMove.groupInfos.length > 1) {
+              @if (selected.groupInfos.length > 1) {
                 <qwirkle-tile
-                  [ngStyle]="getTilePositionStyle(selectedMove.position)"
-                  [tile]="selectedMove.tiles[0]"
+                  [ngStyle]="getTilePositionStyle(selected.position)"
+                  [tile]="selected.tiles[0]"
                   [tileSize]="tileSize"
                   [isInteractive]="false"
                   class="board-tile highlighted-move"
                   >
                 </qwirkle-tile>
               }
-              @for (groupInfo of selectedMove.groupInfos; track groupInfo; let i = $index) {
+              @for (groupInfo of selected.groupInfos; track $index; let i = $index) {
                 <div
                   (click)="makeSelectedMove(groupInfo.direction)"
                   class="tile-group">
                   <!--add grouping-->
-                  @for (boardTile of groupInfo.boardTiles; track boardTile) {
-                    @if (boardTile.position.y == selectedMove.position.y && boardTile.position.x == selectedMove.position.x) {
+                  @for (boardTile of groupInfo.boardTiles; track boardTile.position.x + '-' + boardTile.position.y) {
+                    @if (boardTile.position.y == selected.position.y && boardTile.position.x == selected.position.x) {
                       <!--draw first tile as clickable if theres only one configuration-->
-                      @if (selectedMove.groupInfos.length == 1) {
+                      @if (selected.groupInfos.length == 1) {
                         <qwirkle-tile
                           [ngStyle]="getTilePositionStyle(boardTile.position)"
                           [tile]="boardTile.tile"
@@ -140,5 +142,5 @@
       </div>
       <qwirkle-image-input></qwirkle-image-input>
     </div>
-  }
 </game-session-game>
+}

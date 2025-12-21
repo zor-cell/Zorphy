@@ -6,7 +6,7 @@
   <input type="checkbox" [checked]="editMode" (change)="changeEditMode($event)">
 </div>
 <div class="highlighted-container stack-container">
-  @for (stackTile of stack(); track stackTile; let i = $index) {
+  @for (stackTile of stack(); track $index; let i = $index) {
     <qwirkle-tile
       [isDisabled]="stackTile.count === 0"
       [tile]="stackTile.tile"

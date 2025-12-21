@@ -1,4 +1,4 @@
-import {Component, HostListener, inject, OnInit, ViewChild} from '@angular/core';
+import {Component, HostListener, inject, makeStateKey, OnInit, signal, ViewChild} from '@angular/core';
 import {QwirkleHandComponent} from "../hand/hand.component";
 import {QwirkleStackComponent} from "../stack/stack.component";
 import {QwirkleService} from "../../qwirkle.service";
@@ -34,10 +34,10 @@ export class QwirkleGameComponent implements OnInit {
     @ViewChild('board') board!: PanContainerComponent;
 
     tileSize = 40;
-    gameState!: GameState;
-    selectedMove: MoveGroup | null = null;
+    protected gameState = signal<GameState | null>(null);
+    protected selectedMove = signal<MoveGroup | null>(null);
 
-    bestMoves: MoveGroup[] | null = null;
+    protected bestMoves = signal<MoveGroup[] | null>(null);
     selectionInfo: SelectionInfo | null = null;
 
     editMode: boolean = false;
@@ -67,14 +67,14 @@ export class QwirkleGameComponent implements OnInit {
 
         //unselect a move when clicking anywhere except on it
         if (!target.closest('.valid-move') && !target.closest('.highlighted-move')) {
-            this.selectedMove = null;
+            this.selectedMove.set(null);
         }
     }
 
     //events from children
     clearedHand(gameState: GameState) {
-        this.gameState = gameState;
-        this.bestMoves = null;
+        this.gameState.set(gameState);
+        this.bestMoves.set(null);
     }
 
     selectedInHand(selectionInfo: SelectionInfo) {
@@ -86,7 +86,7 @@ export class QwirkleGameComponent implements OnInit {
     }
 
     drewTile(gameState: GameState) {
-        this.gameState = gameState;
+        this.gameState.set(gameState);
         this.findBestMoves();
     }
 
@@ -98,13 +98,14 @@ export class QwirkleGameComponent implements OnInit {
     chooseValidMove(moveIndex: number) {
         if(!this.selectionInfo) return;
 
-        this.selectedMove = this.selectionInfo.moves[moveIndex];
+        this.selectedMove.set(this.selectionInfo.moves[moveIndex]);
     }
 
     makeBestMove(moveIndex: number) {
-        if (!this.bestMoves) return;
+        const moves = this.bestMoves();
+        if (!moves) return;
 
-        const moveGroup = this.bestMoves[moveIndex];
+        const moveGroup = moves[moveIndex];
 
         const move: Move = {
             position: moveGroup.position,
@@ -116,14 +117,15 @@ export class QwirkleGameComponent implements OnInit {
     }
 
     makeSelectedMove(direction: Direction) {
-        if (!this.selectedMove || !this.selectionInfo) return;
+        const selectedMove = this.selectedMove();
+        if (!selectedMove || !this.selectionInfo) return;
 
         const move: Move = {
-            position: this.selectedMove.position,
+            position: selectedMove.position,
             direction: direction,
-            tiles: this.selectedMove.tiles
+            tiles: selectedMove.tiles
         }
-        this.selectedMove = null;
+        this.selectedMove.set(null);
         this.selectionInfo = null;
 
         this.makeMove(move, this.editMode);
@@ -175,17 +177,17 @@ export class QwirkleGameComponent implements OnInit {
 
     //requests
     protected undoMove() {
-        if(this.gameState.moves.length === 0) return;
+        if(this.gameState()?.moves.length === 0) return;
 
         this.qwirkleService.undoMove().subscribe(res => {
-            this.gameState = res;
+            this.gameState.set(res);
         })
     }
 
     private findBestMoves() {
         this.qwirkleService.getBestMoves().subscribe({
             next: res => {
-                this.bestMoves = res;
+                this.bestMoves.set(res);
             }
         })
     }
@@ -193,7 +195,7 @@ export class QwirkleGameComponent implements OnInit {
     private getSession() {
         this.qwirkleService.getSession().subscribe({
             next: res => {
-                this.gameState = res;
+                this.gameState.set(res);
 
                 this.findBestMoves();
 
@@ -208,7 +210,7 @@ export class QwirkleGameComponent implements OnInit {
 
     private makeMove(move: Move, fromStack: boolean = false) {
         this.qwirkleService.makeMove(move, fromStack).subscribe(res => {
-            this.gameState = res;
+            this.gameState.set(res);
             this.findBestMoves();
         });
     }

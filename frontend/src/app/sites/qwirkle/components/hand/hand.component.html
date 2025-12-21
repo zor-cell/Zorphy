@@ -6,7 +6,7 @@
   </div>
   <div class="highlighted-container hand-wrapper">
     <div class="hand">
-      @for (tile of paddedHand; track tile; let i = $index) {
+      @for (tile of paddedHand; track $index; let i = $index) {
         @if (tile) {
           @if (selectionInfo && selectionInfo.tiles[i] && !selectionInfo.tiles[i].valid && !selected.includes(tile)) {
             <qwirkle-tile
