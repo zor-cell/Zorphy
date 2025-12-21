@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, viewChild} from '@angular/core';
+import {Component, inject, OnInit, signal, viewChild} from '@angular/core';
 import {ProjectDetails} from "../../../dto/projects/ProjectDetails";
 import {ActivatedRoute, RouterLink} from "@angular/router";
 import {ProjectService} from "../../../services/project.service";
@@ -25,8 +25,8 @@ export class ProjectInfoComponent implements OnInit {
     private route = inject(ActivatedRoute);
 
     private updatePopup = viewChild.required<ProjectUpdatePopupComponent>('updatePopup');
+    protected project = signal<ProjectDetails | null>(null);
 
-    protected project: ProjectDetails | null = null;
     private projectName: string | null = null;
 
     ngOnInit(): void {
@@ -52,7 +52,7 @@ export class ProjectInfoComponent implements OnInit {
 
         this.projectService.getProject(this.projectName).subscribe({
             next: res => {
-                this.project = res;
+                this.project.set(res);
             }
         });
     }

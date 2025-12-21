@@ -17,11 +17,10 @@ import {WithFile} from "../../../dto/all/WithFile";
     styleUrl: './project-list.component.css'
 })
 export class ProjectListComponent implements OnInit {
-    private projectService = inject(ProjectService);
     protected authService = inject(AuthService);
+    private projectService = inject(ProjectService);
 
     private createPopup = viewChild.required<ProjectUpdatePopupComponent>('createPopup');
-
     protected projects = signal<ProjectMetadata[]>([]);
 
     ngOnInit() {
