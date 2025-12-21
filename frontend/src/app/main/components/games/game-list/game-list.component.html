@@ -27,7 +27,7 @@
           </td>
         </tr>
       } @else {
-        @for (game of games(); track game; let i = $index) {
+        @for (game of games(); track game.id; let i = $index) {
           <tr>
             <th scope="row">{{ i + 1 }}</th>
             <td>{{ game.gameType }}</td>

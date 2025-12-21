@@ -19,10 +19,6 @@ export class DataChartComponent implements AfterViewInit {
   private charts = viewChildren(BaseChartDirective);
   public chartData = input.required<ChartDataHistory>();
 
-  private colorLost = 'rgba(31, 119, 180, 0.8)';
-  private colorWon = 'rgba(255, 127, 14, 0.8)';
-
-
   ngAfterViewInit(): void {
     this.refillChartData();
   }

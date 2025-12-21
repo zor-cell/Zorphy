@@ -7,18 +7,18 @@
     </tr>
   </thead>
   <tbody>
-    @for (team of paddedTeams(); track team; let i = $index) {
+    @for (resultState of paddedTeams(); track resultState?.team?.name ?? $index; let i = $index) {
       <tr>
-        @if (team) {
+        @if (resultState) {
           <ng-container>
             <th scope="row">{{ i + 1 }}</th>
             <td>
-              {{ team.team.name }}
-              @if (team.score === maxScore()) {
+              {{ resultState.team.name }}
+              @if (resultState.score === maxScore()) {
                 <i class="bi bi-trophy-fill winner-icon"></i>
               }
             </td>
-            <td>{{ team.score }}</td>
+            <td>{{ resultState.score }}</td>
           </ng-container>
         } @else {
           <!--empty player -->

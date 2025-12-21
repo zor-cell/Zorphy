@@ -30,6 +30,7 @@ export class GameSearchComponent implements OnInit {
   public changeFiltersEvent = output<GameFilters>();
 
   protected players = signal<PlayerDetails[]>([]);
+  protected isPopoverOpen = signal<boolean>(false);
   protected searchForm = this.fb.group({
     text: this.fb.control<string | null>(null),
     dateFrom: this.fb.control<Date | null>(null),
@@ -46,7 +47,6 @@ export class GameSearchComponent implements OnInit {
 
     return options;
   };
-  protected isPopoverOpen: boolean = false;
   protected allGameTypes = Object.values(GameType);
 
   ngOnInit() {
@@ -91,11 +91,11 @@ export class GameSearchComponent implements OnInit {
   }
 
   protected popOverOpen() {
-    this.isPopoverOpen = true;
+    this.isPopoverOpen.set(true);
   }
 
   protected popOverClose() {
-    this.isPopoverOpen = false;
+    this.isPopoverOpen.set(false);
   }
 
   protected clear() {
