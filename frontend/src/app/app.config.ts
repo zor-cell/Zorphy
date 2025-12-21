@@ -40,6 +40,7 @@ export const appConfig: ApplicationConfig = {
         provideRouter(routes),
         provideHttpClient(withInterceptors([credentialInterceptor, errorInterceptor])),
         importProvidersFrom(
+            BrowserAnimationsModule,
             ToastrModule.forRoot({closeButton: true})
         ),
         provideCharts(withDefaultRegisterables()),

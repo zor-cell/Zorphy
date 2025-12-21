@@ -124,10 +124,15 @@ export class MoveTimeChart extends BaseChart {
             yAxisID: 'y'
         }));
 
-        MoveTimeChart.data.labels = Array.from(
+        const newLabels = Array.from(
             {length: maxRounds},
             (_, i) => i + 1
         );
-        MoveTimeChart.data.datasets = [...datasets];
+
+        MoveTimeChart.data = {
+            ...MoveTimeChart.data,
+            labels: newLabels,
+            datasets: [...datasets]
+        };
     }
 }

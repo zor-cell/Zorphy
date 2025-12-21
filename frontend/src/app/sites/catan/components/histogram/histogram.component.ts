@@ -25,11 +25,13 @@ import {GameMode} from "../../dto/enums/GameMode";
     styleUrl: './histogram.component.css'
 })
 export class CatanHistogramComponent implements AfterViewInit {
+    private charts = viewChildren(BaseChartDirective);
+    
     public diceRolls = input.required<DiceRoll[]>();
     public isVisible = input<boolean>(true);
     public gameMode = input<GameMode | null>(null);
     public showExactProbability = input<boolean>(false);
-    private charts = viewChildren(BaseChartDirective);
+
 
     constructor() {
         effect(() => {

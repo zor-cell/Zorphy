@@ -18,7 +18,7 @@ import {WithFile} from "../../../main/dto/all/WithFile";
     
     template: `
         <app-main-header>
-          @if (authService.isAdmin()) {
+          @if (authService.isAdmin() && canSave()) {
             <button [disabled]="isSaved()" class="btn btn-primary" (click)="openSavePopup()">
               <i class="bi bi-floppy"></i>
             </button>
@@ -45,6 +45,7 @@ export class GameSessionGameComponent {
     public sessionService = input.required<GameSessionService<GameConfigBase, GameStateBase>>();
     public gameState = input.required<GameStateBase>();
 
+    public canSave = input<boolean>(true);
     public showFileUpload = input<boolean>(true);
     public scores = input<Record<string, number>>();
 

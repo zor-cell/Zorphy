@@ -1,18 +1,16 @@
 @if (diceRoll(); as roll) {
-  <div class="roll">
-    <img class="dice" [src]="'assets/catan/' + roll.dicePair.dice1 + '.svg'" width="20" alt=""/>
-    <img class="dice"
-      [src]="'assets/catan/' + roll.dicePair.dice2 + (gameMode() === GameMode.CITIES_AND_KNIGHTS ? '_red' : '') + '.svg'"
-      width="20" alt=""/>
-      @if (gameMode() === GameMode.CITIES_AND_KNIGHTS) {
+    <div class="roll">
+        <img class="dice" [src]="'assets/catan/' + roll.dicePair.dice1 + '.svg'" width="20" alt=""/>
         <img class="dice"
-          [src]="'assets/catan/' + roll.diceEvent + '.svg'" width="20" alt=""/>
-      }
+             [src]="'assets/catan/' + roll.dicePair.dice2 + (gameMode() === GameMode.CITIES_AND_KNIGHTS ? '_red' : '') + '.svg'"
+             width="20" alt=""/>
+        @if (gameMode() === GameMode.CITIES_AND_KNIGHTS) {
+            <img class="dice"
+                 [src]="'assets/catan/' + roll.diceEvent + '.svg'" width="20" alt=""/>
+        }
     </div>
-  }
-
-  @if (!diceRoll()) {
+} @else {
     <div>
-      <p></p>
+        <p></p>
     </div>
-  }
+}

@@ -14,7 +14,6 @@ import {GameStateBase} from "../dto/GameStateBase";
         GameSessionClearPopupComponent,
         GameSessionUpdatePopupComponent
     ],
-    
     template: `
         <app-main-header>
             @if (!hasSession()) {
