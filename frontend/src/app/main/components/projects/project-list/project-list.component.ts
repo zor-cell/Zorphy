@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, viewChild} from '@angular/core';
+import {Component, inject, OnInit, signal, viewChild} from '@angular/core';
 import {ProjectService} from "../../../services/project.service";
 import {ProjectMetadata} from "../../../dto/projects/ProjectMetadata";
 
@@ -22,9 +22,9 @@ export class ProjectListComponent implements OnInit {
 
     private createPopup = viewChild.required<ProjectUpdatePopupComponent>('createPopup');
 
-    protected projects!: ProjectMetadata[];
+    protected projects = signal<ProjectMetadata[]>([]);
 
-    ngOnInit(): void {
+    ngOnInit() {
         this.getProjects();
     }
 
@@ -39,10 +39,8 @@ export class ProjectListComponent implements OnInit {
     }
 
     private getProjects() {
-        this.projectService.getProjects().subscribe({
-            next: res => {
-                this.projects = res;
-            }
+        this.projectService.getProjects().subscribe(res => {
+            this.projects.set(res);
         });
     }
 }

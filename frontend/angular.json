@@ -24,7 +24,6 @@
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
-              "zone.js",
               "@angular/localize/init",
               "src/polyfills.ts"
             ],

@@ -9,7 +9,7 @@
     <select [disabled]="!currentPlayer()" [value]="currentPlayer() ? currentPlayer()!.id : 'EMPTY'"
       (change)="updateCurrentPlayer($event)">
       @if (currentPlayer()) {
-        @for (player of availablePlayers(); track player) {
+        @for (player of availablePlayers(); track player.id) {
           <option [value]="player.id">
             {{ player.name }}
           </option>
@@ -38,7 +38,7 @@
         [cdkDropListDisabled]="teamHostIndex() >= 0"
         class="drag-container"
         >
-        @for (team of selectedTeams(); track team; let i = $index) {
+        @for (team of selectedTeams(); track team.name; let i = $index) {
           <div class="drag-element">
             <button cdkDrag
               (click)="mergeTeam(i)"
@@ -57,7 +57,7 @@
         }
       </div>
       <div class="drag-container">
-        @for (_ of [].constructor(selectedTeams().length); track _; let i = $index) {
+        @for (_ of [].constructor(selectedTeams().length); track $index; let i = $index) {
           <div class="flex-container flex-row gap-2">
             @if (allowTeams()) {
               <div class="drag-element" (click)="makeHost(i)">

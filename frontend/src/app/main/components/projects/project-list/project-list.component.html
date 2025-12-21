@@ -7,7 +7,7 @@
 </app-main-header>
 
 <div class="main-container projects-container">
-  @for (project of projects; track project) {
+  @for (project of projects(); track project) {
     <project-card [project]="project"></project-card>
   }
 </div>

@@ -1,7 +1,7 @@
 import {
     AfterViewInit,
-    Component,
-    inject,
+    Component, computed,
+    inject, signal,
     viewChild,
 } from '@angular/core';
 import {GameService} from "../../../services/game.service";
@@ -41,12 +41,13 @@ export class GameInfoComponent implements AfterViewInit {
 
     protected deletePopup = viewChild.required<DeletePopupComponent>('deletePopup');
 
-    protected game: GameDetails | null = null;
-    protected readonly galleryName = 'gameInfoGallery';
+    protected game = signal<GameDetails | null>(null);
+    protected gameInfoComponent = computed(() => {
+        const game = this.game();
+        return game ? this.componentRegistry.getInfoComponent(game.metadata.gameType) : null;
+    })
 
-    get gameInfoComponent() {
-        return this.game ? this.componentRegistry.getInfoComponent(this.game.metadata.gameType) : null;
-    }
+    protected readonly galleryName = 'gameInfoGallery';
 
     ngAfterViewInit(): void {
         const id = this.route.snapshot.paramMap.get('id');
@@ -60,16 +61,17 @@ export class GameInfoComponent implements AfterViewInit {
     }
 
     protected deleteGame() {
-        if(!this.game?.metadata) return;
+        const game = this.game();
+        if(!game?.metadata) return;
 
-        this.gameService.deleteGame(this.game?.metadata.id).subscribe(res => {
+        this.gameService.deleteGame(game.metadata.id).subscribe(res => {
             this.location.back();
         });
     }
 
     private getGame(id: string) {
         this.gameService.getGame(id).subscribe(res => {
-            this.game = res;
+            this.game.set(res);
 
             //load into gallery
             const galleryRef = this.gallery.ref(this.galleryName);
@@ -77,8 +79,8 @@ export class GameInfoComponent implements AfterViewInit {
                 thumbs: false
             });
             galleryRef.load([new ImageItem({
-                src: this.game.metadata.imageUrl,
-                thumb: this.game.metadata.imageUrl
+                src: res.metadata.imageUrl,
+                thumb: res.metadata.imageUrl
             })]);
         });
     }

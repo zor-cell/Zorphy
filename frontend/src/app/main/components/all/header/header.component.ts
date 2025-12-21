@@ -1,4 +1,4 @@
-import {Component, HostListener, inject, OnInit, viewChild} from '@angular/core';
+import {Component, HostListener, inject, OnInit, signal, viewChild} from '@angular/core';
 import {RouterLink} from "@angular/router";
 import {AuthService} from "../../../services/auth.service";
 import {LoginPopupComponent} from "../popups/login-popup/login-popup.component";
@@ -18,21 +18,20 @@ export class HeaderComponent implements OnInit {
     protected authService = inject(AuthService);
 
     private loginPopup = viewChild.required<LoginPopupComponent>('loginPopup');
-
-    protected mobileMenuOpen = false;
+    protected mobileMenuOpen = signal(false);
 
     // Close menu when clicking outside
     @HostListener('document:click', ['$event'])
     protected handleOutsideClick(event: MouseEvent) {
         const target = event.target as HTMLElement;
         const header = document.querySelector('header');
-        if (this.mobileMenuOpen && header && !header.contains(target)) {
-            this.mobileMenuOpen = false;
+        if (this.mobileMenuOpen() && header && !header.contains(target)) {
+            this.mobileMenuOpen.set(false);
         }
     }
 
     ngOnInit() {
-        this.mobileMenuOpen = false;
+        this.mobileMenuOpen.set(false);
 
         this.authService.loadUser().subscribe({
             next: res => {
@@ -42,11 +41,11 @@ export class HeaderComponent implements OnInit {
     }
 
     protected toggleMobileMenu() {
-        this.mobileMenuOpen = !this.mobileMenuOpen;
+        this.mobileMenuOpen.update(value => !value);
     }
 
     protected closeMobileMenu() {
-        this.mobileMenuOpen = false;
+        this.mobileMenuOpen.set(false);
     }
 
     protected openLoginPopup() {

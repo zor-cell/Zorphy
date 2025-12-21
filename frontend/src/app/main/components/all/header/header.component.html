@@ -5,14 +5,14 @@
     </div>
 
     <button class="hamburger" (click)="toggleMobileMenu()">
-        @if(mobileMenuOpen) {
+        @if(mobileMenuOpen()) {
             <i class="bi bi-x-lg" style="color: #000"></i>
         } @else {
             <i class="bi bi-list" style="color: #000"></i>
         }
     </button>
 
-    <nav [class.open]="mobileMenuOpen">
+    <nav [class.open]="mobileMenuOpen()">
         <a routerLink="/projects" (click)="closeMobileMenu()">Projects</a>
         <a routerLink="/games" (click)="closeMobileMenu()">Games</a>
         <a>About Me</a>

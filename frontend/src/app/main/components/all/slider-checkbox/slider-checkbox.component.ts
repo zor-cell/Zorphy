@@ -1,4 +1,4 @@
-import {Component, forwardRef, input} from '@angular/core';
+import {Component, forwardRef, input, signal} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from "@angular/forms";
 
 @Component({
@@ -19,16 +19,16 @@ export class SliderCheckboxComponent implements ControlValueAccessor {
     public unCheckedText = input('F');
     public checkedText = input('T');
 
-    protected isChecked: boolean = false;
+    protected isChecked = signal<boolean>(false);
     private onChange: (value: boolean) => void = () => {};
 
     protected get label() {
-        const label = this.isChecked ? this.checkedText() : this.unCheckedText();
+        const label = this.isChecked() ? this.checkedText() : this.unCheckedText();
         return '"' + label + '"';
     }
 
     public writeValue(value: boolean): void {
-        this.isChecked = value;
+        this.isChecked.set(value);
     }
 
     public registerOnChange(fn: (value: boolean) => void): void {
@@ -45,8 +45,8 @@ export class SliderCheckboxComponent implements ControlValueAccessor {
 
     protected updateChecked(event: Event) {
         const checkbox = event.target as HTMLInputElement;
-        this.isChecked = checkbox.checked;
+        this.isChecked.set(checkbox.checked);
 
-        this.onChange(this.isChecked);
+        this.onChange(this.isChecked());
     }
 }

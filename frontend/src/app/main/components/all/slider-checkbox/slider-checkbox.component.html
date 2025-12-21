@@ -1,7 +1,7 @@
 <div class="slider-checkbox">
     <input type="checkbox"
            class="checkbox"
-           [checked]="isChecked"
+           [checked]="isChecked()"
            (change)="updateChecked($event)"
     >
     <div [style.--checkbox-label]='label' class="knobs"></div>

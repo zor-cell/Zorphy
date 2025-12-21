@@ -1,4 +1,7 @@
-import {ApplicationConfig, importProvidersFrom, InjectionToken, provideZoneChangeDetection} from '@angular/core';
+import {
+    ApplicationConfig, importProvidersFrom, InjectionToken, provideZoneChangeDetection,
+    provideZonelessChangeDetection
+} from '@angular/core';
 import {provideRouter} from '@angular/router';
 
 import {routes} from './app.routes';
@@ -32,7 +35,8 @@ const lightBoxProvider: {provide: any, useValue: LightboxConfig} = {
 
 export const appConfig: ApplicationConfig = {
     providers: [
-        provideZoneChangeDetection({eventCoalescing: true}),
+        //provideZoneChangeDetection({eventCoalescing: true}),
+        provideZonelessChangeDetection(),
         provideRouter(routes),
         provideHttpClient(withInterceptors([credentialInterceptor, errorInterceptor])),
         importProvidersFrom(

@@ -1,42 +1,49 @@
 <app-main-header>
-    <button *ngIf="authService.isAdmin()" class="btn btn-danger" (click)="openDeletePopup()">
-        <i class="bi bi-trash3"></i>
-    </button>
+    @if(authService.isAdmin()) {
+        <button class="btn btn-danger" (click)="openDeletePopup()">
+            <i class="bi bi-trash3"></i>
+        </button>
+    }
 </app-main-header>
 
 <div class="main-container">
-    <div *ngIf=game class="header">{{ game.metadata.gameType }} GAME INFO</div>
-    <div class="info-container">
-        <div *ngIf=game class="default-info">
-            <div [lightbox]="0" [gallery]="galleryName">
-                <img [src]="game.metadata.imageUrl" class="highlighted-container game-image" alt="uploaded-image">
+    @if(game(); as g) {
+        <div class="header">{{ g.metadata.gameType }} GAME INFO</div>
+        <div class="info-container">
+            <div class="default-info">
+                <div [lightbox]="0" [gallery]="galleryName">
+                    <img [src]="g.metadata.imageUrl" class="highlighted-container game-image" alt="uploaded-image">
+                </div>
+
+                <div class="meta game-image">
+                    <div class="meta-item">
+                        <div class="meta-label">Date</div>
+                        <div>{{ g.metadata.playedAt | date:'MMM d, yyyy HH:mm' }}</div>
+                        <!--<input type="datetime-local" [value]="game.metadata.playedAt | date:'yyyy-MM-ddTHH:mm'">-->
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Duration</div>
+                        <div>{{ g.metadata.duration | duration }}</div>
+                        <!--<input type="time" step="1" class="form-control-sm" [value]="game.metadata.duration">-->
+                    </div>
+                </div>
             </div>
 
-            <div class="meta game-image">
-                <div class="meta-item">
-                    <div class="meta-label">Date</div>
-                    <div>{{ game.metadata.playedAt | date:'MMM d, yyyy HH:mm' }}</div>
-                    <!--<input type="datetime-local" [value]="game.metadata.playedAt | date:'yyyy-MM-ddTHH:mm'">-->
-                </div>
-                <div class="meta-item">
-                    <div class="meta-label">Duration</div>
-                    <div>{{ game.metadata.duration | duration }}</div>
-                    <!--<input type="time" step="1" class="form-control-sm" [value]="game.metadata.duration">-->
-                </div>
-            </div>
-        </div>
-
-        <!-- dynamically render component -->
-        <ng-container *ngIf="gameInfoComponent as comp">
-            <ng-container *ngComponentOutlet="comp;
+            <!-- dynamically render component -->
+            @if(gameInfoComponent(); as comp) {
+                <ng-container>
+                    <ng-container *ngComponentOutlet="comp;
                             inputs: {
-                                metadata: game?.metadata,
-                                gameState: game?.gameState,
-                                resultState: game?.result
+                                metadata: g.metadata,
+                                gameState: g.gameState,
+                                resultState: g.result
                             }"
-            />
-        </ng-container>
-    </div>
+                    />
+                </ng-container>
+            }
+        </div>
+    }
+
 </div>
 
 <game-delete-popup #deletePopup (deleteGameEvent)="deleteGame()"/>
