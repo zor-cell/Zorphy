@@ -6,7 +6,7 @@ import {GameState} from "./dto/game/GameState";
 import {HeatMapConfig} from "./dto/HeatMapConfig";
 import {HeatMapEntry} from "./dto/HeatMapEntry";
 import {environment} from "../../../environments/environment";
-import {NotificationService} from "../../main/services/notification.service";
+import {NotificationService} from "../../main/core/services/notification.service";
 
 @Injectable({
   providedIn: 'root'

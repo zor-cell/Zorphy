@@ -1,6 +1,6 @@
 import {Component, inject} from '@angular/core';
 import {NobodyIsPerfectService} from "../../nobody-is-perfect.service";
-import {MainHeaderComponent} from "../../../../main/components/all/main-header/main-header.component";
+import {MainHeaderComponent} from "../../../../main/core/components/main-header/main-header.component";
 
 @Component({
   selector: 'app-config',

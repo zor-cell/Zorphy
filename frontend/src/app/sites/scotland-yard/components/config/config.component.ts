@@ -1,11 +1,11 @@
 import {Component, inject, signal} from '@angular/core';
 import {NonNullableFormBuilder, ReactiveFormsModule} from "@angular/forms";
 import {ScotlandYardService} from "../../scotland-yard.service";
-import {Team} from "../../../../main/dto/all/Team";
+import {Team} from "../../../../main/core/dto/Team";
 import {MapType} from "../../dto/MapType";
 import {GameConfig} from "../../dto/game/GameConfig";
 import {GameSessionConfigComponent} from "../../../all/components/game-session-config.component";
-import {PlayerSelectComponent} from "../../../../main/components/all/player-select/player-select.component";
+import {PlayerSelectComponent} from "../../../../main/core/components/player-select/player-select.component";
 
 @Component({
   selector: 'scotland-yard-game-config',

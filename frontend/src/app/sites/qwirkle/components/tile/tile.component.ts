@@ -3,7 +3,7 @@ import {Tile} from "../../dto/tile/Tile";
 import {Color} from "../../dto/enums/Color";
 import {SafeHtml} from "@angular/platform-browser";
 import {AsyncPipe, NgClass} from "@angular/common";
-import {ImageCacheService} from "../../../../main/services/image-cache.service";
+import {ImageCacheService} from "../../../../main/core/services/image-cache.service";
 import {Observable} from "rxjs";
 
 @Component({

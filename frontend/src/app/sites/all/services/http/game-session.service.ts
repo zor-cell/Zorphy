@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {finalize, Observable, tap} from "rxjs";
-import {ResultState} from "../../../../main/dto/all/result/ResultState";
-import {GameDetails} from "../../../../main/dto/games/GameDetails";
+import {ResultState} from "../../../../main/core/dto/result/ResultState";
+import {GameDetails} from "../../../../main/games/dto/GameDetails";
 import {GameConfigBase} from "../../dto/GameConfigBase";
 import {GameStateBase} from "../../dto/GameStateBase";
-import {NotificationService} from "../../../../main/services/notification.service";
+import {NotificationService} from "../../../../main/core/services/notification.service";
 
 @Injectable({
   providedIn: 'root'

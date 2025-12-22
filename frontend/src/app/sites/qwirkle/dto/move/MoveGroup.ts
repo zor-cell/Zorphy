@@ -1,4 +1,4 @@
-import {Position} from "../../../../main/dto/all/Position";
+import {Position} from "../../../../main/core/dto/Position";
 import {Tile} from "../tile/Tile";
 import {MoveGroupInfo} from "./MoveGroupInfo";
 

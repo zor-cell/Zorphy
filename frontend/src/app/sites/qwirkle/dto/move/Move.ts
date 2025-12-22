@@ -1,4 +1,4 @@
-import {Position} from "../../../../main/dto/all/Position";
+import {Position} from "../../../../main/core/dto/Position";
 import {Direction} from "../enums/Direction";
 import {Tile} from "../tile/Tile";
 

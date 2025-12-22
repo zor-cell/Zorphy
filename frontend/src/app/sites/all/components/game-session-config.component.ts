@@ -1,5 +1,5 @@
 import {Component, inject, input, model, OnInit, signal, viewChild} from "@angular/core";
-import {MainHeaderComponent} from "../../../main/components/all/main-header/main-header.component";
+import {MainHeaderComponent} from "../../../main/core/components/main-header/main-header.component";
 import {GameSessionService} from "../services/http/game-session.service";
 import {Router} from "@angular/router";
 import {GameSessionClearPopupComponent} from "./popups/clear-popup/clear-popup.component";

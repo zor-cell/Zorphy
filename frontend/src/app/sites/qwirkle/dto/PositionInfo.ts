@@ -1,4 +1,4 @@
-import {Position} from "../../../main/dto/all/Position";
+import {Position} from "../../../main/core/dto/Position";
 
 export interface PositionInfo {
     isDead: boolean,

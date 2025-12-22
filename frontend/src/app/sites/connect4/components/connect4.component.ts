@@ -5,7 +5,6 @@ import {Connect4Service} from "../connect4.service";
 import {MoveRequest, SolveRequest, UndoRequest} from "../dto/requests";
 import {GameState, PlayerConfig} from "../dto/data";
 import {PlayerSettingsComponent} from "./player-settings/player-settings.component";
-import {DelayLoader} from "../../../main/classes/delay-loader";
 
 @Component({
     selector: 'app-connect4',
@@ -24,7 +23,7 @@ export class Connect4Component {
     gameOverText!: string;
     isUndoing!: boolean;
 
-    delayLoader: DelayLoader = new DelayLoader(10);
+    delayLoader: any;
 
     score: number = 0;
     winDistance: number = -1;

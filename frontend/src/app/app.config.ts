@@ -4,7 +4,7 @@ import {provideRouter} from '@angular/router';
 import {routes} from './app.routes';
 import {provideHttpClient, withInterceptors} from "@angular/common/http";
 import {provideCharts, withDefaultRegisterables} from 'ng2-charts';
-import {credentialInterceptor, errorInterceptor} from "./main/classes/interceptors";
+import {credentialInterceptor, errorInterceptor} from "./main/core/interceptors";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {LIGHTBOX_CONFIG, LightboxConfig} from "ng-gallery/lightbox";
 import {GALLERY_CONFIG, GalleryConfig} from "ng-gallery";

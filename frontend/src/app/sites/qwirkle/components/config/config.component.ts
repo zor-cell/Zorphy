@@ -4,9 +4,9 @@ import {GameConfig} from "../../dto/game/GameConfig";
 import {GameSessionConfigComponent} from "../../../all/components/game-session-config.component";
 import {FormsModule, NonNullableFormBuilder, ReactiveFormsModule} from "@angular/forms";
 
-import {PlayerSelectComponent} from "../../../../main/components/all/player-select/player-select.component";
-import {Team} from "../../../../main/dto/all/Team";
-import {CustomValidators} from "../../../../main/classes/validators";
+import {PlayerSelectComponent} from "../../../../main/core/components/player-select/player-select.component";
+import {Team} from "../../../../main/core/dto/Team";
+import {CustomValidators} from "../../../../main/core/validators";
 
 @Component({
     selector: 'qwirkle-game-config',

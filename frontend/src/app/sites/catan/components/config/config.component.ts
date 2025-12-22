@@ -1,14 +1,14 @@
 import {Component, effect, inject, signal} from '@angular/core';
-import {SliderCheckboxComponent} from "../../../../main/components/all/slider-checkbox/slider-checkbox.component";
+import {SliderCheckboxComponent} from "../../../../main/core/components/slider-checkbox/slider-checkbox.component";
 import {NgOptimizedImage} from "@angular/common";
 import {FormsModule, NonNullableFormBuilder, ReactiveFormsModule} from "@angular/forms";
 import {GameConfig} from "../../dto/game/GameConfig";
 import {CatanService} from "../../catan.service";
-import {PlayerSelectComponent} from "../../../../main/components/all/player-select/player-select.component";
+import {PlayerSelectComponent} from "../../../../main/core/components/player-select/player-select.component";
 import {GameMode, getGameModeName} from "../../dto/enums/GameMode";
 import {GameSessionConfigComponent} from "../../../all/components/game-session-config.component";
-import {Team} from "../../../../main/dto/all/Team";
-import {CustomValidators} from "../../../../main/classes/validators";
+import {Team} from "../../../../main/core/dto/Team";
+import {CustomValidators} from "../../../../main/core/validators";
 
 @Component({
     selector: 'catan-game-settings',

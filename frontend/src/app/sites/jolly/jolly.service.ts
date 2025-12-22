@@ -6,7 +6,7 @@ import {HttpClient} from "@angular/common/http";
 import {RoundResult} from "./dto/RoundResult";
 import {tap} from "rxjs";
 import {environment} from "../../../environments/environment";
-import {NotificationService} from "../../main/services/notification.service";
+import {NotificationService} from "../../main/core/services/notification.service";
 
 @Injectable({
   providedIn: 'root'

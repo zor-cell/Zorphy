@@ -1,13 +1,13 @@
 import {Component, effect, inject, input, signal, viewChild} from "@angular/core";
-import {MainHeaderComponent} from "../../../main/components/all/main-header/main-header.component";
+import {MainHeaderComponent} from "../../../main/core/components/main-header/main-header.component";
 
-import {AuthService} from "../../../main/services/auth.service";
+import {AuthService} from "../../../main/core/services/auth.service";
 import {GameStateBase} from "../dto/GameStateBase";
 import {GameConfigBase} from "../dto/GameConfigBase";
 import {GameSessionService} from "../services/http/game-session.service";
-import {ResultState} from "../../../main/dto/all/result/ResultState";
+import {ResultState} from "../../../main/core/dto/result/ResultState";
 import {GameSessionSavePopupComponent} from "./popups/save-popup/save-popup.component";
-import {WithFile} from "../../../main/dto/all/WithFile";
+import {WithFile} from "../../../main/core/dto/WithFile";
 
 @Component({
     selector: 'game-session-game',

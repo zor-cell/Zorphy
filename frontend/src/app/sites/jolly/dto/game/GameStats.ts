@@ -1,5 +1,5 @@
-import {GameStatsMetrics} from "../../../../main/dto/games/stats/GameStatsMetrics";
-import {GameStatsStreak} from "../../../../main/dto/games/stats/GameStatsStreak";
+import {GameStatsMetrics} from "../../../../main/games/dto/stats/metrics/GameStatsMetrics";
+import {GameStatsStreak} from "../../../../main/games/dto/stats/streaks/GameStatsStreak";
 
 export interface GameStats {
     roundsPlayed: number,

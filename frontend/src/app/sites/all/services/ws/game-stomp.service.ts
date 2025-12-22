@@ -4,7 +4,7 @@ import {map, Observable, Subscription} from "rxjs";
 import {GameRoom} from "../../../nobody-is-perfect/dto/GameRoom";
 import {IMessage} from "@stomp/stompjs";
 import {WebSocketError} from "../../dto/WebSocketError";
-import {NotificationService} from "../../../../main/services/notification.service";
+import {NotificationService} from "../../../../main/core/services/notification.service";
 
 @Injectable({
   providedIn: 'root'

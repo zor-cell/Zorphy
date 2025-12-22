@@ -2,14 +2,14 @@ import {Component, computed, inject, OnInit, signal, viewChild} from '@angular/c
 import {JollyService} from "../../jolly.service";
 import {GameSessionGameComponent} from "../../../all/components/game-session-game.component";
 import {GameState} from "../../dto/game/GameState";
-import {AuthService} from "../../../../main/services/auth.service";
+import {AuthService} from "../../../../main/core/services/auth.service";
 
 import {Router} from "@angular/router";
 import {RoundPopupComponent} from "../popups/round-popup/round-popup.component";
 import {RoundResult} from "../../dto/RoundResult";
 import {ReactiveFormsModule} from "@angular/forms";
 import {JollyRoundTableComponent} from "../rounds-table/round-table.component";
-import {WithFile} from "../../../../main/dto/all/WithFile";
+import {WithFile} from "../../../../main/core/dto/WithFile";
 
 @Component({
   selector: 'jolly-game',

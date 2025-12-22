@@ -5,7 +5,7 @@ import {GameState} from "./dto/game/GameState";
 import {GameConfig} from "./dto/game/GameConfig";
 import {GameSessionService} from "../all/services/http/game-session.service";
 import {environment} from "../../../environments/environment";
-import {NotificationService} from "../../main/services/notification.service";
+import {NotificationService} from "../../main/core/services/notification.service";
 
 @Injectable({
     providedIn: 'root'

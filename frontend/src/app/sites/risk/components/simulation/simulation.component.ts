@@ -3,7 +3,7 @@ import {RiskService} from "../../risk.service";
 import {DataEntry} from "../../dto/DataEntry";
 import {NonNullableFormBuilder, ReactiveFormsModule} from "@angular/forms";
 import {SimulationConfig} from "../../dto/SimulationConfig";
-import {MainHeaderComponent} from "../../../../main/components/all/main-header/main-header.component";
+import {MainHeaderComponent} from "../../../../main/core/components/main-header/main-header.component";
 import {RiskHistogramComponent} from "../histogram/histogram.component";
 
 @Component({

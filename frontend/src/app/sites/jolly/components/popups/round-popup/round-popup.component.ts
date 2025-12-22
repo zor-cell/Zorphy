@@ -8,14 +8,14 @@ import {
     ValidatorFn,
     Validators
 } from "@angular/forms";
-import {Team} from "../../../../../main/dto/all/Team";
-import {PopupService} from "../../../../../main/services/popup.service";
-import {PopupResultType} from "../../../../../main/dto/all/PopupResultType";
+import {Team} from "../../../../../main/core/dto/Team";
+import {PopupService} from "../../../../../main/core/services/popup.service";
+import {PopupResultType} from "../../../../../main/core/dto/PopupResultType";
 
 import {RoundResult} from "../../../dto/RoundResult";
-import {FileUpload} from "../../../../../main/dto/all/FileUpload";
-import {FileUploadComponent} from "../../../../../main/components/all/file-upload/file-upload.component";
-import {WithFile} from "../../../../../main/dto/all/WithFile";
+import {FileUpload} from "../../../../../main/core/dto/FileUpload";
+import {FileUploadComponent} from "../../../../../main/core/components/file-upload/file-upload.component";
+import {WithFile} from "../../../../../main/core/dto/WithFile";
 import {RoundInfo} from "../../../dto/RoundInfo";
 
 interface RoundForm {

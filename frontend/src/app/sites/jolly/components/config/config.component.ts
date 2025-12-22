@@ -3,10 +3,10 @@ import {GameSessionConfigComponent} from "../../../all/components/game-session-c
 import {JollyService} from "../../jolly.service";
 import {GameConfig} from "../../dto/game/GameConfig";
 import {FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
-import {PlayerSelectComponent} from "../../../../main/components/all/player-select/player-select.component";
-import {Team} from "../../../../main/dto/all/Team";
-import {CustomValidators} from "../../../../main/classes/validators";
-import {SliderCheckboxComponent} from "../../../../main/components/all/slider-checkbox/slider-checkbox.component";
+import {PlayerSelectComponent} from "../../../../main/core/components/player-select/player-select.component";
+import {Team} from "../../../../main/core/dto/Team";
+import {CustomValidators} from "../../../../main/core/validators";
+import {SliderCheckboxComponent} from "../../../../main/core/components/slider-checkbox/slider-checkbox.component";
 
 @Component({
     selector: 'jolly-game-config',

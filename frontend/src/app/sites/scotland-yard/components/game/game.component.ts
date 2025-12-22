@@ -1,10 +1,10 @@
 import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import {ScotlandYardService} from "../../scotland-yard.service";
 import {GameState} from "../../dto/game/GameState";
-import {MainHeaderComponent} from "../../../../main/components/all/main-header/main-header.component";
+import {MainHeaderComponent} from "../../../../main/core/components/main-header/main-header.component";
 import {NgStyle} from "@angular/common";
-import {PanContainerComponent} from "../../../../main/components/all/pan-container/pan-container.component";
-import {Position} from "../../../../main/dto/all/Position";
+import {PanContainerComponent} from "../../../../main/core/components/pan-container/pan-container.component";
+import {Position} from "../../../../main/core/dto/Position";
 import {GraphNode} from "../../dto/graph/GraphNode";
 import {EdgeType} from "../../dto/graph/EdgeType";
 import {HeatMapEntry} from "../../dto/HeatMapEntry";

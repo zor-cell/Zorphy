@@ -6,7 +6,7 @@ import {CatanDiceRollComponent} from "../dice-roll/dice-roll.component";
 import {CatanHistogramComponent} from "../histogram/histogram.component";
 import {ReactiveFormsModule} from "@angular/forms";
 import {Router} from "@angular/router";
-import {AuthService} from "../../../../main/services/auth.service";
+import {AuthService} from "../../../../main/core/services/auth.service";
 import {GameMode} from "../../dto/enums/GameMode";
 import {GameSessionGameComponent} from "../../../all/components/game-session-game.component";
 

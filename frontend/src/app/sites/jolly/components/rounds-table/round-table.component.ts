@@ -1,12 +1,12 @@
 import {Component, inject, input, OnInit, output, viewChild} from '@angular/core';
 import {NgOptimizedImage} from "@angular/common";
 import {GameState} from "../../dto/game/GameState";
-import {Team} from "../../../../main/dto/all/Team";
+import {Team} from "../../../../main/core/dto/Team";
 import {LightboxDirective} from "ng-gallery/lightbox";
 import {Gallery, ImageItem} from "ng-gallery";
-import {DurationPipe} from "../../../../main/pipes/DurationPipe";
+import {DurationPipe} from "../../../../main/core/pipes/DurationPipe";
 import {RoundPopupComponent} from "../popups/round-popup/round-popup.component";
-import {WithFile} from "../../../../main/dto/all/WithFile";
+import {WithFile} from "../../../../main/core/dto/WithFile";
 import {RoundResult} from "../../dto/RoundResult";
 import {JollyService} from "../../jolly.service";
 

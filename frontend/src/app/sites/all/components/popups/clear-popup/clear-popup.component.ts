@@ -1,6 +1,6 @@
 import {Component, inject, output, TemplateRef, viewChild} from '@angular/core';
-import {PopupService} from "../../../../../main/services/popup.service";
-import {PopupResultType} from "../../../../../main/dto/all/PopupResultType";
+import {PopupService} from "../../../../../main/core/services/popup.service";
+import {PopupResultType} from "../../../../../main/core/dto/PopupResultType";
 
 @Component({
     selector: 'game-session-clear-popup',

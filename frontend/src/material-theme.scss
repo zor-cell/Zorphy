@@ -8,6 +8,7 @@
 
 html {
   height: 100%;
+
   @include mat.theme((
     color: (
       primary: mat.$azure-palette,
@@ -36,6 +37,7 @@ body {
   background-color: #fff;
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
+  font-size: 1rem;
 
   margin: 0;
   height: 100%;
