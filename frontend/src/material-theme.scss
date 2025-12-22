@@ -15,8 +15,13 @@ html {
     ),
     typography: Roboto,
     //typography: Calibri,
-    density: 0,
+    density: -3,
   ));
+
+  --mat-sys-surface: #fff;
+  --mat-sys-surface-container: #ffffff;
+  --mat-sys-surface-container-high: #ffffff;
+  --mat-sys-surface-container-highest: #ffffff;
 }
 
 body {

@@ -1,18 +1,20 @@
 <div class="modal-header">
-  <h4 class="modal-title">{{ title() }}</h4>
+  <h4 mat-dialog-title class="modal-title">{{ data.title }}</h4>
 </div>
-<div class="modal-body">
-  <ng-container *ngTemplateOutlet="bodyTemplate(); context: {formId: formId()}"></ng-container>
-</div>
-<div class="modal-footer dialog-actions">
-  <button type="button" class="btn btn-outline-secondary" (click)="cancel()">{{ cancelText() }}</button>
 
-  <div class="dialog-main-actions">
-    @if (discardText() !== null) {
-      <button type="button" class="btn btn-outline-danger"
-        (click)="discard()">{{ discardText() }}
-      </button>
-    }
-    <button [disabled]="!valid" [attr.form]="formId()" type="submit" class="btn btn-primary" (click)="submit()">{{ submitText() }}</button>
-  </div>
-</div>
+<mat-dialog-content>
+    <ng-container *ngTemplateOutlet="data.bodyTemplate; context: {formId: data.formId}"></ng-container>
+</mat-dialog-content>
+
+<mat-dialog-actions class="dialog-actions">
+    <button type="button" class="btn btn-outline-secondary" (click)="cancel()">{{ data?.cancelText ?? "Cancel" }}</button>
+
+    <div class="dialog-main-actions">
+        @if (data.discardText) {
+            <button type="button" class="btn btn-outline-danger"
+                    (click)="discard()">{{ data.discardText }}
+            </button>
+        }
+        <button [disabled]="!valid" [attr.form]="data.formId" type="submit" class="btn btn-primary" (click)="submit()">{{ data.submitText }}</button>
+    </div>
+</mat-dialog-actions>

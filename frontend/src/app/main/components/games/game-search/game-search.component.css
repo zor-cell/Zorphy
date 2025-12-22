@@ -29,10 +29,6 @@
 }
 
 ::ng-deep .wide-popover {
-    width: 320px; /* desired width */
+    width: fit-content;
     max-width: none !important;
-}
-
-::ng-deep .wide-popover .popover-arrow {
-    display: none !important;
 }

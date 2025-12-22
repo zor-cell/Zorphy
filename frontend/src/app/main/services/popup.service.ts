@@ -1,13 +1,13 @@
 import {inject, Injectable, TemplateRef} from '@angular/core';
 import {PopupDialogComponent} from "../components/all/popups/popup-dialog/popup-dialog.component";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {PopupResultType} from "../dto/all/PopupResultType";
+import {MatDialog} from "@angular/material/dialog";
 
 @Injectable({
     providedIn: 'root'
 })
 export class PopupService {
-    private modalService = inject(NgbModal);
+    private dialog = inject(MatDialog);
 
     public createPopup(title: string,
                 bodyTemplate: TemplateRef<any>,
@@ -16,7 +16,21 @@ export class PopupService {
                 submitText?: string,
                 discardText?: string,
                 cancelText?: string) {
-        const modalRef = this.modalService.open(PopupDialogComponent);
+        const dialogRef = this.dialog.open(PopupDialogComponent, {
+            width: '500px',
+            autoFocus: 'first-tabbable',
+            data: {
+                formId: `form-${crypto.randomUUID()}`,
+                title: title,
+                bodyTemplate: bodyTemplate,
+                submitText: submitText,
+                discardText: discardText,
+                cancelText: cancelText,
+                submitValidator: submitValidator
+            }
+        });
+
+        /*const modalRef = this.modalService.open(PopupDialogComponent);
 
         //set popup inputs
         modalRef.componentInstance.formId.set(`form-${crypto.randomUUID()}`);
@@ -27,15 +41,10 @@ export class PopupService {
         if (cancelText) modalRef.componentInstance.cancelText.set(cancelText);
 
         if (submitValidator) modalRef.componentInstance.submitValidator.set(submitValidator);
-        modalRef.componentInstance.bodyTemplate.set(bodyTemplate);
+        modalRef.componentInstance.bodyTemplate.set(bodyTemplate);*/
 
-        modalRef.result.then(
-            (res) => {
-                callback(res as PopupResultType);
-            },
-            (res) => {
-                callback(res as PopupResultType);
-            }
-        );
+        dialogRef.afterClosed().subscribe((res) => {
+            callback(res ?? PopupResultType.CANCEL);
+        });
     }
 }

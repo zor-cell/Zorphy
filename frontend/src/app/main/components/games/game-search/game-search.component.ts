@@ -1,23 +1,25 @@
 import {Component, inject, input, OnInit, output, signal} from '@angular/core';
-import {NgbPopover} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {GameFilters} from "../../../dto/games/GameFilters";
-import {Options} from "@popperjs/core";
 import {GameType} from "../../../dto/games/GameType";
 import {DurationPipe} from "../../../pipes/DurationPipe";
 
 import {PlayerService} from "../../../services/player.service";
 import {PlayerDetails} from "../../../dto/all/PlayerDetails";
 import {ActivatedRoute, Router} from "@angular/router";
+import {MatMenu, MatMenuTrigger} from "@angular/material/menu";
+import {MatNativeDateModule, provideNativeDateAdapter} from "@angular/material/core";
 
 @Component({
   selector: 'game-search',
+  providers: [provideNativeDateAdapter()],
   imports: [
-    NgbPopover,
-    ReactiveFormsModule
-],
+    ReactiveFormsModule,
+    MatMenu,
+    MatMenuTrigger,
+    MatNativeDateModule,
+  ],
   templateUrl: './game-search.component.html',
-  
   styleUrl: './game-search.component.css'
 })
 export class GameSearchComponent implements OnInit {
@@ -42,11 +44,6 @@ export class GameSearchComponent implements OnInit {
     gameTypes: this.fb.control<GameType[] | null>(null),
     players: this.fb.control<string[] | null>(null)
   });
-  protected popperOptions = (options: Partial<Options>) => {
-    options.placement = 'bottom-end';
-
-    return options;
-  };
   protected allGameTypes = Object.values(GameType);
 
   ngOnInit() {
@@ -104,11 +101,10 @@ export class GameSearchComponent implements OnInit {
     });
   }
 
-  protected submit(popover: NgbPopover | null = null) {
-    const filters = this.searchForm.getRawValue() as GameFilters;
-
+  protected submit() {
     if(this.searchForm.invalid) return;
 
+    const filters = this.searchForm.getRawValue() as GameFilters;
 
     //apply ISO standards
     filters.dateFrom = filters.dateFrom ? new Date(filters.dateFrom).toISOString() : null;
@@ -117,10 +113,6 @@ export class GameSearchComponent implements OnInit {
     filters.maxDuration = filters.maxDuration ? DurationPipe.toIsoFormat(filters.maxDuration) : null;
 
     this.changeFiltersEvent.emit(filters);
-
-    if(popover) {
-      popover.close();
-    }
   }
 
   private getPlayers() {

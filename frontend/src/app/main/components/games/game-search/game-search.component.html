@@ -1,94 +1,161 @@
 <form [formGroup]="searchForm" class="search-form" (ngSubmit)="submit()">
-  <div class="search-input-group" >
-    <div class="input-group">
-      <button class="btn btn-primary search-button" type="submit">
-        <i class="bi bi-search"></i>
-      </button>
-      <input class="form-control search-input" formControlName="text" type="text" placeholder="Search...">
+    <div class="search-input-group">
+        <div class="input-group">
+            <button class="btn btn-primary search-button" type="submit">
+                <i class="bi bi-search"></i>
+            </button>
+            <input class="form-control search-input" formControlName="text" type="text" placeholder="Search...">
+        </div>
+
+        <button class="btn btn-secondary filter-button" type="button"
+                [matMenuTriggerFor]="filterMenu"
+                (menuOpened)="popOverOpen()"
+                (menuClosed)="popOverClose()"
+                [class.active]="isPopoverOpen()"
+        >
+            <i class="bi bi-funnel"></i>
+        </button>
     </div>
-    <button class="btn btn-secondary filter-button"
-      #searchPopover="ngbPopover"
-      popoverClass="wide-popover"
-      popoverTitle="Filters"
-      [ngbPopover]="searchFilters"
-      [popperOptions]="popperOptions"
-      [autoClose]="'outside'"
-      (shown)="popOverOpen()"
-      (hidden)="popOverClose()"
-      [class.active]="isPopoverOpen()"
-      type="button"
-      >
-      <i class="bi bi-funnel"></i>
-    </button>
-  </div>
 </form>
 
-<ng-template #searchFilters>
-  <form [formGroup]="searchForm" class="form-container" (ngSubmit)="submit(searchPopover)">
-    <div class="row">
-      <div class="col-6">
-        <label>From</label>
-        <input class="form-control" formControlName="dateFrom" type="date">
-      </div>
-      <div class="col-6">
-        <label>To</label>
-        <input class="form-control" formControlName="dateTo" type="date">
-      </div>
+
+<mat-menu #filterMenu="matMenu" xPosition="before" class="wide-popover">
+    <div class="p-3" (click)="$event.stopPropagation()" style="width: 350px;">
+        <form [formGroup]="searchForm" class="form-container" (ngSubmit)="submit()">
+            <h3 class="m-0">Filters</h3>
+
+            <div class="row">
+                <div class="col-6">
+                    <label>From</label>
+                    <input class="form-control" formControlName="dateFrom" type="date">
+                </div>
+                <div class="col-6">
+                    <label>To</label>
+                    <input class="form-control" formControlName="dateTo" type="date">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label>Min Players</label>
+                    <input class="form-control" formControlName="minPlayers" type="number">
+                </div>
+                <div class="col-6">
+                    <label>Max Players</label>
+                    <input class="form-control" formControlName="maxPlayers" type="number">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label>Min Duration</label>
+                    <input class="form-control" formControlName="minDuration" type="time" step="1">
+                </div>
+                <div class="col-6">
+                    <label>Max Duration</label>
+                    <input class="form-control" formControlName="maxDuration" type="time" step="1">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <label>Game Types</label>
+                    <select class="form-select" formControlName="gameTypes" [multiple]="showMultiGameTypes()">
+                        @if (!showMultiGameTypes()) {
+                            <option value="">-- Select a game type --</option>
+                        }
+                        @for (type of allGameTypes; track type) {
+                            <option [value]="type">{{ type }}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <label>Players</label>
+                    <select class="form-select" formControlName="players" multiple>
+                        @for (player of players(); track player) {
+                            <option [value]="player.id">{{ player.name }}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="row justify-content-between mt-4">
+                <div class="col-auto">
+                    <button class="btn btn-outline-danger" type="button" (click)="clear()">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary" [disabled]="searchForm.invalid" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
-    <div class="row">
-      <div class="col-6">
-        <label>Min Players</label>
-        <input class="form-control" formControlName="minPlayers" type="number">
-      </div>
-      <div class="col-6">
-        <label>Max Players</label>
-        <input class="form-control" formControlName="maxPlayers" type="number">
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-6">
-        <label>Min Duration</label>
-        <input class="form-control" formControlName="minDuration" type="time" step="1">
-      </div>
-      <div class="col-6">
-        <label>Max Duration</label>
-        <input class="form-control" formControlName="maxDuration" type="time" step="1">
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12">
-        <label>Game Types</label>
-        <select class="form-select" formControlName="gameTypes" [multiple]="showMultiGameTypes()">
-          @if (!showMultiGameTypes()) {
-            <option value="">-- Select a game type --</option>
-          }
-          @for (type of allGameTypes; track type) {
-            <option [value]="type">{{ type }}</option>
-          }
-        </select>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12">
-        <label>Players</label>
-        <select class="form-select" formControlName="players" multiple>
-          @for (player of players(); track player) {
-            <option [value]="player.id">{{ player.name }}</option>
-          }
-        </select>
-      </div>
-    </div>
-    <div class="row justify-content-between mt-4">
-      <div class="col-auto">
-        <button class="btn btn-outline-danger" type="button" (click)="clear()">
-          <i class="bi bi-x-lg"></i>
-        </button>
-      </div>
-      <div class="col-auto">
-        <button class="btn btn-primary" [disabled]="searchForm.invalid" type="submit">
-          <i class="bi bi-search"></i>
-        </button>
-      </div>
-    </div>
-  </form>
-</ng-template>
+
+    <!--<div class="p-3" (click)="$event.stopPropagation()" style="width: 350px;">
+        <form [formGroup]="searchForm" (ngSubmit)="submit()">
+            <h3 class="mb-3">Filters</h3>
+
+            <div class="row g-2">
+                <div class="col-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>From</mat-label>
+                        <input matInput [matDatepicker]="pickerFrom" formControlName="dateFrom">
+                        <mat-datepicker-toggle matIconSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerFrom></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>To</mat-label>
+                        <input matInput [matDatepicker]="pickerTo" formControlName="dateTo">
+                        <mat-datepicker-toggle matIconSuffix [for]="pickerTo"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerTo></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row g-2">
+                <div class="col-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Min Players</mat-label>
+                        <input matInput type="number" formControlName="minPlayers">
+                    </mat-form-field>
+                </div>
+                <div class="col-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Max Players</mat-label>
+                        <input matInput type="number" formControlName="maxPlayers">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Game Types</mat-label>
+                <mat-select formControlName="gameTypes" [multiple]="showMultiGameTypes()">
+                    @for (type of allGameTypes; track type) {
+                        <mat-option [value]="type">{{ type }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Players</mat-label>
+                <mat-select formControlName="players" multiple>
+                    @for (player of players(); track player.id) {
+                        <mat-option [value]="player.id">{{ player.name }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <div class="d-flex justify-content-between mt-2">
+                <button mat-button color="warn" type="button" (click)="clear()">
+                    Reset
+                </button>
+                <button mat-raised-button color="primary" type="submit" [disabled]="searchForm.invalid">
+                    Apply
+                </button>
+            </div>
+        </form>
+    </div>-->
+</mat-menu>
