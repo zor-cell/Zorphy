@@ -43,7 +43,12 @@ export class NotificationService {
       message = error.message;
     }
 
-    this.snackBarService.open(`ERROR ${status} ${message}`, this.cancelText, this.config);
+    const errorConfig: MatSnackBarConfig = {
+      ...this.config,
+      panelClass: 'error-snackbar'
+    };
+
+    this.snackBarService.open(`ERROR ${status}: ${message}`, this.cancelText, errorConfig);
   }
 
   public handleSuccess(message: string) {

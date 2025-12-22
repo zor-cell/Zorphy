@@ -1,14 +1,6 @@
 @import "./stats.css";
 @import "./config.css";
-
-html, body {
-    height: 100%;
-}
-
-body {
-    margin: 0;
-    font-family: Calibri, "Helvetica Neue", sans-serif;
-}
+@import "./material.css";
 
 .table {
     text-align: center;

@@ -1,0 +1,12 @@
+/* Snackbar */
+.error-snackbar.mat-mdc-snack-bar-container .mdc-snackbar__surface  {
+    background-color: var(--mat-sys-error) !important;
+}
+
+.error-snackbar .mdc-snackbar__label {
+    color: var(--mat-sys-on-error) !important;
+}
+
+.error-snackbar .mat-mdc-snack-bar-action {
+    color: var(--mat-sys-on-error) !important;
+}
