@@ -12,7 +12,7 @@
         }
     </button>
 
-    <nav [class.open]="mobileMenuOpen()">
+    <nav [class.open]="mobileMenuOpen()" style="font-size: 1rem;">
         <a routerLink="/projects" (click)="closeMobileMenu()">Projects</a>
         <a routerLink="/games" (click)="closeMobileMenu()">Games</a>
         <a>About Me</a>

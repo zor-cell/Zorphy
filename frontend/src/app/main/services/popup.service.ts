@@ -23,9 +23,9 @@ export class PopupService {
                 formId: `form-${crypto.randomUUID()}`,
                 title: title,
                 bodyTemplate: bodyTemplate,
-                submitText: submitText,
+                submitText: submitText ?? 'Submit',
                 discardText: discardText,
-                cancelText: cancelText,
+                cancelText: cancelText ?? 'Cancel',
                 submitValidator: submitValidator
             }
         });

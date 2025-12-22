@@ -13,8 +13,10 @@ html {
       primary: mat.$azure-palette,
       tertiary: mat.$blue-palette,
     ),
-    typography: Roboto,
-    //typography: Calibri,
+    typography: (
+            brand-family: 'Calibri, "Helvetica Neue", sans-serif',
+            plain-family: 'Calibri, "Helvetica Neue", sans-serif',
+    ),
     density: -3,
   ));
 

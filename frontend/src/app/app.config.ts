@@ -34,6 +34,9 @@ export const appConfig: ApplicationConfig = {
         provideZonelessChangeDetection(),
         provideRouter(routes),
         provideHttpClient(withInterceptors([credentialInterceptor, errorInterceptor])),
+        importProvidersFrom(
+            BrowserAnimationsModule
+        ),
         provideCharts(withDefaultRegisterables()),
         galleryProvider,
         lightBoxProvider,

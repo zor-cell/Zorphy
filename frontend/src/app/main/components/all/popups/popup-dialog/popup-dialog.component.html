@@ -1,13 +1,11 @@
-<div class="modal-header">
-  <h4 mat-dialog-title class="modal-title">{{ data.title }}</h4>
-</div>
+<h4 mat-dialog-title class="modal-title">{{ data.title }}</h4>
 
-<mat-dialog-content>
+<mat-dialog-content class="pb-1">
     <ng-container *ngTemplateOutlet="data.bodyTemplate; context: {formId: data.formId}"></ng-container>
 </mat-dialog-content>
 
 <mat-dialog-actions class="dialog-actions">
-    <button type="button" class="btn btn-outline-secondary" (click)="cancel()">{{ data?.cancelText ?? "Cancel" }}</button>
+    <button type="button" class="btn btn-outline-secondary" (click)="cancel()">{{ data.cancelText }}</button>
 
     <div class="dialog-main-actions">
         @if (data.discardText) {
