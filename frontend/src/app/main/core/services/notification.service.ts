@@ -52,7 +52,12 @@ export class NotificationService {
   }
 
   public handleSuccess(message: string) {
-    this.snackBarService.open(message, this.cancelText, this.config);
+    const successConfig: MatSnackBarConfig = {
+      ...this.config,
+      panelClass: 'success-snackbar'
+    };
+
+    this.snackBarService.open(message, this.cancelText, successConfig);
   }
 
   public handleLoading(message: string) {

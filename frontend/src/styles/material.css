@@ -10,3 +10,15 @@
 .error-snackbar .mat-mdc-snack-bar-action {
     color: var(--mat-sys-on-error) !important;
 }
+
+.success-snackbar.mat-mdc-snack-bar-container .mdc-snackbar__surface  {
+    background-color: #54A254 !important;
+}
+
+.success-snackbar .mdc-snackbar__label {
+    color: var(--mat-sys-on-error) !important;
+}
+
+.success-snackbar .mat-mdc-snack-bar-action {
+    color: var(--mat-sys-on-error) !important;
+}

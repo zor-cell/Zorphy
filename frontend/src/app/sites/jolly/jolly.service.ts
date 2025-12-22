@@ -4,7 +4,7 @@ import {GameState} from "./dto/game/GameState";
 import {GameSessionService} from "../all/services/http/game-session.service";
 import {HttpClient} from "@angular/common/http";
 import {RoundResult} from "./dto/RoundResult";
-import {tap} from "rxjs";
+import {finalize, tap} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {NotificationService} from "../../main/core/services/notification.service";
 
@@ -14,7 +14,6 @@ import {NotificationService} from "../../main/core/services/notification.service
 export class JollyService extends GameSessionService<GameConfig, GameState> {
   protected readonly baseUri: string = environment.httpApiUrl + '/jolly';
 
-
   constructor(httpClient: HttpClient, notification: NotificationService) {
     super(httpClient, notification);
   }
@@ -22,9 +21,13 @@ export class JollyService extends GameSessionService<GameConfig, GameState> {
   saveRound(results: RoundResult[], imageFile: File | null = null) {
     const formData = this.createFormData(results, imageFile);
 
+    const loadingRef = this.notification.handleLoading('Saving Round...');
     return this.httpClient.post<GameState>(this.baseUri + '/round', formData).pipe(
         tap(() => {
-          this.notification.handleSuccess('Saved round results');
+          this.notification.handleSuccess('Saved round');
+        }),
+        finalize(() => {
+          loadingRef.dismiss();
         }));
   }
 
@@ -33,7 +36,7 @@ export class JollyService extends GameSessionService<GameConfig, GameState> {
 
     return this.httpClient.put<GameState>(this.baseUri + '/round', formData).pipe(
         tap(() => {
-          this.notification.handleSuccess('Updated round results');
+          this.notification.handleSuccess('Updated round');
         }));
   }
 
