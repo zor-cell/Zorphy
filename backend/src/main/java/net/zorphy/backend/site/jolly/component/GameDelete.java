@@ -1,11 +1,11 @@
 package net.zorphy.backend.site.jolly.component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.zorphy.backend.main.all.component.CustomObjectMapperComponent;
+import net.zorphy.backend.main.core.component.CustomObjectMapperComponent;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.main.game.entity.Game;
 import net.zorphy.backend.main.file.service.FileStorageService;
-import net.zorphy.backend.site.all.shared.service.GameSpecificDelete;
+import net.zorphy.backend.site.core.shared.service.GameSpecificDelete;
 import net.zorphy.backend.site.jolly.dto.RoundInfo;
 import net.zorphy.backend.site.jolly.dto.game.GameState;
 import org.springframework.stereotype.Component;

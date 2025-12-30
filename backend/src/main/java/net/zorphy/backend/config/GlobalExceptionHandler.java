@@ -1,9 +1,9 @@
 package net.zorphy.backend.config;
 
-import net.zorphy.backend.main.all.exception.AuthException;
-import net.zorphy.backend.main.all.exception.FileStorageException;
-import net.zorphy.backend.main.all.exception.InvalidSessionException;
-import net.zorphy.backend.main.all.exception.NotFoundException;
+import net.zorphy.backend.main.core.exception.AuthException;
+import net.zorphy.backend.main.core.exception.FileStorageException;
+import net.zorphy.backend.main.core.exception.InvalidSessionException;
+import net.zorphy.backend.main.core.exception.NotFoundException;
 import net.zorphy.backend.site.connect4.exception.InvalidOperationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

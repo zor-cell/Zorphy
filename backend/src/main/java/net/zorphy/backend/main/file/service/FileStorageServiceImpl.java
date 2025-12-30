@@ -3,7 +3,7 @@ package net.zorphy.backend.main.file.service;
 import net.zorphy.backend.config.property.FileStorageProperty;
 import net.zorphy.backend.main.file.dto.FileStorageFile;
 import net.zorphy.backend.main.game.dto.GameType;
-import net.zorphy.backend.main.all.exception.FileStorageException;
+import net.zorphy.backend.main.core.exception.FileStorageException;
 import nu.pattern.OpenCV;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;

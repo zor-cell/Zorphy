@@ -1,17 +1,17 @@
 package net.zorphy.backend.site.jolly.component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.zorphy.backend.main.all.component.CustomObjectMapperComponent;
+import net.zorphy.backend.main.core.component.CustomObjectMapperComponent;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.main.game.dto.stats.correlation.CorrelationResult;
 import net.zorphy.backend.main.game.service.streaks.GameStatsStreakAggregator;
 import net.zorphy.backend.main.player.dto.PlayerDetails;
-import net.zorphy.backend.site.all.http.dto.TeamDetails;
+import net.zorphy.backend.site.core.http.dto.TeamDetails;
 import net.zorphy.backend.main.game.entity.Game;
 import net.zorphy.backend.main.game.service.metrics.DoubleArithmeticStrategy;
 import net.zorphy.backend.main.game.service.metrics.DurationArithmeticStrategy;
 import net.zorphy.backend.main.game.service.metrics.GameStatsMetricAggregator;
-import net.zorphy.backend.site.all.shared.service.GameSpecificStatsCalculator;
+import net.zorphy.backend.site.core.shared.service.GameSpecificStatsCalculator;
 import net.zorphy.backend.main.game.service.GameStatsUtil;
 import net.zorphy.backend.site.jolly.dto.RoundInfo;
 import net.zorphy.backend.site.jolly.dto.RoundResult;

@@ -1,8 +1,8 @@
 package net.zorphy.backend.site.nobodysperfect.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.zorphy.backend.site.all.ws.dto.RoomMember;
-import net.zorphy.backend.site.all.ws.service.GameRoomBaseService;
+import net.zorphy.backend.site.core.ws.dto.RoomMember;
+import net.zorphy.backend.site.core.ws.service.GameRoomBaseService;
 import net.zorphy.backend.site.nobodysperfect.dto.GameRoom;
 import net.zorphy.backend.site.nobodysperfect.dto.GameRoomState;
 import org.springframework.data.redis.core.StringRedisTemplate;

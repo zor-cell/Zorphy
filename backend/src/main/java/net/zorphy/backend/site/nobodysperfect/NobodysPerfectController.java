@@ -1,7 +1,7 @@
 package net.zorphy.backend.site.nobodysperfect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.zorphy.backend.site.all.ws.controller.GameRoomBaseController;
+import net.zorphy.backend.site.core.ws.controller.GameRoomBaseController;
 import net.zorphy.backend.site.nobodysperfect.dto.GameRoom;
 import net.zorphy.backend.site.nobodysperfect.dto.GameRoomState;
 import net.zorphy.backend.site.nobodysperfect.service.NobodyIsPerfectService;

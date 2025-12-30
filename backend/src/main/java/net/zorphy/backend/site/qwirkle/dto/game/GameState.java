@@ -1,6 +1,6 @@
 package net.zorphy.backend.site.qwirkle.dto.game;
 
-import net.zorphy.backend.site.all.http.dto.GameStateBase;
+import net.zorphy.backend.site.core.http.dto.GameStateBase;
 import net.zorphy.backend.site.qwirkle.dto.PositionInfo;
 import net.zorphy.backend.site.qwirkle.dto.move.Move;
 import net.zorphy.backend.site.qwirkle.dto.tile.BoardTile;

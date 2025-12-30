@@ -2,7 +2,7 @@ package net.zorphy.backend.main.user;
 
 import jakarta.validation.Valid;
 import net.zorphy.backend.main.user.dto.UserDetails;
-import net.zorphy.backend.main.all.exception.InvalidSessionException;
+import net.zorphy.backend.main.core.exception.InvalidSessionException;
 import net.zorphy.backend.main.user.service.UserService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;

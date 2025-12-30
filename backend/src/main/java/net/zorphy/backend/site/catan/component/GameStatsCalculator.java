@@ -1,21 +1,21 @@
 package net.zorphy.backend.site.catan.component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.zorphy.backend.main.all.component.CustomObjectMapperComponent;
+import net.zorphy.backend.main.core.component.CustomObjectMapperComponent;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.main.game.dto.stats.correlation.CorrelationAxisType;
 import net.zorphy.backend.main.game.dto.stats.correlation.CorrelationDataPoint;
 import net.zorphy.backend.main.game.dto.stats.correlation.CorrelationMetadata;
 import net.zorphy.backend.main.game.dto.stats.correlation.CorrelationResult;
 import net.zorphy.backend.main.player.dto.PlayerDetails;
-import net.zorphy.backend.site.all.http.dto.TeamDetails;
+import net.zorphy.backend.site.core.http.dto.TeamDetails;
 import net.zorphy.backend.main.game.entity.Game;
 import net.zorphy.backend.main.game.service.metrics.DurationArithmeticStrategy;
 import net.zorphy.backend.main.game.service.metrics.GameStatsMetricAggregator;
-import net.zorphy.backend.site.all.shared.service.GameSpecificStatsCalculator;
+import net.zorphy.backend.site.core.shared.service.GameSpecificStatsCalculator;
 import net.zorphy.backend.main.game.service.GameStatsUtil;
-import net.zorphy.backend.site.all.http.dto.ResultState;
-import net.zorphy.backend.site.all.http.dto.ResultTeamState;
+import net.zorphy.backend.site.core.http.dto.ResultState;
+import net.zorphy.backend.site.core.http.dto.ResultTeamState;
 import net.zorphy.backend.site.catan.dto.DiceRoll;
 import net.zorphy.backend.site.catan.dto.game.GameState;
 import net.zorphy.backend.site.catan.dto.game.GameStats;

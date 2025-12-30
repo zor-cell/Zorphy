@@ -4,7 +4,7 @@ import net.zorphy.backend.main.file.service.FileStorageService;
 import net.zorphy.backend.main.project.dto.ProjectDetails;
 import net.zorphy.backend.main.project.dto.ProjectMetadata;
 import net.zorphy.backend.main.project.entity.Project;
-import net.zorphy.backend.main.all.exception.NotFoundException;
+import net.zorphy.backend.main.core.exception.NotFoundException;
 import net.zorphy.backend.main.project.repository.ProjectMapper;
 import net.zorphy.backend.main.project.repository.ProjectRepository;
 import net.zorphy.backend.site.connect4.exception.InvalidOperationException;

@@ -2,7 +2,7 @@ package net.zorphy.backend.main.player.service;
 
 import net.zorphy.backend.main.player.dto.PlayerDetails;
 import net.zorphy.backend.main.player.entity.Player;
-import net.zorphy.backend.main.all.exception.NotFoundException;
+import net.zorphy.backend.main.core.exception.NotFoundException;
 import net.zorphy.backend.main.player.repository.PlayerMapper;
 import net.zorphy.backend.main.player.repository.PlayerRepository;
 import org.springframework.stereotype.Service;
