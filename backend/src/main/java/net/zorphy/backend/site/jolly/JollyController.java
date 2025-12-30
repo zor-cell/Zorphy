@@ -9,7 +9,7 @@ import net.zorphy.backend.main.core.exception.InvalidSessionException;
 import net.zorphy.backend.site.core.http.controller.GameSessionController;
 import net.zorphy.backend.site.core.http.controller.SavableController;
 import net.zorphy.backend.site.core.http.dto.ResultState;
-import net.zorphy.backend.site.core.http.service.GameSessionSaveService;
+import net.zorphy.backend.site.core.http.service.SavableService;
 import net.zorphy.backend.site.jolly.dto.RoundResult;
 import net.zorphy.backend.site.jolly.dto.game.GameConfig;
 import net.zorphy.backend.site.jolly.dto.game.GameState;
@@ -97,7 +97,7 @@ public class JollyController extends GameSessionController<GameConfig, GameState
     }
 
     @Override
-    public GameSessionSaveService<GameConfig, GameState, ResultState> getSessionService() {
+    public SavableService<GameState, ResultState> getSessionService() {
         return jollyService;
     }
 

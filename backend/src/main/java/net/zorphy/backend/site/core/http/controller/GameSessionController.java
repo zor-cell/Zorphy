@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.main.core.exception.InvalidSessionException;
-import net.zorphy.backend.site.core.http.service.GameSessionBaseService;
+import net.zorphy.backend.site.core.http.service.GameSessionService;
 import net.zorphy.backend.site.core.http.dto.GameConfigBase;
 import net.zorphy.backend.site.core.http.dto.GameStateBase;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.*;
  * The base controller for game session management, so all basic CRUD features for game sessions
  */
 public abstract class GameSessionController<Config extends GameConfigBase, State extends GameStateBase> {
-    private final GameSessionBaseService<Config, State> sessionBaseService;
+    private final GameSessionService<Config, State> sessionBaseService;
     protected final String SESSION_KEY;
 
-    public GameSessionController(GameSessionBaseService<Config, State> sessionService, GameType gameType) {
+    public GameSessionController(GameSessionService<Config, State> sessionService, GameType gameType) {
         this.sessionBaseService = sessionService;
         this.SESSION_KEY = gameType.toString() + "_sessionState";
     }
@@ -34,7 +34,6 @@ public abstract class GameSessionController<Config extends GameConfigBase, State
 
         State gameState = sessionBaseService.createSession(gameConfig);
         setSessionState(session, gameState);
-        onAfterCreate(session);
 
         return gameState;
     }
@@ -52,7 +51,6 @@ public abstract class GameSessionController<Config extends GameConfigBase, State
         //check for valid session
         getSessionState(session);
 
-        onBeforeClear(session);
         session.removeAttribute(SESSION_KEY);
     }
 
@@ -75,16 +73,6 @@ public abstract class GameSessionController<Config extends GameConfigBase, State
     public void setSessionState(HttpSession session, State state) {
         session.setAttribute(SESSION_KEY, state);
     }
-
-    /**
-     * A hook that is executed before the session is cleared
-     */
-    protected void onBeforeClear(HttpSession session) {};
-
-    /**
-     * A hook that is executed after the session is created
-     */
-    protected void onAfterCreate(HttpSession session) {};
 
     private boolean sessionExists(HttpSession session) {
         try {

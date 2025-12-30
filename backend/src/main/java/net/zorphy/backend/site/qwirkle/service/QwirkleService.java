@@ -1,6 +1,7 @@
 package net.zorphy.backend.site.qwirkle.service;
 
-import net.zorphy.backend.site.core.http.service.GameSessionSaveService;
+import net.zorphy.backend.site.core.http.service.GameSessionService;
+import net.zorphy.backend.site.core.http.service.SavableService;
 import net.zorphy.backend.site.core.http.dto.ResultState;
 import net.zorphy.backend.site.qwirkle.dto.SelectionInfo;
 import net.zorphy.backend.site.qwirkle.dto.game.GameConfig;
@@ -11,7 +12,7 @@ import net.zorphy.backend.site.qwirkle.dto.tile.Tile;
 
 import java.util.List;
 
-public interface QwirkleService extends GameSessionSaveService<GameConfig, GameState, ResultState> {
+public interface QwirkleService extends GameSessionService<GameConfig, GameState>, SavableService<GameState, ResultState> {
     /**
      * Retrieves the {@code N} best moves for the given {@code gameState} where {@code N} is {@code maxMoves}.
      */

@@ -7,7 +7,7 @@ import net.zorphy.backend.main.game.dto.GameDetails;
 import net.zorphy.backend.site.core.http.dto.GameConfigBase;
 import net.zorphy.backend.site.core.http.dto.ResultStateBase;
 import net.zorphy.backend.site.core.http.dto.SavableGameState;
-import net.zorphy.backend.site.core.http.service.GameSessionSaveService;
+import net.zorphy.backend.site.core.http.service.SavableService;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +45,7 @@ public interface SavableController<
         return gameState.isSaved();
     }
 
-    GameSessionSaveService<Config, State, Result> getSessionService();
+    SavableService<State, Result> getSessionService();
     State getSessionState(HttpSession session);
     void setSessionState(HttpSession session, State state);
 }

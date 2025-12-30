@@ -106,6 +106,7 @@ public class CatanServiceImpl implements CatanService {
 
         return new GameState(
                 false,
+                new ArrayList<>(),
                 Instant.now(),
                 gameConfig,
                 0,
@@ -148,6 +149,7 @@ public class CatanServiceImpl implements CatanService {
 
         return new GameState(
                 oldState.isSaved(),
+                oldState.pauseEntries(),
                 oldState.startTime(),
                 gameConfig,
                 currentPlayerTurn,
@@ -223,6 +225,7 @@ public class CatanServiceImpl implements CatanService {
 
         return new GameState(
                 oldState.isSaved(),
+                oldState.pauseEntries(),
                 oldState.startTime(),
                 oldState.gameConfig(),
                 currentTeamTurn,
@@ -305,6 +308,7 @@ public class CatanServiceImpl implements CatanService {
                     if (!allSame) {
                         return rollDice(new GameState(
                                 oldState.isSaved(),
+                                oldState.pauseEntries(),
                                 oldState.startTime(),
                                 oldState.gameConfig(),
                                 oldState.currentPlayerTurn(),
@@ -335,6 +339,7 @@ public class CatanServiceImpl implements CatanService {
 
         return new GameState(
                 oldState.isSaved(),
+                oldState.pauseEntries(),
                 oldState.startTime(),
                 oldState.gameConfig(),
                 currentTeamTurn,
