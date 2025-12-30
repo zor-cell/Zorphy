@@ -24,8 +24,9 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/jolly")
-public class JollyController extends GameSessionController<GameConfig, GameState>
-        implements SavableController<GameConfig, GameState, ResultState> {
+public class JollyController extends GameSessionController<GameConfig, GameState> implements
+        SavableController<GameState, ResultState>
+{
     private final JollyService jollyService;
     private final String SESSION_IMAGES;
 

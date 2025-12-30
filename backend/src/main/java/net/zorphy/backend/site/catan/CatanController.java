@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/catan")
 public class CatanController extends GameSessionController<GameConfig, GameState> implements
-        SavableController<GameConfig, GameState, ResultState>,
+        SavableController<GameState, ResultState>,
         PausableController<GameState>
 {
     private final CatanService catanService;

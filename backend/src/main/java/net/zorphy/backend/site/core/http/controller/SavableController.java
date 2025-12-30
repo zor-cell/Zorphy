@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import net.zorphy.backend.main.core.exception.InvalidSessionException;
 import net.zorphy.backend.main.game.dto.GameDetails;
-import net.zorphy.backend.site.core.http.dto.GameConfigBase;
 import net.zorphy.backend.site.core.http.dto.ResultStateBase;
 import net.zorphy.backend.site.core.http.dto.SavableGameState;
 import net.zorphy.backend.site.core.http.service.SavableService;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface SavableController<
-        Config extends GameConfigBase,
         State extends SavableGameState,
         Result extends ResultStateBase> {
     @Secured("ROLE_ADMIN")

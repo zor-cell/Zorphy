@@ -23,8 +23,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/qwirkle")
-public class QwirkleController extends GameSessionController<GameConfig, GameState>
-implements SavableController<GameConfig, GameState, ResultState> {
+public class QwirkleController extends GameSessionController<GameConfig, GameState> implements
+        SavableController<GameState, ResultState>
+{
     private final QwirkleService qwirkleService;
 
     public QwirkleController(QwirkleService qwirkleService) {

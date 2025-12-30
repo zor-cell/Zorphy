@@ -10,7 +10,7 @@ import java.time.Instant;
 
 public interface PausableController<State extends PausableGameState> {
     @PostMapping("session/pause")
-    default void pause(HttpSession session) {
+    default void pauseSession(HttpSession session) {
         State state = getSessionState(session);
 
         if(state.pauseEntries() == null) {
@@ -36,7 +36,7 @@ public interface PausableController<State extends PausableGameState> {
     }
 
     @PostMapping("session/resume")
-    default void resume(HttpSession session) {
+    default void resumeSession(HttpSession session) {
         State state = getSessionState(session);
 
         if(state.pauseEntries() == null) {
