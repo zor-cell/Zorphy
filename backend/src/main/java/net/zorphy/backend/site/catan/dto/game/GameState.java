@@ -1,13 +1,14 @@
 package net.zorphy.backend.site.catan.dto.game;
 
-import net.zorphy.backend.site.core.http.dto.GameStateBase;
 import net.zorphy.backend.site.catan.dto.DicePair;
 import net.zorphy.backend.site.catan.dto.DiceRoll;
+import net.zorphy.backend.site.core.http.dto.SavableGameState;
 
 import java.time.Instant;
 import java.util.List;
 
 public record GameState(
+        boolean isSaved,
         Instant startTime,
         GameConfig gameConfig,
         int currentPlayerTurn,
@@ -15,5 +16,18 @@ public record GameState(
         List<DicePair> classicCards,
         List<Character> eventCards,
         List<DiceRoll> diceRolls
-) implements GameStateBase {
+) implements SavableGameState {
+    @Override
+    public GameState withSaved(boolean saved) {
+        return new GameState(
+                saved,
+                startTime,
+                gameConfig,
+                currentPlayerTurn,
+                currentShipTurn,
+                classicCards,
+                eventCards,
+                diceRolls
+        );
+    }
 }

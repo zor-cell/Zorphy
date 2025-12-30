@@ -105,6 +105,7 @@ public class CatanServiceImpl implements CatanService {
         }
 
         return new GameState(
+                false,
                 Instant.now(),
                 gameConfig,
                 0,
@@ -146,6 +147,7 @@ public class CatanServiceImpl implements CatanService {
         }
 
         return new GameState(
+                oldState.isSaved(),
                 oldState.startTime(),
                 gameConfig,
                 currentPlayerTurn,
@@ -220,6 +222,7 @@ public class CatanServiceImpl implements CatanService {
         currentTeamTurn = (currentTeamTurn - 1 + oldState.gameConfig().teams().size()) % oldState.gameConfig().teams().size();
 
         return new GameState(
+                oldState.isSaved(),
                 oldState.startTime(),
                 oldState.gameConfig(),
                 currentTeamTurn,
@@ -301,6 +304,7 @@ public class CatanServiceImpl implements CatanService {
                     //try to roll again with reshuffled deck
                     if (!allSame) {
                         return rollDice(new GameState(
+                                oldState.isSaved(),
                                 oldState.startTime(),
                                 oldState.gameConfig(),
                                 oldState.currentPlayerTurn(),
@@ -330,6 +334,7 @@ public class CatanServiceImpl implements CatanService {
         diceRolls.add(diceRoll);
 
         return new GameState(
+                oldState.isSaved(),
                 oldState.startTime(),
                 oldState.gameConfig(),
                 currentTeamTurn,

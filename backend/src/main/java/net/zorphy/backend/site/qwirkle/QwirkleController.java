@@ -3,8 +3,10 @@ package net.zorphy.backend.site.qwirkle;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import net.zorphy.backend.main.game.dto.GameType;
-import net.zorphy.backend.site.core.http.controller.GameSessionSaveController;
+import net.zorphy.backend.site.core.http.controller.GameSessionBaseController;
+import net.zorphy.backend.site.core.http.controller.SavableController;
 import net.zorphy.backend.site.core.http.dto.ResultState;
+import net.zorphy.backend.site.core.http.service.GameSessionSaveService;
 import net.zorphy.backend.site.qwirkle.dto.SelectionInfo;
 import net.zorphy.backend.site.qwirkle.dto.game.GameConfig;
 import net.zorphy.backend.site.qwirkle.dto.game.GameState;
@@ -21,7 +23,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/qwirkle")
-public class QwirkleController extends GameSessionSaveController<GameConfig, GameState, ResultState> {
+public class QwirkleController extends GameSessionBaseController<GameConfig, GameState>
+implements SavableController<GameConfig, GameState, ResultState> {
     private final QwirkleService qwirkleService;
 
     public QwirkleController(QwirkleService qwirkleService) {
@@ -83,5 +86,10 @@ public class QwirkleController extends GameSessionSaveController<GameConfig, Gam
     @PostMapping("image/confirm")
     public void confirmImage(HttpSession session) {
 
+    }
+
+    @Override
+    public GameSessionSaveService<GameConfig, GameState, ResultState> getSessionService() {
+        return qwirkleService;
     }
 }

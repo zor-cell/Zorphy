@@ -6,8 +6,10 @@ import net.zorphy.backend.main.file.dto.FileStorageFile;
 import net.zorphy.backend.main.game.dto.GameDetails;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.main.core.exception.InvalidSessionException;
-import net.zorphy.backend.site.core.http.controller.GameSessionSaveController;
+import net.zorphy.backend.site.core.http.controller.GameSessionBaseController;
+import net.zorphy.backend.site.core.http.controller.SavableController;
 import net.zorphy.backend.site.core.http.dto.ResultState;
+import net.zorphy.backend.site.core.http.service.GameSessionSaveService;
 import net.zorphy.backend.site.jolly.dto.RoundResult;
 import net.zorphy.backend.site.jolly.dto.game.GameConfig;
 import net.zorphy.backend.site.jolly.dto.game.GameState;
@@ -22,7 +24,8 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/jolly")
-public class JollyController extends GameSessionSaveController<GameConfig, GameState, ResultState> {
+public class JollyController extends GameSessionBaseController<GameConfig, GameState>
+        implements SavableController<GameConfig, GameState, ResultState> {
     private final JollyService jollyService;
     private final String SESSION_IMAGES;
 
@@ -68,7 +71,7 @@ public class JollyController extends GameSessionSaveController<GameConfig, GameS
                                    @RequestPart("resultState") @Valid ResultState resultState,
                                    @RequestPart(value = "image", required = false) MultipartFile image) {
         var gameState = getSessionState(session);
-        if(getSessionSaved(session)) {
+        if(gameState.isSaved()) {
             throw new InvalidSessionException("The game state for this session was already saved");
         }
 
@@ -77,7 +80,8 @@ public class JollyController extends GameSessionSaveController<GameConfig, GameS
         GameDetails gameDetails = jollyService.saveSession(gameState, resultState, image);
 
         session.removeAttribute(SESSION_IMAGES);
-        setSessionSaved(session, true);
+        var newState = gameState.withSaved(true);
+        setSessionState(session, newState);
 
         return gameDetails;
     }
@@ -89,8 +93,12 @@ public class JollyController extends GameSessionSaveController<GameConfig, GameS
         getSessionState(session);
 
         session.removeAttribute(SESSION_KEY);
-        session.removeAttribute(SESSION_SAVE_KEY);
         session.removeAttribute(SESSION_IMAGES);
+    }
+
+    @Override
+    public GameSessionSaveService<GameConfig, GameState, ResultState> getSessionService() {
+        return jollyService;
     }
 
 

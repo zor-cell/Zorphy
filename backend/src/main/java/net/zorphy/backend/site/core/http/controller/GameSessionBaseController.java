@@ -56,14 +56,11 @@ public abstract class GameSessionBaseController<Config extends GameConfigBase, S
         session.removeAttribute(SESSION_KEY);
     }
 
-    protected void onBeforeClear(HttpSession session) {};
-    protected void onAfterCreate(HttpSession session) {};
-
     /**
      * Gets the game state from the current session
      * @throws InvalidSessionException if no game state exists in the session
      */
-    protected State getSessionState(HttpSession session) {
+    public State getSessionState(HttpSession session) {
         State gameState = (State) session.getAttribute(SESSION_KEY);
         if (gameState == null) {
             throw new InvalidSessionException("No game state for this session exists");
@@ -72,9 +69,22 @@ public abstract class GameSessionBaseController<Config extends GameConfigBase, S
         return gameState;
     }
 
-    protected void setSessionState(HttpSession session, State state) {
+    /**
+     * Sets the current session game state from {@code state}
+     */
+    public void setSessionState(HttpSession session, State state) {
         session.setAttribute(SESSION_KEY, state);
     }
+
+    /**
+     * A hook that is executed before the session is cleared
+     */
+    protected void onBeforeClear(HttpSession session) {};
+
+    /**
+     * A hook that is executed after the session is created
+     */
+    protected void onAfterCreate(HttpSession session) {};
 
     private boolean sessionExists(HttpSession session) {
         try {
