@@ -44,6 +44,7 @@ public class GameMapper implements GameSpecificMapper {
             }
 
             return new GameState(
+                    oldState.isSaved(),
                     oldState.startTime(),
                     oldState.gameConfig(),
                     rounds

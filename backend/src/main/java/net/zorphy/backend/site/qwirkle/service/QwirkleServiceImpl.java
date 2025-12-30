@@ -62,6 +62,7 @@ public class QwirkleServiceImpl implements QwirkleService {
         }
 
         return new GameState(
+                false,
                 Instant.now(),
                 config,
                 0,
@@ -113,6 +114,7 @@ public class QwirkleServiceImpl implements QwirkleService {
         }
 
         return new GameState(
+                oldState.isSaved(),
                 oldState.startTime(),
                 oldState.gameConfig(),
                 oldState.currentPlayerTurn(),
@@ -263,6 +265,7 @@ public class QwirkleServiceImpl implements QwirkleService {
         stack.set(index, updatedTile);
 
         return new GameState(
+                oldState.isSaved(),
                 oldState.startTime(),
                 oldState.gameConfig(),
                 oldState.currentPlayerTurn(),
@@ -294,6 +297,7 @@ public class QwirkleServiceImpl implements QwirkleService {
         }
 
         return new GameState(
+                oldState.isSaved(),
                 oldState.startTime(),
                 oldState.gameConfig(),
                 oldState.currentPlayerTurn(),
@@ -370,6 +374,7 @@ public class QwirkleServiceImpl implements QwirkleService {
         moves.add(move);
 
         return new GameState(
+                oldState.isSaved(),
                 oldState.startTime(),
                 oldState.gameConfig(),
                 currentPlayerTurn,

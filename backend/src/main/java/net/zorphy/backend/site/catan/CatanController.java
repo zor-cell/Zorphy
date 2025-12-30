@@ -2,7 +2,7 @@ package net.zorphy.backend.site.catan;
 
 import jakarta.servlet.http.HttpSession;
 import net.zorphy.backend.main.game.dto.GameType;
-import net.zorphy.backend.site.core.http.controller.GameSessionBaseController;
+import net.zorphy.backend.site.core.http.controller.GameSessionController;
 import net.zorphy.backend.site.core.http.controller.SavableController;
 import net.zorphy.backend.site.core.http.dto.ResultState;
 import net.zorphy.backend.site.catan.dto.game.GameConfig;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/catan")
-public class CatanController extends GameSessionBaseController<GameConfig, GameState>
+public class CatanController extends GameSessionController<GameConfig, GameState>
         implements SavableController<GameConfig, GameState, ResultState> {
     private final CatanService catanService;
 

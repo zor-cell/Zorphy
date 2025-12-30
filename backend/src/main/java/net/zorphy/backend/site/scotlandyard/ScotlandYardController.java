@@ -3,7 +3,7 @@ package net.zorphy.backend.site.scotlandyard;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import net.zorphy.backend.main.game.dto.GameType;
-import net.zorphy.backend.site.core.http.controller.GameSessionBaseController;
+import net.zorphy.backend.site.core.http.controller.GameSessionController;
 import net.zorphy.backend.site.scotlandyard.dto.HeatMapConfig;
 import net.zorphy.backend.site.scotlandyard.dto.HeatMapEntry;
 import net.zorphy.backend.site.scotlandyard.dto.game.GameConfig;
@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/scotland-yard")
-public class ScotlandYardController extends GameSessionBaseController<GameConfig, GameState> {
+public class ScotlandYardController extends GameSessionController<GameConfig, GameState> {
     private final ScotlandYardService scotlandYardService;
 
     public ScotlandYardController(ScotlandYardService scotlandYardService) {
