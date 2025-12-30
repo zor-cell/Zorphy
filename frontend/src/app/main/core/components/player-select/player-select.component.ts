@@ -8,6 +8,7 @@ import {Team} from "../../dto/Team";
 import {NewPlayerPopupComponent} from "../popups/new-player-popup/new-player-popup.component";
 import {AuthService} from "../../services/auth.service";
 import {PlayerCreate} from "../../dto/PlayerCreate";
+import {NotificationService} from "../../services/notification.service";
 
 @Component({
     selector: 'app-player-select',
@@ -34,6 +35,7 @@ import {PlayerCreate} from "../../dto/PlayerCreate";
 })
 export class PlayerSelectComponent implements ControlValueAccessor, OnInit {
     private playerService = inject(PlayerService);
+    private notificationService = inject(NotificationService)
     protected authService = inject(AuthService);
 
     public playerPopup = viewChild.required<NewPlayerPopupComponent>('playerPopup');
@@ -96,6 +98,9 @@ export class PlayerSelectComponent implements ControlValueAccessor, OnInit {
         // rotate array by offset
         const rotated = players.slice(offset).concat(players.slice(0, offset));
         this.selectedTeams.set(rotated);
+        this.onChange(this.selectedTeams());
+
+        this.notificationService.handleSuccess("Teams reordered");
     }
 
     protected mergeTeam(teamIndex: number) {

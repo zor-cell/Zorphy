@@ -1,4 +1,4 @@
-import {Component, inject, input, OnInit, output, signal} from '@angular/core';
+import {Component, inject, input, OnInit, output, signal, viewChild} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {GameFilters} from "../../dto/GameFilters";
 import {GameType} from "../../dto/GameType";
@@ -28,6 +28,7 @@ export class GameSearchComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
+  private menuTrigger = viewChild.required(MatMenuTrigger);
   public showMultiGameTypes = input<boolean>(true);
   public changeFiltersEvent = output<GameFilters>();
 
@@ -113,6 +114,8 @@ export class GameSearchComponent implements OnInit {
     filters.maxDuration = filters.maxDuration ? DurationPipe.toIsoFormat(filters.maxDuration) : null;
 
     this.changeFiltersEvent.emit(filters);
+
+    this.menuTrigger().closeMenu();
   }
 
   private getPlayers() {

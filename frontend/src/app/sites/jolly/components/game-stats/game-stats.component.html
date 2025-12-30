@@ -1,7 +1,7 @@
 <div class="meta">
     <div>
         <game-stats-simple label="Rounds Played" [text]="stats().roundsPlayed.toString()"/>
-        <game-stats-simple label="Win Rate" [text]="(stats().roundWinRate * 100).toFixed(2) + '%'"/>
+        <game-stats-simple label="Round Win Rate" [text]="(stats().roundWinRate * 100).toFixed(2) + '%'"/>
     </div>
 
     <game-stats-metrics [metric]="stats().roundScoreMetrics" label="Round Score"/>
