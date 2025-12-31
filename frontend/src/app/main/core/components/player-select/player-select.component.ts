@@ -35,7 +35,7 @@ import {NotificationService} from "../../services/notification.service";
 })
 export class PlayerSelectComponent implements ControlValueAccessor, OnInit {
     private playerService = inject(PlayerService);
-    private notificationService = inject(NotificationService)
+    private notification = inject(NotificationService)
     protected authService = inject(AuthService);
 
     public playerPopup = viewChild.required<NewPlayerPopupComponent>('playerPopup');
@@ -100,7 +100,7 @@ export class PlayerSelectComponent implements ControlValueAccessor, OnInit {
         this.selectedTeams.set(rotated);
         this.onChange(this.selectedTeams());
 
-        this.notificationService.handleSuccess("Teams reordered");
+        this.notification.handleSuccess("Teams reordered");
     }
 
     protected mergeTeam(teamIndex: number) {

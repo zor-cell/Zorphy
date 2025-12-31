@@ -59,18 +59,10 @@ export abstract class GameSessionService<Config extends GameConfigBase, State ex
   }
 
   pauseSession() {
-      return this.httpClient.post<State>(this.baseUri + '/session/pause', {}).pipe(
-        tap(() => {
-          this.notification.handleSuccess('Paused session');
-        })
-      );
+      return this.httpClient.post<State>(this.baseUri + '/session/pause', {});
   }
 
   resumeSession() {
-      return this.httpClient.post<State>(this.baseUri + '/session/resume', {}).pipe(
-        tap(() => {
-          this.notification.handleSuccess('Resumed session');
-        })
-      );
+      return this.httpClient.post<State>(this.baseUri + '/session/resume', {});
   }
 }

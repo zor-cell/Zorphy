@@ -66,6 +66,6 @@ export class NotificationService {
       duration: undefined
     };
 
-    return this.snackBarService.open(message, undefined, config);
+    return this.snackBarService.open(message, this.cancelText, config);
   }
 }

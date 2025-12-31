@@ -1,6 +1,6 @@
 @if(gameState(); as state) {
 <game-session-game [sessionService]="qwirkleService"
-  [gameState]="state"
+  [(gameState)]="gameState"
   >
     <div class="main-container">
       <div class="game-container">

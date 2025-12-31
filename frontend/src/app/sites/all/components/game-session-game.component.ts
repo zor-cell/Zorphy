@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject, input, signal, viewChild} from "@angular/core";
+import {Component, computed, effect, inject, input, model, signal, viewChild} from "@angular/core";
 import {MainHeaderComponent} from "../../../main/core/components/main-header/main-header.component";
 
 import {AuthService} from "../../../main/core/services/auth.service";
@@ -83,9 +83,9 @@ import {state} from "@angular/animations";
             }    
         </div>
         
-        @if (gameState()) {
+        @if (gameState(); as state) {
           <game-session-save-popup #savePopup
-            [teams]="gameState().gameConfig.teams"
+            [teams]="state.gameConfig.teams"
             [showFileUpload]="showFileUpload()"
             [scores]="scores()"
             (saveSessionEvent)="saveSession($event)"
@@ -94,39 +94,31 @@ import {state} from "@angular/animations";
         `
 })
 export class GameSessionGameComponent<
-  Config extends GameConfigBase = GameConfigBase,
-  State extends GameStateBase & SavableGameState & PausableGameState = any
+  Config extends GameConfigBase,
+  State extends GameStateBase & SavableGameState & PausableGameState
 > {
     protected authService = inject(AuthService);
 
     protected savePopup = viewChild.required<GameSessionSavePopupComponent>('savePopup')
 
+    public gameState = model.required<State | null>();
     public sessionService = input.required<GameSessionService<Config, State>>();
-    public gameState = input.required<State>();
-
     public canSave = input<boolean>(true);
     public canPause = input<boolean>(true);
     public showFileUpload = input<boolean>(true);
     public scores = input<Record<string, number>>();
 
-    protected state = signal<State | null>(null);
     protected isSaved = computed(() => {
-        const state = this.state();
+        const state = this.gameState();
         return !state ? false : state.isSaved;
     })
     protected isPaused = computed(() => {
-       const state = this.state();
+       const state = this.gameState();
        if(!state || state.pauseEntries.length === 0) return false;
 
        const last = state.pauseEntries[state.pauseEntries.length - 1];
        return last.resumeTime === null;
     });
-
-    constructor() {
-        effect(() => {
-            this.getSession();
-        });
-    }
 
     protected openSavePopup() {
         this.savePopup().openPopup();
@@ -134,7 +126,7 @@ export class GameSessionGameComponent<
 
     protected getSession() {
         this.sessionService().getSession().subscribe(res => {
-            this.state.set(res);
+            this.gameState.set(res);
         });
     }
 
@@ -148,13 +140,13 @@ export class GameSessionGameComponent<
 
     protected pauseSession() {
         this.sessionService().pauseSession().subscribe(res => {
-            this.state.set(res);
+            this.gameState.set(res);
         });
     }
 
     protected resumeSession() {
         this.sessionService().resumeSession().subscribe(res => {
-            this.state.set(res);
+            this.gameState.set(res);
         });
     }
 }

@@ -1,6 +1,6 @@
 @if (gameState(); as state) {
   <game-session-game [sessionService]="jollyService"
-    [gameState]="state"
+    [(gameState)]="gameState"
     [showFileUpload]="false"
     [scores]="saveScores()"
     >
