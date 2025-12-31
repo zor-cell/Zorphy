@@ -7,6 +7,7 @@ import net.zorphy.backend.main.game.dto.GameDetails;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.main.core.exception.InvalidSessionException;
 import net.zorphy.backend.site.core.http.controller.GameSessionController;
+import net.zorphy.backend.site.core.http.controller.PausableController;
 import net.zorphy.backend.site.core.http.controller.SavableController;
 import net.zorphy.backend.site.core.http.dto.ResultState;
 import net.zorphy.backend.site.core.http.service.SavableService;
@@ -25,7 +26,8 @@ import java.util.*;
 @RestController
 @RequestMapping("/jolly")
 public class JollyController extends GameSessionController<GameConfig, GameState> implements
-        SavableController<GameState, ResultState>
+        SavableController<GameState, ResultState>,
+        PausableController<GameState>
 {
     private final JollyService jollyService;
     private final String SESSION_IMAGES;

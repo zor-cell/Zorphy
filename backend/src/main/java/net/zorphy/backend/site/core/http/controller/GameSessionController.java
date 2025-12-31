@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * The base controller for game session management, so all basic CRUD features for game sessions
  */
-public abstract class GameSessionController<Config extends GameConfigBase, State extends GameStateBase> {
+public class GameSessionController<Config extends GameConfigBase, State extends GameStateBase> {
     private final GameSessionService<Config, State> sessionBaseService;
     protected final String SESSION_KEY;
 

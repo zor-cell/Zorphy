@@ -34,6 +34,7 @@ public class JollyServiceImpl implements JollyService {
     public GameState createSession(GameConfig gameConfig) {
         return new GameState(
                 false,
+                new ArrayList<>(),
                 Instant.now(),
                 gameConfig,
                 new ArrayList<>()
@@ -44,6 +45,7 @@ public class JollyServiceImpl implements JollyService {
     public GameState updateSession(GameState oldState, GameConfig gameConfig) {
         return new GameState(
                 oldState.isSaved(),
+                oldState.pauseEntries(),
                 oldState.startTime(),
                 gameConfig,
                 oldState.rounds()
@@ -78,6 +80,7 @@ public class JollyServiceImpl implements JollyService {
 
         return new GameState(
                 oldState.isSaved(),
+                oldState.pauseEntries(),
                 oldState.startTime(),
                 oldState.gameConfig(),
                 rounds
@@ -101,6 +104,7 @@ public class JollyServiceImpl implements JollyService {
 
         return new GameState(
                 oldState.isSaved(),
+                oldState.pauseEntries(),
                 oldState.startTime(),
                 oldState.gameConfig(),
                 rounds
@@ -128,6 +132,7 @@ public class JollyServiceImpl implements JollyService {
 
         return new GameState(
                 oldState.isSaved(),
+                oldState.pauseEntries(),
                 oldState.startTime(),
                 oldState.gameConfig(),
                 rounds

@@ -17,7 +17,6 @@ public interface PausableController<State extends PausableGameState> {
             return;
         }
 
-
         if(state.pauseEntries() != null) {
             var last = state.pauseEntries().getLast();
 
