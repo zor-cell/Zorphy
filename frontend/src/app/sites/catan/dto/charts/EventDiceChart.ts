@@ -31,7 +31,7 @@ export class EventDiceChart extends BaseChart {
         }
     };
 
-    static override data: ChartData<any, number[], string> = {
+    public data: ChartData<any, number[], string> = {
         labels: ['g', 'b', 'y', 'e'],
         datasets: [
             {
@@ -49,7 +49,7 @@ export class EventDiceChart extends BaseChart {
         ]
     }
 
-    static override options: ChartOptions = {
+    public options: ChartOptions = {
         ...BaseChart.options,
         plugins: {
             ...BaseChart.options.plugins,
@@ -88,12 +88,12 @@ export class EventDiceChart extends BaseChart {
         }
     }
 
-    static override plugins: Plugin[] = [EventDiceChart.labelImagePlugin];
+    public plugins: Plugin[] = [EventDiceChart.labelImagePlugin];
 
-    static refresh(diceRolls: DiceRoll[]) {
+    public refresh(diceRolls: DiceRoll[]) {
         diceRolls = diceRolls.filter(d => d.diceEvent != null);
 
-        EventDiceChart.data.datasets[0].data = this.generatePMF(diceRolls.length);
+        this.data.datasets[0].data = this.generatePMF(diceRolls.length);
 
         //team datasets
         const teams = [...new Set(diceRolls.map(d => d.teamName))];
@@ -103,7 +103,7 @@ export class EventDiceChart extends BaseChart {
             teamData[team] = Array(4).fill(0);
         });
         diceRolls.forEach(diceRoll => {
-            const pos = EventDiceChart.data.labels?.indexOf(diceRoll.diceEvent);
+            const pos = this.data.labels?.indexOf(diceRoll.diceEvent);
             if(pos !== undefined) {
                 teamData[diceRoll.teamName][pos]++;
             }
@@ -117,24 +117,24 @@ export class EventDiceChart extends BaseChart {
             order: 2
         }));
 
-        EventDiceChart.data.datasets = [
-            EventDiceChart.data.datasets[0],
+        this.data.datasets = [
+            this.data.datasets[0],
             ...datasets
         ];
 
-        EventDiceChart.options = {
-            ...EventDiceChart.options,
+        this.options = {
+            ...this.options,
             plugins: {
-                ...EventDiceChart.options.plugins,
+                ...this.options.plugins,
                 title: {
-                    ...EventDiceChart.options.plugins?.title,
+                    ...this.options.plugins?.title,
                     text: `Event Dice Histogram of ${diceRolls.length} Rolls`,
                 }
             },
         }
     }
 
-    private static generatePMF(totalRolls: number) {
+    private generatePMF(totalRolls: number) {
         const probabilities: { [key: string]: number } = {
             'g': 1 / 6,
             'b': 1 / 6,
@@ -142,6 +142,6 @@ export class EventDiceChart extends BaseChart {
             'e': 3 / 6,
         };
 
-        return EventDiceChart.data.labels?.map(l => probabilities[l] * totalRolls);
+        return this.data.labels?.map(l => probabilities[l] * totalRolls);
     }
 }

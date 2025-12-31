@@ -2,8 +2,8 @@
     <section class="chart-container">
         <div class="histogram-container">
             <canvas baseChart
-                    [data]="ClassicDiceChart.data"
-                    [options]="ClassicDiceChart.options">
+                    [data]="classicDiceChart.data"
+                    [options]="classicDiceChart.options">
             </canvas>
         </div>
 
@@ -11,9 +11,9 @@
             @if (gameMode() === GameMode.CITIES_AND_KNIGHTS || gameMode() === null) {
                 <div class="histogram-container small-container">
                     <canvas baseChart
-                            [data]="EventDiceChart.data"
-                            [options]="EventDiceChart.options"
-                            [plugins]="EventDiceChart.plugins">
+                            [data]="eventDiceChart.data"
+                            [options]="eventDiceChart.options"
+                            [plugins]="eventDiceChart.plugins">
                     </canvas>
                 </div>
             }
@@ -21,8 +21,8 @@
             @if (gameMode() !== null) {
                 <div class="histogram-container small-container">
                     <canvas baseChart
-                            [data]="MoveTimeChart.data"
-                            [options]="MoveTimeChart.options">
+                            [data]="moveTimeChart.data"
+                            [options]="moveTimeChart.options">
                     </canvas>
                 </div>
             }

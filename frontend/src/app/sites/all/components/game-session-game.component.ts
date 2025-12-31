@@ -39,6 +39,8 @@ import {state} from "@angular/animations";
             color: white;
             pointer-events: all;
             cursor: not-allowed;
+
+            transition: all 0.3s ease-in-out;
         }
 
         .pause-content {

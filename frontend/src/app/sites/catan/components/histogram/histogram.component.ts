@@ -24,6 +24,10 @@ export class CatanHistogramComponent implements AfterViewInit {
     public gameMode = input<GameMode | null>(null);
     public showExactProbability = input<boolean>(false);
 
+    protected classicDiceChart = new ClassicDiceChart();
+    protected eventDiceChart = new EventDiceChart();
+    protected moveTimeChart = new MoveTimeChart();
+
 
     constructor() {
         effect(() => {
@@ -42,9 +46,9 @@ export class CatanHistogramComponent implements AfterViewInit {
 
         const diceRolls = this.diceRolls();
 
-        ClassicDiceChart.refresh(diceRolls, this.showExactProbability());
-        EventDiceChart.refresh(diceRolls);
-        MoveTimeChart.refresh(diceRolls, this.gameMode());
+        this.classicDiceChart.refresh(diceRolls, this.showExactProbability());
+        this.eventDiceChart.refresh(diceRolls);
+        this.moveTimeChart.refresh(diceRolls, this.gameMode());
 
         //update chart changes
         this.charts().forEach(chart => {
@@ -52,8 +56,5 @@ export class CatanHistogramComponent implements AfterViewInit {
         });
     }
 
-    protected readonly ClassicDiceChart = ClassicDiceChart;
-    protected readonly EventDiceChart = EventDiceChart;
-    protected readonly MoveTimeChart = MoveTimeChart;
     protected readonly GameMode = GameMode;
 }

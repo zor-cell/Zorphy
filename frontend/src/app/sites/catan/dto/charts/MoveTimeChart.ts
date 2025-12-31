@@ -4,12 +4,12 @@ import {DiceRoll} from "../DiceRoll";
 import {GameMode} from "../enums/GameMode";
 
 export class MoveTimeChart extends BaseChart {
-    static override data : ChartData<any, number[], number> = {
+    public data : ChartData<any, number[], number> = {
         labels: [1, 2, 3],
         datasets: []
     };
 
-    static override options : ChartOptions = {
+    public options : ChartOptions = {
         ...BaseChart.options,
         scales: {
             x: {
@@ -82,7 +82,7 @@ export class MoveTimeChart extends BaseChart {
         },
     };
 
-    static refresh(diceRolls: DiceRoll[], gameMode: GameMode | null) {
+    public refresh(diceRolls: DiceRoll[], gameMode: GameMode | null) {
         //team datasets
         const teams = [...new Set(diceRolls.map(d => d.teamName))];
         const teamData: any = {};
@@ -129,8 +129,8 @@ export class MoveTimeChart extends BaseChart {
             (_, i) => i + 1
         );
 
-        MoveTimeChart.data = {
-            ...MoveTimeChart.data,
+        this.data = {
+            ...this.data,
             labels: newLabels,
             datasets: [...datasets]
         }

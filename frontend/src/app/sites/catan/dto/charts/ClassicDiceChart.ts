@@ -3,7 +3,7 @@ import {BaseChart} from "./BaseChart";
 import {DiceRoll} from "../DiceRoll";
 
 export class ClassicDiceChart extends BaseChart {
-    static override data: ChartData<any, number[], number> = {
+    public data: ChartData<any, number[], number> = {
         labels: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
         datasets: [
             {
@@ -32,7 +32,7 @@ export class ClassicDiceChart extends BaseChart {
         ]
     };
 
-    static override options: ChartOptions = {
+    public options: ChartOptions = {
         ...BaseChart.options,
         plugins: {
             ...BaseChart.options.plugins,
@@ -69,13 +69,13 @@ export class ClassicDiceChart extends BaseChart {
                 display: false
             }
         }
-    }
+    };
 
-    static refresh(diceRolls: DiceRoll[], showExactProbabilities: boolean) {
+    public refresh(diceRolls: DiceRoll[], showExactProbabilities: boolean) {
         //bell curve
-        ClassicDiceChart.data.datasets[0].data = this.generateBellCurveData(diceRolls.length);
+        this.data.datasets[0].data = this.generateBellCurveData(diceRolls.length);
         if(showExactProbabilities) {
-            ClassicDiceChart.data.datasets[1].data = ClassicDiceChart.generateExactProbabilities(diceRolls.length);
+            this.data.datasets[1].data = this.generateExactProbabilities(diceRolls.length);
         }
 
         //team datasets
@@ -91,31 +91,31 @@ export class ClassicDiceChart extends BaseChart {
         });
 
         const datasets = teams.map((team, index) => ({
-            type: 'bar',
+            type: 'bar' as const,
             label: team,
             data: teamData[team],
             backgroundColor: BaseChart.colors[index % teams.length],
             order: 2
         }));
 
-        ClassicDiceChart.data.datasets = [
-            ClassicDiceChart.data.datasets[0],
-            ClassicDiceChart.data.datasets[1],
+        this.data.datasets = [
+            this.data.datasets[0],
+            this.data.datasets[1],
             ...datasets];
 
-        ClassicDiceChart.options = {
-            ...ClassicDiceChart.options,
+        this.options = {
+            ...this.options,
             plugins: {
-                ...ClassicDiceChart.options.plugins,
+                ...this.options.plugins,
                 title: {
-                    ...ClassicDiceChart.options.plugins?.title,
+                    ...this.options.plugins?.title,
                     text: `Classic Dice Histogram of ${diceRolls.length} Rolls`,
                 }
             },
         }
     }
 
-    private static generateBellCurveData(totalRolls: number): number[] {
+    private generateBellCurveData(totalRolls: number): number[] {
         const mean = 7;
         const variance = 35 / 6;
         const stdDev = Math.sqrt(variance);
@@ -132,7 +132,7 @@ export class ClassicDiceChart extends BaseChart {
         });
     }
 
-    private static generateExactProbabilities(totalRolls: number): number[] {
+    private generateExactProbabilities(totalRolls: number): number[] {
         const labels = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
         const probabilities: { [key: number]: number } = {
