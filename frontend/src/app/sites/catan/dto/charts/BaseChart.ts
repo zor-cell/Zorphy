@@ -23,7 +23,7 @@ export abstract class BaseChart {
             y: {
                 duration: 500,
                 easing: 'easeOutQuart'
-            },
+            }
         },
         plugins: {
             title: {

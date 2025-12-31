@@ -1,5 +1,9 @@
 @if (isVisible()) {
     <section class="chart-container">
+
+        <!-- TODO: temp -->
+        <app-replay-chart [data]="classicDiceChart.data" [options]="classicDiceChart.options" [diceRolls]="diceRolls()"></app-replay-chart>
+
         <div class="histogram-container">
             <canvas baseChart
                     [data]="classicDiceChart.data"

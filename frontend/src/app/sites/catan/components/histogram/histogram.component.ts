@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, effect, input, viewChildren,} from '@angular/core';
+import {AfterViewInit, Component, computed, effect, input, signal, viewChildren,} from '@angular/core';
 import {BaseChartDirective} from "ng2-charts";
 import {DiceRoll} from "../../dto/DiceRoll";
 import {ClassicDiceChart} from "../../dto/charts/ClassicDiceChart";
@@ -6,14 +6,15 @@ import {EventDiceChart,} from "../../dto/charts/EventDiceChart";
 
 import {MoveTimeChart} from "../../dto/charts/MoveTimeChart";
 import {GameMode} from "../../dto/enums/GameMode";
+import {ReplayChartComponent} from "../../../../main/core/components/replay-chart/replay-chart.component";
 
 @Component({
     selector: 'catan-histogram',
     imports: [
-    BaseChartDirective
-],
+        BaseChartDirective,
+        ReplayChartComponent
+    ],
     templateUrl: './histogram.component.html',
-    
     styleUrl: './histogram.component.css'
 })
 export class CatanHistogramComponent implements AfterViewInit {

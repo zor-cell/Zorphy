@@ -1,0 +1,18 @@
+<div class="histogram-container">
+    <div class="flex-container button-container">
+        @if (canReplay()) {
+            <button class="btn btn-outline-secondary" (click)="toggleReplay()">
+                @if (isPlaying()) {
+                    <i class="bi bi-pause-fill"></i>
+                } @else {
+                    <i class="bi bi-play-fill"></i>
+                }
+            </button>
+        }
+    </div>
+
+    <canvas baseChart
+            [data]="data()"
+            [options]="options()">
+    </canvas>
+</div>

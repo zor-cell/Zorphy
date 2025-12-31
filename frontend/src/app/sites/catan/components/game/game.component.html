@@ -74,7 +74,8 @@
                 </div>
             </div>
             <div style="margin: 15rem auto 0 auto">
-                <catan-histogram [isVisible]="showChart()" [diceRolls]="state.diceRolls"
+                <!-- TODO: remove fixed true -->
+                <catan-histogram [isVisible]="true" [diceRolls]="state.diceRolls"
                                  [gameMode]="state.gameConfig.gameMode"/>
             </div>
         </div>
