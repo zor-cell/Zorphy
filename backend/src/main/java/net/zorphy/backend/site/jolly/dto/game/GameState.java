@@ -1,8 +1,8 @@
 package net.zorphy.backend.site.jolly.dto.game;
 
-import net.zorphy.backend.site.core.http.dto.PausableGameState;
+import net.zorphy.backend.site.core.http.dto.state.PausableGameState;
 import net.zorphy.backend.site.core.http.dto.PauseEntry;
-import net.zorphy.backend.site.core.http.dto.SavableGameState;
+import net.zorphy.backend.site.core.http.dto.state.SavableGameState;
 import net.zorphy.backend.site.jolly.dto.RoundInfo;
 
 import java.time.Instant;

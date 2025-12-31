@@ -3,7 +3,7 @@ package net.zorphy.backend.site.jolly.service;
 import net.zorphy.backend.main.file.dto.FileStorageFile;
 import net.zorphy.backend.site.core.http.service.GameSessionService;
 import net.zorphy.backend.site.core.http.service.SavableService;
-import net.zorphy.backend.site.core.http.dto.ResultState;
+import net.zorphy.backend.site.core.http.dto.result.ResultState;
 import net.zorphy.backend.site.jolly.dto.RoundResult;
 import net.zorphy.backend.site.jolly.dto.game.GameConfig;
 import net.zorphy.backend.site.jolly.dto.game.GameState;

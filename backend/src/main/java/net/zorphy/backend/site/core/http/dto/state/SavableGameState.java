@@ -1,4 +1,4 @@
-package net.zorphy.backend.site.core.http.dto;
+package net.zorphy.backend.site.core.http.dto.state;
 
 public interface SavableGameState extends GameStateBase {
     boolean isSaved();

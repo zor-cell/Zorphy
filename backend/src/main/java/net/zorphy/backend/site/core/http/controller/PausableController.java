@@ -2,7 +2,7 @@ package net.zorphy.backend.site.core.http.controller;
 
 import jakarta.servlet.http.HttpSession;
 import net.zorphy.backend.main.core.exception.InvalidSessionException;
-import net.zorphy.backend.site.core.http.dto.PausableGameState;
+import net.zorphy.backend.site.core.http.dto.state.PausableGameState;
 import net.zorphy.backend.site.core.http.dto.PauseEntry;
 import org.springframework.web.bind.annotation.PostMapping;
 

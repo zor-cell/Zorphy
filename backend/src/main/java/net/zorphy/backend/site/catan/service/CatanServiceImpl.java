@@ -4,7 +4,7 @@ import net.zorphy.backend.main.game.dto.GameDetails;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.site.core.http.dto.TeamDetails;
 import net.zorphy.backend.main.game.service.GameService;
-import net.zorphy.backend.site.core.http.dto.ResultState;
+import net.zorphy.backend.site.core.http.dto.result.ResultState;
 import net.zorphy.backend.site.catan.dto.DicePair;
 import net.zorphy.backend.site.catan.dto.DiceRoll;
 import net.zorphy.backend.site.catan.dto.enums.GameMode;

@@ -2,7 +2,7 @@ package net.zorphy.backend.site.qwirkle.service;
 
 import net.zorphy.backend.site.core.http.service.GameSessionService;
 import net.zorphy.backend.site.core.http.service.SavableService;
-import net.zorphy.backend.site.core.http.dto.ResultState;
+import net.zorphy.backend.site.core.http.dto.result.ResultState;
 import net.zorphy.backend.site.qwirkle.dto.SelectionInfo;
 import net.zorphy.backend.site.qwirkle.dto.game.GameConfig;
 import net.zorphy.backend.site.qwirkle.dto.game.GameState;

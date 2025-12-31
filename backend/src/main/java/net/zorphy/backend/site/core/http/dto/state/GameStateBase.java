@@ -1,7 +1,8 @@
-package net.zorphy.backend.site.core.http.dto;
+package net.zorphy.backend.site.core.http.dto.state;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import net.zorphy.backend.site.core.http.dto.GameConfigBase;
 
 import java.time.Instant;
 

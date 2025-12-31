@@ -2,9 +2,9 @@ package net.zorphy.backend.site.catan.dto.game;
 
 import net.zorphy.backend.site.catan.dto.DicePair;
 import net.zorphy.backend.site.catan.dto.DiceRoll;
-import net.zorphy.backend.site.core.http.dto.PausableGameState;
+import net.zorphy.backend.site.core.http.dto.state.PausableGameState;
 import net.zorphy.backend.site.core.http.dto.PauseEntry;
-import net.zorphy.backend.site.core.http.dto.SavableGameState;
+import net.zorphy.backend.site.core.http.dto.state.SavableGameState;
 
 import java.time.Instant;
 import java.util.List;

@@ -6,7 +6,7 @@ import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.main.core.exception.InvalidSessionException;
 import net.zorphy.backend.site.core.http.service.GameSessionService;
 import net.zorphy.backend.site.core.http.dto.GameConfigBase;
-import net.zorphy.backend.site.core.http.dto.GameStateBase;
+import net.zorphy.backend.site.core.http.dto.state.GameStateBase;
 import org.springframework.web.bind.annotation.*;
 
 /**

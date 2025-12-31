@@ -8,7 +8,7 @@ import net.zorphy.backend.site.catan.service.CatanService;
 import net.zorphy.backend.site.core.http.controller.GameSessionController;
 import net.zorphy.backend.site.core.http.controller.PausableController;
 import net.zorphy.backend.site.core.http.controller.SavableController;
-import net.zorphy.backend.site.core.http.dto.ResultState;
+import net.zorphy.backend.site.core.http.dto.result.ResultState;
 import net.zorphy.backend.site.core.http.service.SavableService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
