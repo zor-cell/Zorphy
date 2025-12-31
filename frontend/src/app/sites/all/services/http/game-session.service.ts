@@ -29,14 +29,14 @@ export abstract class GameSessionService<Config extends GameConfigBase, State ex
   updateSession(config: Config): Observable<State> {
     return this.httpClient.put<State>(this.baseUri + '/session', config).pipe(
         tap(() => {
-          this.notification.handleSuccess('Updated session data');
+          this.notification.handleSuccess('Updated session');
         }));
   }
 
   clearSession(): Observable<void> {
     return this.httpClient.delete<void>(this.baseUri + '/session').pipe(
         tap(() => {
-          this.notification.handleSuccess('Cleared session data');
+          this.notification.handleSuccess('Cleared session');
         }));
   }
   
@@ -50,7 +50,7 @@ export abstract class GameSessionService<Config extends GameConfigBase, State ex
     const loadingRef = this.notification.handleLoading('Saving session...');
     return this.httpClient.post<GameDetails>(this.baseUri + '/session/save', formData).pipe(
         tap(() => {
-            this.notification.handleSuccess('Saved session data');
+            this.notification.handleSuccess('Saved session');
         }),
         finalize(() => {
             loadingRef.dismiss();
@@ -58,7 +58,19 @@ export abstract class GameSessionService<Config extends GameConfigBase, State ex
     );
   }
 
-  isSessionSaved(): Observable<boolean> {
-    return this.httpClient.get<boolean>(this.baseUri + '/session/save');
+  pauseSession() {
+      return this.httpClient.post<State>(this.baseUri + '/session/pause', {}).pipe(
+        tap(() => {
+          this.notification.handleSuccess('Paused session');
+        })
+      );
+  }
+
+  resumeSession() {
+      return this.httpClient.post<State>(this.baseUri + '/session/resume', {}).pipe(
+        tap(() => {
+          this.notification.handleSuccess('Resumed session');
+        })
+      );
   }
 }

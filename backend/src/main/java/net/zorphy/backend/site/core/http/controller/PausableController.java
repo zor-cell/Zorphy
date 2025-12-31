@@ -10,32 +10,36 @@ import java.time.Instant;
 
 public interface PausableController<State extends PausableGameState> {
     @PostMapping("session/pause")
-    default void pauseSession(HttpSession session) {
+    default State pauseSession(HttpSession session) {
         State state = getSessionState(session);
 
         if(state.pauseEntries() == null) {
-            return;
+           throw new InvalidSessionException("Invalid session pauses");
         }
 
-        if(state.pauseEntries() != null) {
-            var last = state.pauseEntries().getLast();
+        PauseEntry entry = new PauseEntry(Instant.now(), null);
+        if(state.pauseEntries().isEmpty()) {
+            state.pauseEntries().add(entry);
+        } else {
+            PauseEntry last = state.pauseEntries().getLast();
 
-            if(last != null && last.pauseTime() != null) {
+            if(last.pauseTime() != null) {
                 if(last.resumeTime() != null) {
                     //previous pause is finished
-                    state.pauseEntries().add(new PauseEntry(Instant.now(), null));
+                    state.pauseEntries().add(entry);
                 } else {
                     //already paused
                     throw new InvalidSessionException("Session is already paused");
                 }
-
-                setSessionState(session, state);
             }
         }
+
+        setSessionState(session, state);
+        return state;
     }
 
     @PostMapping("session/resume")
-    default void resumeSession(HttpSession session) {
+    default State resumeSession(HttpSession session) {
         State state = getSessionState(session);
 
         if(state.pauseEntries() == null) {
@@ -56,6 +60,7 @@ public interface PausableController<State extends PausableGameState> {
         state.pauseEntries().set(state.pauseEntries().size() - 1, entry);
 
         setSessionState(session, state);
+        return state;
     }
 
     State getSessionState(HttpSession session);
