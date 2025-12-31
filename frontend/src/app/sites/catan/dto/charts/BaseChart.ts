@@ -13,7 +13,6 @@ export abstract class BaseChart {
         weight: 'bold'
     };
 
-    static data: ChartData<keyof ChartTypeRegistry, any, any>;
     static options: ChartOptions = {
         maintainAspectRatio: false,
         animations: {
@@ -50,5 +49,4 @@ export abstract class BaseChart {
             }
         },
     };
-    static plugins: Plugin[] = [];
 }

@@ -8,7 +8,7 @@ import {GameService} from "../../../game.service";
 import {GameComponentRegistryService} from "../../../../core/services/game-component-registry.service";
 import {DurationPipe} from "../../../../core/pipes/DurationPipe";
 import {GameStatsMetricsComponent} from "../game-stats-metrics/game-stats-metrics.component";
-import {DataChartComponent} from "../data-chart/data-chart.component";
+import {ScoreChartComponent} from "../data-chart/score-chart.component";
 import {GameStatsStreakComponent} from "../game-stats-streak/game-stats-streak.component";
 import {GameStatsSimpleComponent} from "../game-stats-simple/game-stats-simple.component";
 
@@ -19,7 +19,7 @@ import {GameStatsSimpleComponent} from "../game-stats-simple/game-stats-simple.c
         GameSearchComponent,
         NgComponentOutlet,
         GameStatsMetricsComponent,
-        DataChartComponent,
+        ScoreChartComponent,
         GameStatsStreakComponent,
         GameStatsSimpleComponent
     ],

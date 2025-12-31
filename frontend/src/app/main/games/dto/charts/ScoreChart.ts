@@ -3,11 +3,11 @@ import {ChartData, ChartOptions} from "chart.js";
 import {ChartDataHistory} from "../stats/charts/ChartDataHistory";
 
 export class ScoreChart extends BaseChart {
-    static override data: ChartData<any, number[], number> = {
+    public data: ChartData<any, number[], number> = {
         datasets: []
     }
 
-    static override options: ChartOptions = {
+    public options: ChartOptions = {
         ...BaseChart.options,
         scales: {
             x: {
@@ -47,7 +47,7 @@ export class ScoreChart extends BaseChart {
         },
     }
 
-    static refresh(data: ChartDataHistory) {
+    public refresh(data: ChartDataHistory) {
         data.entries.sort((a, b) => {
             const dateA = new Date(a.date).getTime();
             const dateB = new Date(b.date).getTime();
@@ -66,7 +66,7 @@ export class ScoreChart extends BaseChart {
             entry.won ? '#4caf50' : '#f44336'
         );
 
-        ScoreChart.data.datasets = [{
+        this.data.datasets = [{
             type: 'line',
             label: 'Score',
             data: dataPoints,

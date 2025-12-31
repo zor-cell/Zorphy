@@ -8,25 +8,25 @@ import {ChartDataHistory} from "../../../dto/stats/charts/ChartDataHistory";
   imports: [
     BaseChartDirective
   ],
-  templateUrl: './data-chart.component.html',
-  styleUrl: './data-chart.component.css'
+  templateUrl: './score-chart.component.html',
+  styleUrl: './score-chart.component.css'
 })
-export class DataChartComponent implements AfterViewInit {
+export class ScoreChartComponent implements AfterViewInit {
   private charts = viewChildren(BaseChartDirective);
   public chartData = input.required<ChartDataHistory>();
+
+  protected scoreChart = new ScoreChart();
 
   ngAfterViewInit(): void {
     this.refillChartData();
   }
 
   private refillChartData() {
-    ScoreChart.refresh(this.chartData());
+    this.scoreChart.refresh(this.chartData());
 
     //update chart changes
     this.charts().forEach(chart => {
       chart.update();
     });
   }
-
-  protected readonly ScoreChart = ScoreChart;
 }
