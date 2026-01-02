@@ -18,6 +18,7 @@ import net.zorphy.backend.main.file.service.FileStorageService;
 import net.zorphy.backend.main.game.repository.GameSpecifications;
 import net.zorphy.backend.site.core.http.dto.state.GameStateBase;
 import net.zorphy.backend.site.core.http.dto.result.ResultStateBase;
+import net.zorphy.backend.site.core.http.dto.state.PausableGameState;
 import net.zorphy.backend.site.core.shared.service.GameSpecificDelete;
 import net.zorphy.backend.site.connect4.exception.InvalidOperationException;
 import org.springframework.data.jpa.domain.Specification;
@@ -151,9 +152,15 @@ public class GameServiceImpl implements GameService {
         //save image file to file storage
         String path = fileStorageService.saveFile(gameType, image);
 
+        //compute duration
+        Duration duration = Duration.between(gameState.startTime(), Instant.now());
+        if(gameState instanceof PausableGameState pausableState) {
+            duration = GameStatsUtil.computeDurationWithPauses(pausableState.startTime(), Instant.now(), pausableState.pauseEntries());
+        }
+
         Game toSave = new Game(
                 gameState.startTime(),
-                Duration.between(gameState.startTime(), Instant.now()),
+                duration,
                 gameType.name(),
                 path,
                 gameState,

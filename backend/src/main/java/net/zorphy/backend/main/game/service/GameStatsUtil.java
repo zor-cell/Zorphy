@@ -17,6 +17,7 @@ import net.zorphy.backend.main.game.repository.GameMapper;
 import net.zorphy.backend.main.game.service.metrics.DoubleArithmeticStrategy;
 import net.zorphy.backend.main.game.service.metrics.DurationArithmeticStrategy;
 import net.zorphy.backend.main.game.service.metrics.GameStatsMetricAggregator;
+import net.zorphy.backend.site.core.http.dto.PauseEntry;
 import net.zorphy.backend.site.core.http.dto.result.ResultState;
 import net.zorphy.backend.site.core.http.dto.result.ResultTeamState;
 import net.zorphy.backend.site.core.shared.service.GameSpecificStatsCalculator;
@@ -25,6 +26,7 @@ import org.apache.commons.math3.stat.regression.SimpleRegression;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.function.ToDoubleFunction;
 
@@ -184,6 +186,28 @@ public class GameStatsUtil {
                 chartData,
                 gameSpecificStats
         );
+    }
+
+    /**
+     * Computes the duration for a given {@code startTime} and {@code endTime}. All intervals in {@code pauseEntries} that
+     * fall into this window, are subtracted, so the resulting duration is the duration with pauses.
+     */
+    public static Duration computeDurationWithPauses(Instant startTime, Instant endTime, List<PauseEntry> pauseEntries) {
+        Duration duration = Duration.between(startTime, endTime);
+
+        //consider pauses for correct duration
+        if(pauseEntries != null) {
+            Duration pauseDuration = Duration.ZERO;
+            for (PauseEntry pauseEntry : pauseEntries) {
+                if (startTime.compareTo(pauseEntry.pauseTime()) < 0 && endTime.compareTo(pauseEntry.resumeTime()) > 0) {
+                    pauseDuration = pauseDuration.plus(Duration.between(pauseEntry.pauseTime(), pauseEntry.resumeTime()));
+                }
+            }
+
+            return duration.minus(pauseDuration);
+        }
+
+        return duration;
     }
 
     /**

@@ -20,6 +20,7 @@ import net.zorphy.backend.site.jolly.dto.game.GameStats;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 
 @Component("JollyGameStatsCalculator")
@@ -85,12 +86,8 @@ public class GameStatsCalculator implements GameSpecificStatsCalculator {
                     roundScoreMetrics.update(game.getId(), (double) curScore);
 
                     //duration data
-                    Duration curDuration;
-                    if(i > 0) {
-                        curDuration = Duration.between(gameState.rounds().get(i - 1).endTime(), round.endTime());
-                    } else {
-                        curDuration = Duration.between(gameState.startTime(), round.endTime());
-                    }
+                    Instant startTime = i > 0 ? gameState.rounds().get(i - 1).endTime() : gameState.startTime();
+                    Duration curDuration = GameStatsUtil.computeDurationWithPauses(startTime, round.endTime(), gameState.pauseEntries());
                     roundDurationMetrics.update(game.getId(), curDuration);
 
                     //streaks

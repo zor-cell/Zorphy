@@ -98,7 +98,7 @@ public class GameStatsCalculator implements GameSpecificStatsCalculator {
                     if(i < gameState.diceRolls().size() - 1) {
                         var next = gameState.diceRolls().get(i + 1);
                         if(diceRoll.rollTime() != null && next.rollTime() != null) {
-                            Duration curDuration = Duration.between(diceRoll.rollTime(), next.rollTime());
+                            Duration curDuration = GameStatsUtil.computeDurationWithPauses(diceRoll.rollTime(), next.rollTime(), gameState.pauseEntries());
                             rollDurationMetrics.update(game.getId(), curDuration);
                         }
                     }
