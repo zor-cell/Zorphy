@@ -2,7 +2,7 @@
   <thead>
     <tr>
       <th scope="col">#</th>
-      @for (team of gameState().gameConfig.teams; track team) {
+      @for (team of gameState().gameConfig.teams; track team.name) {
         <th scope="col">{{ team.name }}</th>
       }
       <th scope="col">Duration</th>

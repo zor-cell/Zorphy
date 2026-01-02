@@ -1,6 +1,31 @@
 import {ChartData, ChartOptions, ChartTypeRegistry, FontSpec, Plugin} from "chart.js";
 
 export abstract class BaseChart {
+    /**
+     * The chart.js chart data
+     */
+    abstract data: ChartData;
+
+    /**
+     * The chart.js chart options
+     */
+    abstract options: ChartOptions;
+
+    /**
+     * Refreshes the internal {@link data} and {@link options} properties with the new data
+     * provided in {@link data}
+     */
+    abstract refresh(data: any[]): void;
+
+    /**
+     * Refreshes the internal {@link data} and {@link options} properties with the data provided
+     * in {@link dataSlice}. This method is used to display partial data by using a slice of
+     * the total data.
+     */
+    refreshSlice(dataSlice: any[], data: any[]): void {
+
+    };
+
     protected static readonly colors = ['rgba(31, 119, 180, 0.8)', 'rgba(255, 127, 14, 0.8)', 'rgba(148, 103, 189, 0.8)', 'rgb(255, 187, 120, 0.8)'];
 
     protected static readonly titleFont: Partial<FontSpec> = {

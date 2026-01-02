@@ -47,7 +47,11 @@ export class ScoreChart extends BaseChart {
         },
     }
 
-    public refresh(data: ChartDataHistory) {
+    public refresh(data: any[]): void {
+        
+    }
+
+    public refreshTemp(data: ChartDataHistory) {
         data.entries.sort((a, b) => {
             const dateA = new Date(a.date).getTime();
             const dateB = new Date(b.date).getTime();

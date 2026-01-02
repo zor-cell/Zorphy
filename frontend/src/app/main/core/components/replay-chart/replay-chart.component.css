@@ -1,4 +1,6 @@
 .histogram-container {
+    position: relative;
+
     border-radius: 7px;
     border: 2px solid rgba(0, 0, 0, 0.1);
 
@@ -7,7 +9,10 @@
 }
 
 .button-container {
-    width: fit-content;
-    justify-content: end;
-    align-items: end;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+
+    margin: 0.2rem;
 }

@@ -22,7 +22,7 @@ export class ScoreChartComponent implements AfterViewInit {
   }
 
   private refillChartData() {
-    this.scoreChart.refresh(this.chartData());
+    this.scoreChart.refreshTemp(this.chartData());
 
     //update chart changes
     this.charts().forEach(chart => {

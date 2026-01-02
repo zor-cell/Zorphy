@@ -84,7 +84,7 @@ export class MoveTimeChart extends BaseChart {
         },
     };
 
-    public refresh(diceRolls: DiceRoll[], gameMode: GameMode | null, pauseEntries: PauseEntry[] = []) {
+    public refresh(diceRolls: DiceRoll[], gameMode: GameMode | null = null, pauseEntries: PauseEntry[] = []) {
         //team datasets
         const teams = [...new Set(diceRolls.map(d => d.teamName))];
         const teamData: any = {};

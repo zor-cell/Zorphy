@@ -2,14 +2,14 @@
     <section class="chart-container">
 
         <!-- TODO: temp -->
-        <app-replay-chart [data]="classicDiceChart.data" [options]="classicDiceChart.options" [diceRolls]="diceRolls()"></app-replay-chart>
+        <app-replay-chart [chartInstance]="classicDiceChart" [data]="diceRolls()"></app-replay-chart>
 
-        <div class="histogram-container">
+        <!--<div class="histogram-container">
             <canvas baseChart
                     [data]="classicDiceChart.data"
                     [options]="classicDiceChart.options">
             </canvas>
-        </div>
+        </div>-->
 
         <div class="sub-chart-container">
             @if (gameMode() === GameMode.CITIES_AND_KNIGHTS || gameMode() === null) {

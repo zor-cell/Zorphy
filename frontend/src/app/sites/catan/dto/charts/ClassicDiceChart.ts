@@ -9,7 +9,7 @@ export class ClassicDiceChart extends BaseChart {
             {
                 type: 'line',
                 label: 'Bell Curve',
-                data: [], // compute below
+                data: Array(11).fill(0), // compute below
                 tension: 0.4,
                 pointRadius: 0,
                 backgroundColor: 'rgba(255, 0, 0, 0.6)',
@@ -21,7 +21,7 @@ export class ClassicDiceChart extends BaseChart {
             {
                 type: 'line',
                 label: 'Exact Probabilities',
-                data: [], // compute below
+                data: Array(11).fill(0), // compute below
                 tension: 0,
                 pointRadius: 0,
                 borderColor: 'rgba(200, 200, 200, 0.8)',
@@ -71,7 +71,56 @@ export class ClassicDiceChart extends BaseChart {
         }
     };
 
-    public refresh(diceRolls: DiceRoll[], showExactProbabilities: boolean) {
+    public override refreshSlice(dataSlice: DiceRoll[], data: DiceRoll[]) {
+        //bell curve
+        this.data.datasets[0].data = this.generateBellCurveData(dataSlice.length);
+
+        //team datasets
+        const teams = [...new Set(dataSlice.map(d => d.teamName))];
+        const teamData: any = {};
+
+        teams.forEach(team => {
+            teamData[team] = Array(11).fill(0);
+        });
+        dataSlice.forEach(diceRoll => {
+            const sum = diceRoll.dicePair.dice1 + diceRoll.dicePair.dice2;
+            teamData[diceRoll.teamName][sum - 2]++;
+        });
+
+        const datasets = teams.map((team, index) => ({
+            type: 'bar' as const,
+            label: team,
+            data: teamData[team],
+            backgroundColor: BaseChart.colors[index % teams.length],
+            order: 2
+        }));
+
+        this.data.datasets = [
+            this.data.datasets[0],
+            this.data.datasets[1],
+            ...datasets];
+
+        const s = new Array(11).fill(0);
+        for(const roll of data) {
+            const sum = roll.dicePair.dice1 + roll.dicePair.dice2;
+            s[sum - 2]++;
+        }
+
+
+        this.options = {
+            ...this.options,
+            animation: false,
+            scales: {
+              ...this.options.scales,
+              y: {
+                  ...this.options.scales!['y']!,
+                  max: Math.max(...s)
+              }
+            }
+        }
+    }
+
+    public refresh(diceRolls: DiceRoll[], showExactProbabilities: boolean = false) {
         //bell curve
         this.data.datasets[0].data = this.generateBellCurveData(diceRolls.length);
         if(showExactProbabilities) {
@@ -111,7 +160,7 @@ export class ClassicDiceChart extends BaseChart {
                     ...this.options.plugins?.title,
                     text: `Classic Dice Histogram of ${diceRolls.length} Rolls`,
                 }
-            },
+            }
         }
     }
 
