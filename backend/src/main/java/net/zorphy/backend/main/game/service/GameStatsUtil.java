@@ -199,7 +199,8 @@ public class GameStatsUtil {
         if(pauseEntries != null) {
             Duration pauseDuration = Duration.ZERO;
             for (PauseEntry pauseEntry : pauseEntries) {
-                if (startTime.compareTo(pauseEntry.pauseTime()) < 0 && endTime.compareTo(pauseEntry.resumeTime()) > 0) {
+                if (pauseEntry.pauseTime() != null && pauseEntry.resumeTime() != null &&
+                        startTime.compareTo(pauseEntry.pauseTime()) < 0 && endTime.compareTo(pauseEntry.resumeTime()) > 0) {
                     pauseDuration = pauseDuration.plus(Duration.between(pauseEntry.pauseTime(), pauseEntry.resumeTime()));
                 }
             }

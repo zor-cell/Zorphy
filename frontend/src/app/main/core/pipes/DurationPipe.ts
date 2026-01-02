@@ -1,4 +1,5 @@
 import {Pipe, PipeTransform} from "@angular/core";
+import {PauseEntry} from "../dto/PauseEntry";
 
 @Pipe({
     
@@ -48,5 +49,26 @@ export class DurationPipe implements PipeTransform {
         const ss = (seconds % 60).toString().padStart(2, '0');
 
         return `${mm}:${ss}`;
+    }
+
+    public static toDurationMsWithPauses(start: string, end: string, pauses: PauseEntry[]) {
+        const startTime = new Date(start).getTime();
+        const endTime = new Date(end).getTime();
+        let durationMs = endTime - startTime;
+
+        if(pauses) {
+            for(const pause of pauses) {
+                if(!pause.pauseTime || !pause.resumeTime) continue;
+
+                const pauseStart = new Date(pause.pauseTime).getTime();
+                const pauseEnd = new Date(pause.resumeTime).getTime();
+                if(startTime < pauseStart && endTime > pauseEnd) {
+                    const pauseMs = pauseEnd - pauseStart;
+                    durationMs -= pauseMs;
+                }
+            }
+        }
+
+        return durationMs;
     }
 }

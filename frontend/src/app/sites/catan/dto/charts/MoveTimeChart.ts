@@ -2,6 +2,8 @@ import {ChartData, ChartOptions} from "chart.js";
 import {BaseChart} from "./BaseChart";
 import {DiceRoll} from "../DiceRoll";
 import {GameMode} from "../enums/GameMode";
+import {DurationPipe} from "../../../../main/core/pipes/DurationPipe";
+import {PauseEntry} from "../../../../main/core/dto/PauseEntry";
 
 export class MoveTimeChart extends BaseChart {
     public data : ChartData<any, number[], number> = {
@@ -82,7 +84,7 @@ export class MoveTimeChart extends BaseChart {
         },
     };
 
-    public refresh(diceRolls: DiceRoll[], gameMode: GameMode | null) {
+    public refresh(diceRolls: DiceRoll[], gameMode: GameMode | null, pauseEntries: PauseEntry[] = []) {
         //team datasets
         const teams = [...new Set(diceRolls.map(d => d.teamName))];
         const teamData: any = {};
@@ -95,10 +97,7 @@ export class MoveTimeChart extends BaseChart {
             if (i < diceRolls.length - 1) {
                 if (!diceRolls[i].rollTime || !diceRolls[i + 1].rollTime) return;
 
-                const cur = new Date(diceRolls[i].rollTime);
-                const next = new Date(diceRolls[i + 1].rollTime);
-
-                const duration = (next.getTime() - cur.getTime()) / 1000;
+                const duration = DurationPipe.toDurationMsWithPauses(diceRolls[i].rollTime, diceRolls[i + 1].rollTime, pauseEntries) / 1000;
 
                 let round: number = Math.floor(i / teams.length);
 

@@ -7,6 +7,7 @@ import {EventDiceChart,} from "../../dto/charts/EventDiceChart";
 import {MoveTimeChart} from "../../dto/charts/MoveTimeChart";
 import {GameMode} from "../../dto/enums/GameMode";
 import {ReplayChartComponent} from "../../../../main/core/components/replay-chart/replay-chart.component";
+import {PauseEntry} from "../../../../main/core/dto/PauseEntry";
 
 @Component({
     selector: 'catan-histogram',
@@ -24,6 +25,7 @@ export class CatanHistogramComponent implements AfterViewInit {
     public isVisible = input<boolean>(true);
     public gameMode = input<GameMode | null>(null);
     public showExactProbability = input<boolean>(false);
+    public pauseEntries = input<PauseEntry[]>([]);
 
     protected classicDiceChart = new ClassicDiceChart();
     protected eventDiceChart = new EventDiceChart();
@@ -49,7 +51,7 @@ export class CatanHistogramComponent implements AfterViewInit {
 
         this.classicDiceChart.refresh(diceRolls, this.showExactProbability());
         this.eventDiceChart.refresh(diceRolls);
-        this.moveTimeChart.refresh(diceRolls, this.gameMode());
+        this.moveTimeChart.refresh(diceRolls, this.gameMode(), this.pauseEntries());
 
         //update chart changes
         this.charts().forEach(chart => {

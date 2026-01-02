@@ -46,17 +46,10 @@ export class JollyRoundTableComponent implements OnInit {
     if(index < 0 || index >= this.gameState().rounds.length) return 0;
 
     const curRound = this.gameState().rounds[index];
-    const curTime = new Date(curRound.endTime);
 
-    let prevTime;
-    if(index == 0) {
-      prevTime = new Date(this.gameState().startTime);
-    } else {
-      const prevRound = this.gameState().rounds[index - 1];
-      prevTime = new Date(prevRound.endTime);
-    }
+    const start = index > 0 ? this.gameState().rounds[index - 1].endTime : this.gameState().startTime;
+    const durationMs = DurationPipe.toDurationMsWithPauses(start, curRound.endTime, this.gameState().pauseEntries);
 
-    const durationMs = curTime.getTime() - prevTime.getTime();
     return Math.floor(durationMs / 1000);
   }
 
