@@ -6,17 +6,19 @@ import net.zorphy.backend.main.core.exception.InvalidSessionException;
 import net.zorphy.backend.site.core.ws.dto.GameRoomBase;
 import net.zorphy.backend.site.core.ws.dto.GameRoomStateBase;
 import net.zorphy.backend.site.core.ws.service.GameRoomBaseService;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 
 public abstract class GameRoomBaseController<Room extends GameRoomBase, State extends GameRoomStateBase> {
     private static final String REDIS_NAMESPACE = "zorphy";
-    private static final String REDIS_ROOM_NAMESPACE = "rooms:";
-    private static final String SESSION_USERNAME_KEY = "SESSION_USERNAME";
+    private static final String REDIS_ROOM_NAMESPACE = "rooms";
 
     private final GameRoomBaseService<Room, State> roomBaseService;
     private final StringRedisTemplate redisTemplate;
@@ -38,6 +40,21 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
         this.stateClass = stateClass;
     }
 
+    @EventListener
+    public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
+        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
+
+        String username = (String) headerAccessor.getSessionAttributes().get("username");
+        String roomId = (String) headerAccessor.getSessionAttributes().get("room_id");
+
+        if (username != null) {
+            System.out.println("User Disconnected: " + username);
+
+            // 3. Perform your cleanup logic here
+            // e.g., gameService.removePlayer(roomId, username);
+        }
+    }
+
     @MessageMapping("create")
     public void createRoom(SimpMessageHeaderAccessor headerAccessor) {
         String targetUser = getTargetUser(headerAccessor);
@@ -45,10 +62,7 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
         State state = roomBaseService.createRoom(targetUser);
         setRoomState(state);
 
-        messagingTemplate.convertAndSendToUser(targetUser,
-                "/queue/created",
-                state
-        );
+        messagingTemplate.convertAndSendToUser(targetUser, "/queue/created", state);
     }
 
     @MessageMapping("join/{roomId}")
@@ -59,6 +73,7 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
         setRoomState(state);
 
         messagingTemplate.convertAndSendToUser(targetUser, "/queue/joined", state);
+        messagingTemplate.convertAndSend("/topic/game/" + roomId, state);
     }
 
     protected String getTargetUser(SimpMessageHeaderAccessor headerAccessor) {
@@ -103,6 +118,6 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
     }
 
     private String getRoomKey(String roomId) {
-        return REDIS_NAMESPACE + ":" + REDIS_ROOM_NAMESPACE + roomId;
+        return REDIS_NAMESPACE + ":" + REDIS_ROOM_NAMESPACE + ":" + roomId;
     }
 }

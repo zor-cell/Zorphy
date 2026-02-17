@@ -22,6 +22,7 @@ export abstract class GameStompService {
   private subscriptions: Subscription[] = [];
 
   public connectionStatus = signal('');
+  public gameState = signal<GameRoomState | null>(null);
 
   protected constructor() {
     this.stompService.connectionState$.subscribe(state => {
@@ -70,26 +71,38 @@ export abstract class GameStompService {
   }
 
   protected subscribeDefaults() {
-    const createdSubscription = this.watchAndMap<GameRoomState>('created').subscribe(state => {
-      console.log(state);
+    const createdSubscription = this.watchAndMap<GameRoomState>('/user/queue/created').subscribe(state => {
+      this.gameState.set(state);
       this.notification.handleSuccess(`Room ${state.room.roomId} created`);
+
+      this.subscribeRoom(state.room.roomId);
     });
     this.subscriptions.push(createdSubscription);
 
-    const joinedSubscription = this.watchAndMap<GameRoomState>('joined').subscribe(state => {
+    const joinedSubscription = this.watchAndMap<GameRoomState>('/user/queue/joined').subscribe(state => {
+      this.gameState.set(state);
       this.notification.handleSuccess(`Room ${state.room.roomId} joined`);
+
+      this.subscribeRoom(state.room.roomId);
     });
     this.subscriptions.push(joinedSubscription);
 
-    const errorsSubscription = this.watchAndMap<WebSocketError>('errors').subscribe(error => {
-      console.log("error", error);
+    const errorsSubscription = this.watchAndMap<WebSocketError>('/user/queue/errors').subscribe(error => {
       this.notification.handleError(error);
     });
     this.subscriptions.push(errorsSubscription);
   }
 
+  private subscribeRoom(roomId: string) {
+    const topicSubscription = this.watchAndMap<GameRoomState>(`/topic/game/${roomId}`).subscribe(state => {
+      this.gameState.set(state);
+      console.log("topic", state);
+    });
+    this.subscriptions.push(topicSubscription);
+  }
+
   protected watchAndMap<T>(destination: string): Observable<T> {
-    return this.stompService.watch(`/user/queue/${destination}`)
+    return this.stompService.watch(`${destination}`)
         .pipe(
             map((message: IMessage) => JSON.parse(message.body) as T)
         );
