@@ -21,18 +21,21 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
     private final GameRoomBaseService<Room, State> roomBaseService;
     private final StringRedisTemplate redisTemplate;
     private final ObjectMapper mapper;
+    private final Class<State> stateClass;
     protected final SimpMessagingTemplate messagingTemplate;
 
     public GameRoomBaseController(
            GameRoomBaseService<Room, State> roomBaseService,
            SimpMessagingTemplate messagingTemplate,
            StringRedisTemplate redisTemplate,
-           ObjectMapper mapper
+           ObjectMapper mapper,
+           Class<State> stateClass
     ) {
         this.roomBaseService = roomBaseService;
         this.messagingTemplate = messagingTemplate;
         this.redisTemplate = redisTemplate;
         this.mapper = mapper;
+        this.stateClass = stateClass;
     }
 
     @MessageMapping("create")
@@ -58,11 +61,6 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
         messagingTemplate.convertAndSendToUser(targetUser, "/queue/joined", state);
     }
 
-    @MessageMapping("set-username")
-    public void setUsername(SimpMessageHeaderAccessor headerAccessor, String username) {
-        headerAccessor.getSessionAttributes().put("SESSION_USERNAME", username);
-    }
-
     protected String getTargetUser(SimpMessageHeaderAccessor headerAccessor) {
         String sessionId = headerAccessor.getSessionId();
         if(sessionId == null || sessionId.isBlank()) {
@@ -77,13 +75,6 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
         return user.getName();
     }
 
-    private String getTargetUserWithoutException(SimpMessageHeaderAccessor headerAccessor) {
-        String sessionId = headerAccessor.getSessionId();
-        var user = headerAccessor.getUser();
-
-        return user != null ? user.getName() : sessionId;
-    }
-
     protected State getRoomState(String roomId) {
         String roomKey = getRoomKey(roomId);
 
@@ -93,7 +84,7 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
                 throw new InvalidSessionException("Room does not exist");
             }
 
-            return (State) mapper.readValue(roomJson, GameRoomStateBase.class);
+            return mapper.readValue(roomJson, stateClass);
         } catch (JsonProcessingException e) {
             throw new InvalidSessionException("Could not parse room state");
         }

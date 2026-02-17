@@ -18,26 +18,26 @@ export class NobodyIsPerfectConfigComponent implements OnDestroy {
   private fb = inject(FormBuilder);
 
   protected configForm = this.fb.group({
-    username: this.fb.control<string>("", [Validators.required])
+    username: this.fb.control<string>("", [Validators.required]),
+    roomId: this.fb.control<string>("", [Validators.required])
   });
 
   ngOnDestroy() {
     this.stompService.disconnect();
   }
 
-  create() {
+  protected create() {
     const value = this.configForm.getRawValue();
     if(value.username == null) return;
 
     this.stompService.createRoom(value.username);
   }
 
-  join() {
-    this.stompService.joinRoom("123");
-  }
+  protected  join() {
+    const value = this.configForm.getRawValue();
+    if(value.username == null || value.roomId == null) return;
 
-  test() {
-    this.stompService.save();
+    this.stompService.joinRoom(value.username, value.roomId);
   }
 
   protected readonly config = config;

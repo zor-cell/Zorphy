@@ -4,7 +4,7 @@ import java.time.Instant;
 import java.util.List;
 
 public interface GameRoomBase {
-    Instant creationTime();
+    Instant createdAt();
     String roomId();
     List<RoomMember> members();
 }

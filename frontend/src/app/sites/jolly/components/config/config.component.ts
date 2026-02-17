@@ -18,7 +18,6 @@ import {SliderCheckboxComponent} from "../../../../main/core/components/slider-c
         SliderCheckboxComponent
     ],
     templateUrl: './config.component.html',
-    
     styleUrl: './config.component.css'
 })
 export class JollyConfigComponent {

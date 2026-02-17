@@ -6,6 +6,7 @@ import {IMessage} from "@stomp/stompjs";
 import {WebSocketError} from "../../dto/WebSocketError";
 import {NotificationService} from "../../../../main/core/services/notification.service";
 import {RxStompState} from "@stomp/rx-stomp";
+import {GameRoomState} from "../../../nobody-is-perfect/dto/GameRoomState";
 
 @Injectable({
   providedIn: 'root'
@@ -38,8 +39,8 @@ export abstract class GameStompService {
     this.connectAndSend(username,'create');
   }
 
-  public joinRoom(roomId: string) {
-    this.sendMessage(`join/${roomId}`);
+  public joinRoom(username: string, roomId: string) {
+    this.connectAndSend(username, `join/${roomId}`);
   }
 
   public disconnect() {
@@ -69,13 +70,14 @@ export abstract class GameStompService {
   }
 
   protected subscribeDefaults() {
-    const createdSubscription = this.watchAndMap<GameRoom>('created').subscribe(room => {
-      this.notification.handleSuccess(`Room ${room.roomId} created`);
+    const createdSubscription = this.watchAndMap<GameRoomState>('created').subscribe(state => {
+      console.log(state);
+      this.notification.handleSuccess(`Room ${state.room.roomId} created`);
     });
     this.subscriptions.push(createdSubscription);
 
-    const joinedSubscription = this.watchAndMap<GameRoom>('joined').subscribe(room => {
-      this.notification.handleSuccess(`Room ${room.roomId} joined`);
+    const joinedSubscription = this.watchAndMap<GameRoomState>('joined').subscribe(state => {
+      this.notification.handleSuccess(`Room ${state.room.roomId} joined`);
     });
     this.subscriptions.push(joinedSubscription);
 

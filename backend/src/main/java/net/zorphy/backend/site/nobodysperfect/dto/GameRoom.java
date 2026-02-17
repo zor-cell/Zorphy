@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.List;
 
 public record GameRoom(
-        Instant creationTime,
+        Instant createdAt,
         String roomId,
         List<RoomMember> members
 ) implements GameRoomBase {

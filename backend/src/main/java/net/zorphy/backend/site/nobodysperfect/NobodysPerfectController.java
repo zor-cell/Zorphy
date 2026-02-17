@@ -20,7 +20,7 @@ public class NobodysPerfectController extends GameRoomBaseController<GameRoom, G
                                     StringRedisTemplate stringRedisTemplate,
                                     ObjectMapper objectMapper
     ) {
-        super(socketService, messagingTemplate, stringRedisTemplate, objectMapper);
+        super(socketService, messagingTemplate, stringRedisTemplate, objectMapper, GameRoomState.class);
         this.socketService = socketService;
     }
 }

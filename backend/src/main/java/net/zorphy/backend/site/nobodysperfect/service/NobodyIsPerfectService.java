@@ -20,17 +20,13 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
             StringRedisTemplate redisTemplate,
             SimpMessagingTemplate messagingTemplate,
             ObjectMapper mapper) {
-
     }
 
     @Override
-    public GameRoomState createRoom(String sessionId) {
+    public GameRoomState createRoom(String username) {
         String roomId = UUID.randomUUID().toString();
 
-        var member = new RoomMember(
-                sessionId,
-                "username"
-        );
+        var member = new RoomMember(username);
         GameRoom room = new GameRoom(
                 Instant.now(),
                 roomId,
@@ -41,8 +37,8 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
     }
 
     @Override
-    public GameRoomState joinRoom(GameRoomState state, String sessionId) {
-        var member = new RoomMember(sessionId, "username");
+    public GameRoomState joinRoom(GameRoomState state, String username) {
+        var member = new RoomMember(username);
         state.room().members().add(member);
 
         return new GameRoomState(
