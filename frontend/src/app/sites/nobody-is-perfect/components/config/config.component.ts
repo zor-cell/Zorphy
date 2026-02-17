@@ -1,20 +1,36 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnDestroy} from '@angular/core';
 import {NobodyIsPerfectService} from "../../nobody-is-perfect.service";
 import {MainHeaderComponent} from "../../../../main/core/components/main-header/main-header.component";
+import {FormBuilder, NonNullableFormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
+import {config} from "rxjs";
 
 @Component({
   selector: 'app-config',
   imports: [
-    MainHeaderComponent
+    MainHeaderComponent,
+    ReactiveFormsModule
   ],
   templateUrl: './config.component.html',
   styleUrl: './config.component.css'
 })
-export class NobodyIsPerfectConfigComponent {
+export class NobodyIsPerfectConfigComponent implements OnDestroy {
   private stompService = inject(NobodyIsPerfectService);
+  private fb = inject(FormBuilder);
+
+  protected configForm = this.fb.group({
+    username: this.fb.control<string>("", [Validators.required])
+  });
+
+  ngOnDestroy() {
+    console.log("destory")
+    this.stompService.disconnect();
+  }
 
   create() {
-    this.stompService.createRoom();
+    const value = this.configForm.getRawValue();
+    if(value.username == null) return;
+
+    this.stompService.createRoom(value.username);
   }
 
   join() {
@@ -24,4 +40,6 @@ export class NobodyIsPerfectConfigComponent {
   test() {
     this.stompService.save();
   }
+
+  protected readonly config = config;
 }

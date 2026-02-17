@@ -9,7 +9,7 @@ export class NobodyIsPerfectService extends GameStompService {
 
   constructor() {
     super();
-    this.subscribeDefaults();
+    // this.subscribeDefaults();
   }
 
   save() {

@@ -1,15 +1,16 @@
-import {inject, Injectable, OnDestroy} from '@angular/core';
+import {inject, Injectable, OnDestroy, signal} from '@angular/core';
 import {RxStompService} from "./rx-stomp.service";
 import {map, Observable, Subscription} from "rxjs";
 import {GameRoom} from "../../../nobody-is-perfect/dto/GameRoom";
 import {IMessage} from "@stomp/stompjs";
 import {WebSocketError} from "../../dto/WebSocketError";
 import {NotificationService} from "../../../../main/core/services/notification.service";
+import {RxStompState} from "@stomp/rx-stomp";
 
 @Injectable({
   providedIn: 'root'
 })
-export abstract class GameStompService implements OnDestroy {
+export abstract class GameStompService {
   private stompService = inject(RxStompService);
   private notification = inject(NotificationService);
 
@@ -18,16 +19,35 @@ export abstract class GameStompService implements OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  ngOnDestroy(): void {
-    this.cleanup();
+  public isConnected = signal(false);
+
+  protected constructor() {
+    this.stompService.connectionState$.subscribe(state => {
+      this.isConnected.set(state == RxStompState.OPEN);
+      console.log("connection:", state)
+    });
   }
 
-  public createRoom() {
-    this.sendMessage('create');
+  public createRoom(username: string) {
+    this.connectAndSend(username,'create');
   }
 
   public joinRoom(roomId: string) {
     this.sendMessage(`join/${roomId}`);
+  }
+
+  public disconnect() {
+    for(const subscription of this.subscriptions) {
+      subscription.unsubscribe();
+    }
+
+    this.stompService.disconnect();
+  }
+
+  private connectAndSend(username: string, destination: string, body: any = '') {
+    this.stompService.connect(username);
+
+    this.sendMessage(destination, body);
   }
 
   protected sendMessage(destination: string, body: any = '') {
@@ -35,12 +55,6 @@ export abstract class GameStompService implements OnDestroy {
       destination: `${this.APP_PREFIX}${this.gameType}/${destination}`,
       body: JSON.stringify(body)
     });
-  }
-
-  protected cleanup() {
-    for(const subscription of this.subscriptions) {
-      subscription.unsubscribe();
-    }
   }
 
   protected subscribeDefaults() {

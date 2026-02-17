@@ -22,7 +22,6 @@ import {CustomValidators} from "../../../../main/core/validators";
     ReactiveFormsModule
 ],
     templateUrl: './config.component.html',
-    
     styleUrl: './config.component.css'
 })
 export class CatanConfigComponent {

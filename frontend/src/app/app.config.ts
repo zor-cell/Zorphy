@@ -40,7 +40,8 @@ export const appConfig: ApplicationConfig = {
         provideCharts(withDefaultRegisterables()),
         galleryProvider,
         lightBoxProvider,
-        {
+        RxStompService,
+        /*{
             provide: RxStompService,
             useFactory: () => {
                 const rxStompService = new RxStompService();
@@ -48,6 +49,6 @@ export const appConfig: ApplicationConfig = {
                 rxStompService.activate();
                 return rxStompService;
             }
-        }
+        }*/
     ]
 };
