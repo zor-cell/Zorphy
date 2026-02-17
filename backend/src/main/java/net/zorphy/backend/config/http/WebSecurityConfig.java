@@ -1,4 +1,4 @@
-package net.zorphy.backend.config;
+package net.zorphy.backend.config.http;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

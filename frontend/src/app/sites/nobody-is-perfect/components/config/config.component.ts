@@ -14,7 +14,7 @@ import {config} from "rxjs";
   styleUrl: './config.component.css'
 })
 export class NobodyIsPerfectConfigComponent implements OnDestroy {
-  private stompService = inject(NobodyIsPerfectService);
+  protected stompService = inject(NobodyIsPerfectService);
   private fb = inject(FormBuilder);
 
   protected configForm = this.fb.group({
@@ -22,7 +22,6 @@ export class NobodyIsPerfectConfigComponent implements OnDestroy {
   });
 
   ngOnDestroy() {
-    console.log("destory")
     this.stompService.disconnect();
   }
 

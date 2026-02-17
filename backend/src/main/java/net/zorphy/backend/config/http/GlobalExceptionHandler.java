@@ -1,4 +1,4 @@
-package net.zorphy.backend.config;
+package net.zorphy.backend.config.http;
 
 import net.zorphy.backend.main.core.exception.AuthException;
 import net.zorphy.backend.main.core.exception.FileStorageException;

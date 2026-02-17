@@ -1,4 +1,4 @@
-package net.zorphy.backend.config;
+package net.zorphy.backend.config.http;
 
 import net.zorphy.backend.config.property.FileStorageProperty;
 import org.springframework.context.annotation.Configuration;

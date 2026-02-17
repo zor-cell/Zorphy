@@ -5,16 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import net.zorphy.backend.main.core.exception.InvalidSessionException;
 import net.zorphy.backend.site.core.ws.dto.GameRoomBase;
 import net.zorphy.backend.site.core.ws.dto.GameRoomStateBase;
-import net.zorphy.backend.site.core.ws.dto.WebSocketError;
 import net.zorphy.backend.site.core.ws.service.GameRoomBaseService;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
-import java.util.Map;
 
 public abstract class GameRoomBaseController<Room extends GameRoomBase, State extends GameRoomStateBase> {
     private static final String REDIS_NAMESPACE = "zorphy";
@@ -40,27 +37,25 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
 
     @MessageMapping("create")
     public void createRoom(SimpMessageHeaderAccessor headerAccessor) {
-        String sessionId = headerAccessor.getSessionId();
-        var user = headerAccessor.getUser();
+        String targetUser = getTargetUser(headerAccessor);
 
-        State state = roomBaseService.createRoom(sessionId);
+        State state = roomBaseService.createRoom(targetUser);
         setRoomState(state);
 
-        messagingTemplate.convertAndSendToUser(user.getName(),
+        messagingTemplate.convertAndSendToUser(targetUser,
                 "/queue/created",
-                state,
-                Map.of(SimpMessageHeaderAccessor.SESSION_ID_HEADER, sessionId)
+                state
         );
     }
 
     @MessageMapping("join/{roomId}")
     public void joinRoom(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomId) {
-        String sessionId = headerAccessor.getSessionId();
+        String targetUser = getTargetUser(headerAccessor);
 
-        State state = roomBaseService.joinRoom(getRoomState(roomId), sessionId);
+        State state = roomBaseService.joinRoom(getRoomState(roomId), targetUser);
         setRoomState(state);
 
-        messagingTemplate.convertAndSendToUser(sessionId, "/queue/joined", state);
+        messagingTemplate.convertAndSendToUser(targetUser, "/queue/joined", state);
     }
 
     @MessageMapping("set-username")
@@ -68,16 +63,25 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
         headerAccessor.getSessionAttributes().put("SESSION_USERNAME", username);
     }
 
-    @MessageExceptionHandler()
-    public void handleMessagingExceptions(SimpMessageHeaderAccessor headerAccessor, Exception ex) {
+    protected String getTargetUser(SimpMessageHeaderAccessor headerAccessor) {
         String sessionId = headerAccessor.getSessionId();
+        if(sessionId == null || sessionId.isBlank()) {
+            throw new InvalidSessionException("Session ID is required");
+        }
 
-        var error = new WebSocketError(
-                400,
-                ex.getMessage()
-        );
+        var user = headerAccessor.getUser();
+        if(user == null || user.getName() == null || user.getName().isBlank()) {
+            throw new InvalidSessionException("Username is required");
+        }
 
-        messagingTemplate.convertAndSendToUser(sessionId, "/queue/errors", error);
+        return user.getName();
+    }
+
+    private String getTargetUserWithoutException(SimpMessageHeaderAccessor headerAccessor) {
+        String sessionId = headerAccessor.getSessionId();
+        var user = headerAccessor.getUser();
+
+        return user != null ? user.getName() : sessionId;
     }
 
     protected State getRoomState(String roomId) {

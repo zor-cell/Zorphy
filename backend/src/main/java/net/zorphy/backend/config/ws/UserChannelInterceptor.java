@@ -1,15 +1,12 @@
-package net.zorphy.backend.config.websockets;
+package net.zorphy.backend.config.ws;
 
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.messaging.MessageDeliveryException;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 public class UserChannelInterceptor implements ChannelInterceptor {
@@ -23,12 +20,12 @@ public class UserChannelInterceptor implements ChannelInterceptor {
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
             String rawUsername = getHeaderValue(accessor, "user-name");
 
-            if(rawUsername == null || rawUsername.isBlank()) {
+            /*if(rawUsername == null || rawUsername.isBlank()) {
                 throw new MessageDeliveryException("Username is required");
-            }
+            }*/
 
             //avoid name duplication with user id
-            String userId = rawUsername + "#" + UUID.randomUUID().toString().substring(0, 6);
+            String userId = rawUsername;// + "#" + UUID.randomUUID().toString().substring(0, 6);
             accessor.setUser(new StompPrincipal(userId));
         }
 

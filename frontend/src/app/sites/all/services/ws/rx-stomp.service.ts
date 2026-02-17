@@ -11,6 +11,7 @@ export class RxStompService extends RxStomp {
     }
 
     public connect(username: string): void {
+        //reset connection
         if (this.active) {
             this.deactivate();
         }

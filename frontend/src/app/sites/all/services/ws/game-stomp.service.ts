@@ -17,14 +17,20 @@ export abstract class GameStompService {
   protected abstract readonly gameType: string;
   protected readonly APP_PREFIX = '/app/';
 
+  private subscriptionsInitialized: boolean = false;
   private subscriptions: Subscription[] = [];
 
-  public isConnected = signal(false);
+  public connectionStatus = signal('');
 
   protected constructor() {
     this.stompService.connectionState$.subscribe(state => {
-      this.isConnected.set(state == RxStompState.OPEN);
-      console.log("connection:", state)
+      let status = 'UNKNOWN';
+      if(state == RxStompState.CONNECTING) status = 'CONNECTING';
+      else if(state == RxStompState.OPEN) status = 'CONNECTED';
+      else if(state == RxStompState.CLOSING) status = 'CLOSING';
+      else if(state == RxStompState.CLOSED) status = 'CLOSED';
+
+      this.connectionStatus.set(status);
     });
   }
 
@@ -46,6 +52,11 @@ export abstract class GameStompService {
 
   private connectAndSend(username: string, destination: string, body: any = '') {
     this.stompService.connect(username);
+
+    if(!this.subscriptionsInitialized) {
+      this.subscribeDefaults();
+      this.subscriptionsInitialized = true;
+    }
 
     this.sendMessage(destination, body);
   }
@@ -69,14 +80,10 @@ export abstract class GameStompService {
     this.subscriptions.push(joinedSubscription);
 
     const errorsSubscription = this.watchAndMap<WebSocketError>('errors').subscribe(error => {
+      console.log("error", error);
       this.notification.handleError(error);
     });
     this.subscriptions.push(errorsSubscription);
-
-    const temp = this.stompService.watch(`/topic/test`).subscribe(error => {
-      console.log(error)
-    });
-    this.subscriptions.push(temp);
   }
 
   protected watchAndMap<T>(destination: string): Observable<T> {

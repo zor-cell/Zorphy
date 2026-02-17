@@ -1,4 +1,4 @@
-package net.zorphy.backend.config.websockets;
+package net.zorphy.backend.config.ws;
 
 import java.security.Principal;
 
