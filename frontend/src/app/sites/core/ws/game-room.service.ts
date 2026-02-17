@@ -7,11 +7,12 @@ import {WebSocketError} from "./dto/WebSocketError";
 import {NotificationService} from "../../../main/core/services/notification.service";
 import {RxStompState} from "@stomp/rx-stomp";
 import {GameRoomState} from "../../nobody-is-perfect/dto/GameRoomState";
+import {GameRoomStateBase} from "./dto/GameRoomStateBase";
 
 @Injectable({
   providedIn: 'root'
 })
-export abstract class GameRoomService<State extends GameRoomState> {
+export abstract class GameRoomService<State extends GameRoomStateBase> {
   private stompService = inject(RxStompService);
   private notification = inject(NotificationService);
 

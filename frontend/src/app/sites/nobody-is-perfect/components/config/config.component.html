@@ -1,35 +1,8 @@
-<app-main-header>
+<game-room-config [roomService]="roomService">
 
-</app-main-header>
-
-<div class="main-container">
-    <section class="config-container">
-        <div class="config-grid-container">
-            <div class="config-header">
-                Room settings
-            </div>
-
-            <div class="flex-container gap-4" [formGroup]="configForm">
-                <input placeholder="Username" formControlName="username">
-
-                <div class="flex-container">
-                    <button class="btn btn-primary" [disabled]="configForm.controls.username.invalid" (click)="create()">Create New Room</button>
-
-                    <div>
-                        <div class="text-center p-2">OR</div>
-
-                        <input class="m-2" placeholder="Room Id" formControlName="roomId">
-                        <button class="btn btn-secondary" [disabled]="configForm.invalid" (click)="join()">Join Room</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-</div>
-
-<div>{{stompService.gameState()?.room?.roomId}}</div>
-@for(a of stompService.gameState()?.room?.members; track a.username) {
+<div>{{roomService.gameState()?.room?.roomId}}</div>
+@for(a of roomService.gameState()?.room?.members; track a.username) {
  <div>{{a.username}}</div>
 }
 
-<div>Connection: {{ stompService.connectionStatus() }}</div>
+<div>Connection: {{ roomService.connectionStatus() }}</div>
