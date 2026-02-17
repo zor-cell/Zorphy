@@ -6,6 +6,7 @@ import net.zorphy.backend.main.core.exception.InvalidSessionException;
 import net.zorphy.backend.site.core.ws.dto.GameRoomBase;
 import net.zorphy.backend.site.core.ws.dto.GameRoomStateBase;
 import net.zorphy.backend.site.core.ws.service.GameRoomBaseService;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -15,6 +16,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import java.time.Duration;
+
 
 public abstract class GameRoomBaseController<Room extends GameRoomBase, State extends GameRoomStateBase> {
     private static final String REDIS_NAMESPACE = "zorphy";
@@ -22,6 +25,7 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
 
     private final GameRoomBaseService<Room, State> roomBaseService;
     private final StringRedisTemplate redisTemplate;
+    private final Duration sessionTimeout;
     private final ObjectMapper mapper;
     private final Class<State> stateClass;
     protected final SimpMessagingTemplate messagingTemplate;
@@ -30,29 +34,33 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
            GameRoomBaseService<Room, State> roomBaseService,
            SimpMessagingTemplate messagingTemplate,
            StringRedisTemplate redisTemplate,
+           ServerProperties serverProperties,
            ObjectMapper mapper,
            Class<State> stateClass
     ) {
         this.roomBaseService = roomBaseService;
         this.messagingTemplate = messagingTemplate;
         this.redisTemplate = redisTemplate;
+        this.sessionTimeout = serverProperties.getServlet().getSession().getTimeout();
         this.mapper = mapper;
         this.stateClass = stateClass;
     }
 
     @EventListener
-    public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
-        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
+    public void leaveRoom(SessionDisconnectEvent event) {
+        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
 
-        String username = (String) headerAccessor.getSessionAttributes().get("username");
-        String roomId = (String) headerAccessor.getSessionAttributes().get("room_id");
-
-        if (username != null) {
-            System.out.println("User Disconnected: " + username);
-
-            // 3. Perform your cleanup logic here
-            // e.g., gameService.removePlayer(roomId, username);
+        if(accessor.getUser() == null || accessor.getSessionAttributes() == null) {
+            return;
         }
+
+        String username = accessor.getUser().getName();
+        String roomId = accessor.getSessionAttributes().get("room-id").toString();
+
+        State state = roomBaseService.leaveRoom(getRoomState(roomId), username);
+        setRoomState(state);
+
+        messagingTemplate.convertAndSend("/topic/game/" + roomId, state);
     }
 
     @MessageMapping("create")
@@ -71,6 +79,8 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
 
         State state = roomBaseService.joinRoom(getRoomState(roomId), targetUser);
         setRoomState(state);
+
+        headerAccessor.getSessionAttributes().put("room-id", roomId);
 
         messagingTemplate.convertAndSendToUser(targetUser, "/queue/joined", state);
         messagingTemplate.convertAndSend("/topic/game/" + roomId, state);
@@ -112,6 +122,7 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
             String value = mapper.writeValueAsString(state);
 
             redisTemplate.opsForValue().set(roomKey, value);
+            redisTemplate.expire(roomKey, sessionTimeout);
         } catch (JsonProcessingException e) {
             throw new InvalidSessionException("Could not parse room state");
         }

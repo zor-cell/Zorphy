@@ -1,6 +1,6 @@
 import {Injectable, signal} from '@angular/core';
 import {RxStomp, RxStompState} from '@stomp/rx-stomp';
-import {rxStompConfig} from "../../../../rx-stomp-config";
+import {rxStompConfig} from "./rx-stomp-config";
 
 @Injectable({
     providedIn: 'root',
@@ -11,9 +11,9 @@ export class RxStompService extends RxStomp {
     }
 
     public connect(username: string): void {
-        //reset connection
+        //reset connection if active
         if (this.active) {
-            this.deactivate();
+            this.disconnect();
         }
 
         const finalConfig = {

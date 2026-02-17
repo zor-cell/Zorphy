@@ -1,6 +1,7 @@
 package net.zorphy.backend.site.nobodysperfect.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.zorphy.backend.main.core.exception.InvalidSessionException;
 import net.zorphy.backend.site.core.ws.dto.RoomMember;
 import net.zorphy.backend.site.core.ws.service.GameRoomBaseService;
 import net.zorphy.backend.site.nobodysperfect.dto.GameRoom;
@@ -39,10 +40,24 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
     @Override
     public GameRoomState joinRoom(GameRoomState state, String username) {
         var member = new RoomMember(username);
+
+        if(state.room().members().contains(member)) {
+            throw new InvalidSessionException("Member with this username already exists");
+        }
+
         state.room().members().add(member);
 
         return new GameRoomState(
                 state.room()
         );
+    }
+
+    @Override
+    public GameRoomState leaveRoom(GameRoomState state, String username) {
+        var member = new RoomMember(username);
+
+        state.room().members().remove(member);
+
+        return state;
     }
 }

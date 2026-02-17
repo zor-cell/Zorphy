@@ -7,4 +7,6 @@ public interface GameRoomBaseService<Room extends GameRoomBase, State extends Ga
     State createRoom(String username);
 
     State joinRoom(State state, String username);
+
+    State leaveRoom(State state, String username);
 }

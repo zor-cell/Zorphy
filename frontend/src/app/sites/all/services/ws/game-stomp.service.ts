@@ -11,7 +11,7 @@ import {GameRoomState} from "../../../nobody-is-perfect/dto/GameRoomState";
 @Injectable({
   providedIn: 'root'
 })
-export abstract class GameStompService {
+export abstract class GameStompService<State extends GameRoomState> {
   private stompService = inject(RxStompService);
   private notification = inject(NotificationService);
 
@@ -22,7 +22,7 @@ export abstract class GameStompService {
   private subscriptions: Subscription[] = [];
 
   public connectionStatus = signal('');
-  public gameState = signal<GameRoomState | null>(null);
+  public gameState = signal<State | null>(null);
 
   protected constructor() {
     this.stompService.connectionState$.subscribe(state => {
@@ -71,7 +71,7 @@ export abstract class GameStompService {
   }
 
   protected subscribeDefaults() {
-    const createdSubscription = this.watchAndMap<GameRoomState>('/user/queue/created').subscribe(state => {
+    const createdSubscription = this.watchAndMap<State>('/user/queue/created').subscribe(state => {
       this.gameState.set(state);
       this.notification.handleSuccess(`Room ${state.room.roomId} created`);
 
@@ -79,7 +79,7 @@ export abstract class GameStompService {
     });
     this.subscriptions.push(createdSubscription);
 
-    const joinedSubscription = this.watchAndMap<GameRoomState>('/user/queue/joined').subscribe(state => {
+    const joinedSubscription = this.watchAndMap<State>('/user/queue/joined').subscribe(state => {
       this.gameState.set(state);
       this.notification.handleSuccess(`Room ${state.room.roomId} joined`);
 
@@ -94,9 +94,8 @@ export abstract class GameStompService {
   }
 
   private subscribeRoom(roomId: string) {
-    const topicSubscription = this.watchAndMap<GameRoomState>(`/topic/game/${roomId}`).subscribe(state => {
+    const topicSubscription = this.watchAndMap<State>(`/topic/game/${roomId}`).subscribe(state => {
       this.gameState.set(state);
-      console.log("topic", state);
     });
     this.subscriptions.push(topicSubscription);
   }

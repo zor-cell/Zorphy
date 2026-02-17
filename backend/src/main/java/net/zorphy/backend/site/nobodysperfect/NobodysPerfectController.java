@@ -5,6 +5,7 @@ import net.zorphy.backend.site.core.ws.controller.GameRoomBaseController;
 import net.zorphy.backend.site.nobodysperfect.dto.GameRoom;
 import net.zorphy.backend.site.nobodysperfect.dto.GameRoomState;
 import net.zorphy.backend.site.nobodysperfect.service.NobodyIsPerfectService;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -18,9 +19,10 @@ public class NobodysPerfectController extends GameRoomBaseController<GameRoom, G
     public NobodysPerfectController(NobodyIsPerfectService socketService,
                                     SimpMessagingTemplate messagingTemplate,
                                     StringRedisTemplate stringRedisTemplate,
+                                    ServerProperties serverProperties,
                                     ObjectMapper objectMapper
     ) {
-        super(socketService, messagingTemplate, stringRedisTemplate, objectMapper, GameRoomState.class);
+        super(socketService, messagingTemplate, stringRedisTemplate, serverProperties, objectMapper, GameRoomState.class);
         this.socketService = socketService;
     }
 }

@@ -6,7 +6,7 @@
     <section class="config-container">
         <div class="config-grid-container">
             <div class="config-header">
-                Test
+                Room settings
             </div>
 
             <div class="flex-container gap-4" [formGroup]="configForm">
@@ -26,5 +26,10 @@
         </div>
     </section>
 </div>
+
+<div>{{stompService.gameState()?.room?.roomId}}</div>
+@for(a of stompService.gameState()?.room?.members; track a.username) {
+ <div>{{a.username}}</div>
+}
 
 <div>Connection: {{ stompService.connectionStatus() }}</div>
