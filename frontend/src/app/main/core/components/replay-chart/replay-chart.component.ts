@@ -40,7 +40,6 @@ export class ReplayChartComponent implements AfterViewInit {
     const instance = this.chartInstance();
 
     if(!chart || !chart.chart) return;
-    console.log(index)
 
     if(index < 0 || index >= data.length) {
       instance.refresh(data);
@@ -49,8 +48,7 @@ export class ReplayChartComponent implements AfterViewInit {
     }
 
     if(chart && chart.chart) {
-      console.log("update")
-      chart.update('none');
+      chart.update();
     }
   }
 
