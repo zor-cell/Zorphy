@@ -6,7 +6,7 @@ import {GameConfig} from "../../dto/game/GameConfig";
 import {CatanService} from "../../catan.service";
 import {PlayerSelectComponent} from "../../../../main/core/components/player-select/player-select.component";
 import {GameMode, getGameModeName} from "../../dto/enums/GameMode";
-import {GameSessionConfigComponent} from "../../../all/components/game-session-config.component";
+import {GameSessionConfigComponent} from "../../../core/http/components/game-session-config.component";
 import {Team} from "../../../../main/core/dto/Team";
 import {CustomValidators} from "../../../../main/core/validators";
 

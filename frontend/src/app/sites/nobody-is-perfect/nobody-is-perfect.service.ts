@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {GameStompService} from "../all/services/ws/game-stomp.service";
+import {GameRoomService} from "../core/ws/game-room.service";
 import {GameRoomState} from "./dto/GameRoomState";
 
 @Injectable({
   providedIn: 'root'
 })
-export class NobodyIsPerfectService extends GameStompService<GameRoomState> {
+export class NobodyIsPerfectService extends GameRoomService<GameRoomState> {
   protected override gameType: string = 'nobody-is-perfect';
 
   constructor() {

@@ -8,7 +8,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {Router} from "@angular/router";
 import {AuthService} from "../../../../main/core/services/auth.service";
 import {GameMode} from "../../dto/enums/GameMode";
-import {GameSessionGameComponent} from "../../../all/components/game-session-game.component";
+import {GameSessionGameComponent} from "../../../core/http/components/game-session-game.component";
 
 @Component({
     selector: 'catan-game',

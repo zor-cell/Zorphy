@@ -4,7 +4,7 @@ import {ScotlandYardService} from "../../scotland-yard.service";
 import {Team} from "../../../../main/core/dto/Team";
 import {MapType} from "../../dto/MapType";
 import {GameConfig} from "../../dto/game/GameConfig";
-import {GameSessionConfigComponent} from "../../../all/components/game-session-config.component";
+import {GameSessionConfigComponent} from "../../../core/http/components/game-session-config.component";
 import {PlayerSelectComponent} from "../../../../main/core/components/player-select/player-select.component";
 
 @Component({

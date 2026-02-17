@@ -13,7 +13,7 @@ import {PanContainerComponent} from "../../../../main/core/components/pan-contai
 import {SelectionInfo} from "../../dto/SelectionInfo";
 import {ImageInputComponent} from "../image-input/image-input.component";
 import {Router} from "@angular/router";
-import {GameSessionGameComponent} from "../../../all/components/game-session-game.component";
+import {GameSessionGameComponent} from "../../../core/http/components/game-session-game.component";
 
 @Component({
     selector: 'qwirkle-game',

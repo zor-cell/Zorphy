@@ -1,7 +1,7 @@
 import {Component, effect, inject, signal} from '@angular/core';
 import {QwirkleService} from "../../qwirkle.service";
 import {GameConfig} from "../../dto/game/GameConfig";
-import {GameSessionConfigComponent} from "../../../all/components/game-session-config.component";
+import {GameSessionConfigComponent} from "../../../core/http/components/game-session-config.component";
 import {FormsModule, NonNullableFormBuilder, ReactiveFormsModule} from "@angular/forms";
 
 import {PlayerSelectComponent} from "../../../../main/core/components/player-select/player-select.component";

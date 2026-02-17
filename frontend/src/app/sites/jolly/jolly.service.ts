@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {GameConfig} from "./dto/game/GameConfig";
 import {GameState} from "./dto/game/GameState";
-import {GameSessionService} from "../all/services/http/game-session.service";
+import {GameSessionService} from "../core/http/game-session.service";
 import {HttpClient} from "@angular/common/http";
 import {RoundResult} from "./dto/RoundResult";
 import {finalize, tap} from "rxjs";

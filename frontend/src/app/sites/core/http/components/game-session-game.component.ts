@@ -1,13 +1,13 @@
 import {Component, computed, effect, inject, input, model, signal, viewChild} from "@angular/core";
-import {MainHeaderComponent} from "../../../main/core/components/main-header/main-header.component";
+import {MainHeaderComponent} from "../../../../main/core/components/main-header/main-header.component";
 
-import {AuthService} from "../../../main/core/services/auth.service";
+import {AuthService} from "../../../../main/core/services/auth.service";
 import {GameStateBase} from "../dto/GameStateBase";
 import {GameConfigBase} from "../dto/GameConfigBase";
-import {GameSessionService} from "../services/http/game-session.service";
-import {ResultState} from "../../../main/core/dto/result/ResultState";
+import {GameSessionService} from "../game-session.service";
+import {ResultState} from "../../../../main/core/dto/result/ResultState";
 import {GameSessionSavePopupComponent} from "./popups/save-popup/save-popup.component";
-import {WithFile} from "../../../main/core/dto/WithFile";
+import {WithFile} from "../../../../main/core/dto/WithFile";
 import {SavableGameState} from "../dto/SavableGameState";
 import {PausableGameState} from "../dto/PausableGameState";
 import {state} from "@angular/animations";

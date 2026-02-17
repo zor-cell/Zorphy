@@ -1,17 +1,17 @@
 import {inject, Injectable, OnDestroy, signal} from '@angular/core';
 import {RxStompService} from "./rx-stomp.service";
 import {map, Observable, Subscription} from "rxjs";
-import {GameRoom} from "../../../nobody-is-perfect/dto/GameRoom";
+import {GameRoom} from "../../nobody-is-perfect/dto/GameRoom";
 import {IMessage} from "@stomp/stompjs";
-import {WebSocketError} from "../../dto/WebSocketError";
-import {NotificationService} from "../../../../main/core/services/notification.service";
+import {WebSocketError} from "./dto/WebSocketError";
+import {NotificationService} from "../../../main/core/services/notification.service";
 import {RxStompState} from "@stomp/rx-stomp";
-import {GameRoomState} from "../../../nobody-is-perfect/dto/GameRoomState";
+import {GameRoomState} from "../../nobody-is-perfect/dto/GameRoomState";
 
 @Injectable({
   providedIn: 'root'
 })
-export abstract class GameStompService<State extends GameRoomState> {
+export abstract class GameRoomService<State extends GameRoomState> {
   private stompService = inject(RxStompService);
   private notification = inject(NotificationService);
 

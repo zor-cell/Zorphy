@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {GameState} from "./dto/game/GameState";
 import {GameConfig} from "./dto/game/GameConfig";
-import {GameSessionService} from "../all/services/http/game-session.service";
+import {GameSessionService} from "../core/http/game-session.service";
 import {environment} from "../../../environments/environment";
 import {NotificationService} from "../../main/core/services/notification.service";
 

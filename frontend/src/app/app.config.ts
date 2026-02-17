@@ -8,8 +8,8 @@ import {credentialInterceptor, errorInterceptor} from "./main/core/interceptors"
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {LIGHTBOX_CONFIG, LightboxConfig} from "ng-gallery/lightbox";
 import {GALLERY_CONFIG, GalleryConfig} from "ng-gallery";
-import {RxStompService} from "./sites/all/services/ws/rx-stomp.service";
-import {rxStompConfig} from "./sites/all/services/ws/rx-stomp-config";
+import {RxStompService} from "./sites/core/ws/rx-stomp.service";
+import {rxStompConfig} from "./sites/core/ws/rx-stomp-config";
 
 const galleryProvider: {provide: any, useValue: GalleryConfig} = {
     provide: GALLERY_CONFIG,

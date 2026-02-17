@@ -3,10 +3,10 @@ import {BoardTile} from "../tile/BoardTile";
 import {Tile} from "../tile/Tile";
 import {PositionInfo} from "../PositionInfo";
 import {GameConfig} from "./GameConfig";
-import {GameStateBase} from "../../../all/dto/GameStateBase";
+import {GameStateBase} from "../../../core/http/dto/GameStateBase";
 import {Move} from "../move/Move";
-import {SavableGameState} from "../../../all/dto/SavableGameState";
-import {PausableGameState} from "../../../all/dto/PausableGameState";
+import {SavableGameState} from "../../../core/http/dto/SavableGameState";
+import {PausableGameState} from "../../../core/http/dto/PausableGameState";
 
 export interface GameState extends GameStateBase, SavableGameState, PausableGameState {
     gameConfig: GameConfig,
