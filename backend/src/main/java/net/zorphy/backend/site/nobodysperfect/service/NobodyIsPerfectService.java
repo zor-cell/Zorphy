@@ -1,13 +1,11 @@
 package net.zorphy.backend.site.nobodysperfect.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import net.zorphy.backend.main.core.exception.InvalidSessionException;
 import net.zorphy.backend.site.core.ws.dto.RoomMember;
 import net.zorphy.backend.site.core.ws.service.GameRoomBaseService;
 import net.zorphy.backend.site.nobodysperfect.dto.GameRoom;
 import net.zorphy.backend.site.nobodysperfect.dto.GameRoomState;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import net.zorphy.backend.site.nobodysperfect.dto.Prompt;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -17,15 +15,11 @@ import java.util.UUID;
 
 @Service
 public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, GameRoomState> {
-    public NobodyIsPerfectService(
-            StringRedisTemplate redisTemplate,
-            SimpMessagingTemplate messagingTemplate,
-            ObjectMapper mapper) {
-    }
+    public NobodyIsPerfectService() { }
 
     @Override
     public GameRoomState createRoom(String username) {
-        String roomId = UUID.randomUUID().toString();
+        String roomId = UUID.randomUUID().toString().substring(0, 6);
 
         var member = new RoomMember(username);
         GameRoom room = new GameRoom(
@@ -34,7 +28,12 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
                 new ArrayList<>(List.of(member))
         );
 
-        return new GameRoomState(room);
+        return new GameRoomState(
+                room,
+                member,
+                member,
+                new ArrayList<>()
+        );
     }
 
     @Override
@@ -47,9 +46,7 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
 
         state.room().members().add(member);
 
-        return new GameRoomState(
-                state.room()
-        );
+        return state;
     }
 
     @Override
@@ -57,6 +54,15 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
         var member = new RoomMember(username);
 
         state.room().members().remove(member);
+
+        return state;
+    }
+
+    public GameRoomState addPrompt(GameRoomState state, String username, String message) {
+        RoomMember member = new RoomMember(username);
+        Prompt prompt = new Prompt(message, member);
+
+        state.prompts().add(prompt);
 
         return state;
     }

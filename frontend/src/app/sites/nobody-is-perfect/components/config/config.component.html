@@ -1,4 +1,4 @@
-<game-room-config [roomService]="roomService">
+<game-room-config [roomService]="roomService"/>
 
 <div>{{roomService.gameState()?.room?.roomId}}</div>
 @for(a of roomService.gameState()?.room?.members; track a.username) {

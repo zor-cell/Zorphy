@@ -7,7 +7,10 @@ import net.zorphy.backend.site.nobodysperfect.dto.GameRoomState;
 import net.zorphy.backend.site.nobodysperfect.service.NobodyIsPerfectService;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
@@ -24,5 +27,17 @@ public class NobodysPerfectController extends GameRoomBaseController<GameRoom, G
     ) {
         super(socketService, messagingTemplate, stringRedisTemplate, serverProperties, objectMapper, GameRoomState.class);
         this.socketService = socketService;
+    }
+
+    @MessageMapping("add-prompt/{roomId}")
+    public void addPrompt(SimpMessageHeaderAccessor headerAccessor, @Payload String message, @DestinationVariable String roomId) {
+        String username = getUsername(headerAccessor);
+
+        executeWithLock(roomId, () -> {
+            GameRoomState state = socketService.addPrompt(getRoomState(roomId), username, message);
+            setRoomState(state);
+
+            messagingTemplate.convertAndSend("/topic/game/" + roomId, state);
+        });
     }
 }

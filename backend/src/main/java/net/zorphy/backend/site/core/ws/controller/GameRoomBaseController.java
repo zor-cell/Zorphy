@@ -17,12 +17,16 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.time.Duration;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 public abstract class GameRoomBaseController<Room extends GameRoomBase, State extends GameRoomStateBase> {
     private static final String REDIS_NAMESPACE = "zorphy";
     private static final String REDIS_ROOM_NAMESPACE = "rooms";
 
+    private final ConcurrentHashMap<String, Lock> roomLocks = new ConcurrentHashMap<>();
     private final GameRoomBaseService<Room, State> roomBaseService;
     private final StringRedisTemplate redisTemplate;
     private final Duration sessionTimeout;
@@ -57,15 +61,17 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
         String username = accessor.getUser().getName();
         String roomId = accessor.getSessionAttributes().get("room-id").toString();
 
-        State state = roomBaseService.leaveRoom(getRoomState(roomId), username);
-        setRoomState(state);
+        executeWithLock(roomId, () -> {
+            State state = roomBaseService.leaveRoom(getRoomState(roomId), username);
+            setRoomState(state);
 
-        messagingTemplate.convertAndSend("/topic/game/" + roomId, state);
+            messagingTemplate.convertAndSend("/topic/game/" + roomId, state);
+        });
     }
 
     @MessageMapping("create")
     public void createRoom(SimpMessageHeaderAccessor headerAccessor) {
-        String targetUser = getTargetUser(headerAccessor);
+        String targetUser = getUsername(headerAccessor);
 
         State state = roomBaseService.createRoom(targetUser);
         setRoomState(state);
@@ -75,31 +81,37 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
 
     @MessageMapping("join/{roomId}")
     public void joinRoom(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomId) {
-        String targetUser = getTargetUser(headerAccessor);
+        String targetUser = getUsername(headerAccessor);
 
-        State state = roomBaseService.joinRoom(getRoomState(roomId), targetUser);
-        setRoomState(state);
+        executeWithLock(roomId, () -> {
+            State state = roomBaseService.joinRoom(getRoomState(roomId), targetUser);
+            setRoomState(state);
 
-        headerAccessor.getSessionAttributes().put("room-id", roomId);
+            headerAccessor.getSessionAttributes().put("room-id", roomId);
 
-        messagingTemplate.convertAndSendToUser(targetUser, "/queue/joined", state);
-        messagingTemplate.convertAndSend("/topic/game/" + roomId, state);
+            messagingTemplate.convertAndSendToUser(targetUser, "/queue/joined", state);
+            messagingTemplate.convertAndSend("/topic/game/" + roomId, state);
+        });
     }
 
-    protected String getTargetUser(SimpMessageHeaderAccessor headerAccessor) {
-        String sessionId = headerAccessor.getSessionId();
-        if(sessionId == null || sessionId.isBlank()) {
-            throw new InvalidSessionException("Session ID is required");
-        }
+    /**
+     * Executes an action on a given {@code roomId} with a lock, so no race conditions can occur
+     */
+    protected void executeWithLock(String roomId, Runnable action) {
+        Lock lock = roomLocks.computeIfAbsent(roomId, k -> new ReentrantLock());
 
-        var user = headerAccessor.getUser();
-        if(user == null || user.getName() == null || user.getName().isBlank()) {
-            throw new InvalidSessionException("Username is required");
+        lock.lock();
+        try {
+            action.run();
+        } finally {
+            lock.unlock();
         }
-
-        return user.getName();
     }
 
+    /**
+     * Gets the current room state from the session storage
+     * Calls to this method should always be wrapped by {@link #executeWithLock} to avoid race conditions
+     */
     protected State getRoomState(String roomId) {
         String roomKey = getRoomKey(roomId);
 
@@ -115,6 +127,10 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
         }
     }
 
+    /**
+     * Sets the current room state in the session storage
+     * Calls to this method should always be wrapped by {@link #executeWithLock} to avoid race conditions
+     */
     protected void setRoomState(State state) {
         String roomKey = getRoomKey(state.room().roomId());
 
@@ -126,6 +142,23 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
         } catch (JsonProcessingException e) {
             throw new InvalidSessionException("Could not parse room state");
         }
+    }
+
+    /**
+     * Gets the target user to which private /queue/ STOMP messages should be sent
+     */
+    protected String getUsername(SimpMessageHeaderAccessor headerAccessor) {
+        String sessionId = headerAccessor.getSessionId();
+        if(sessionId == null || sessionId.isBlank()) {
+            throw new InvalidSessionException("Session ID is required");
+        }
+
+        var user = headerAccessor.getUser();
+        if(user == null || user.getName() == null || user.getName().isBlank()) {
+            throw new InvalidSessionException("Username is required");
+        }
+
+        return user.getName();
     }
 
     private String getRoomKey(String roomId) {
