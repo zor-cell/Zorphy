@@ -6,14 +6,13 @@ import {GameRoomState} from "./dto/GameRoomState";
   providedIn: 'root'
 })
 export class NobodyIsPerfectService extends GameRoomService<GameRoomState> {
-  protected override gameType: string = 'nobody-is-perfect';
+  protected override gameType: string = '';
 
   constructor() {
     super();
-    // this.subscribeDefaults();
   }
 
-  save() {
-    this.sendMessage('save/1344');
+  public addPrompt(roomId: string, message: string) {
+    this.sendMessage(`add-prompt/${roomId}`, message);
   }
 }
