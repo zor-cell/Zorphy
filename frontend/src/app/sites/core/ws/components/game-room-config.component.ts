@@ -17,8 +17,6 @@ import {GameRoomStateBase} from "../dto/GameRoomStateBase";
   selector: 'game-room-config',
   imports: [
     MainHeaderComponent,
-    GameSessionClearPopupComponent,
-    GameSessionUpdatePopupComponent,
     FormsModule,
     ReactiveFormsModule
   ],
@@ -26,7 +24,7 @@ import {GameRoomStateBase} from "../dto/GameRoomStateBase";
       <app-main-header/>
 
       <div class="main-container">
-          <section class="config-container">
+          <section class="config-container" style="grid-template-columns: 1fr; justify-items: center;">
               <div class="config-grid-container">
                   <div class="config-header">
                       Room settings
@@ -61,10 +59,6 @@ export class GameRoomConfigComponent {
     roomId: this.fb.control<string>("", [Validators.required])
   });
 
-  ngOnDestroy() {
-    this.roomService().disconnect();
-  }
-
   protected create() {
     const value = this.configForm.getRawValue();
     if(value.username == null) return;
@@ -72,7 +66,7 @@ export class GameRoomConfigComponent {
     this.roomService().createRoom(value.username);
   }
 
-  protected  join() {
+  protected join() {
     const value = this.configForm.getRawValue();
     if(value.username == null || value.roomId == null) return;
 

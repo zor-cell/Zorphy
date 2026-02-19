@@ -76,6 +76,8 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
       this.gameState.set(state);
       this.notification.handleSuccess(`Room ${state.room.roomId} created`);
 
+      console.log(state);
+
       this.subscribeRoom(state.room.roomId);
     });
     this.subscriptions.push(createdSubscription);

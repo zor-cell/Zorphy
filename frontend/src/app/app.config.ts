@@ -1,5 +1,5 @@
 import {ApplicationConfig, importProvidersFrom, provideZonelessChangeDetection} from '@angular/core';
-import {provideRouter} from '@angular/router';
+import {provideRouter, withComponentInputBinding} from '@angular/router';
 
 import {routes} from './app.routes';
 import {provideHttpClient, withInterceptors} from "@angular/common/http";
@@ -32,7 +32,7 @@ const lightBoxProvider: {provide: any, useValue: LightboxConfig} = {
 export const appConfig: ApplicationConfig = {
     providers: [
         provideZonelessChangeDetection(),
-        provideRouter(routes),
+        provideRouter(routes, withComponentInputBinding()),
         provideHttpClient(withInterceptors([credentialInterceptor, errorInterceptor])),
         importProvidersFrom(
             BrowserAnimationsModule
@@ -40,15 +40,6 @@ export const appConfig: ApplicationConfig = {
         provideCharts(withDefaultRegisterables()),
         galleryProvider,
         lightBoxProvider,
-        RxStompService,
-        /*{
-            provide: RxStompService,
-            useFactory: () => {
-                const rxStompService = new RxStompService();
-                rxStompService.configure(rxStompConfig);
-                rxStompService.activate();
-                return rxStompService;
-            }
-        }*/
+        RxStompService
     ]
 };

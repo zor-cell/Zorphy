@@ -1,4 +1,4 @@
-import {Routes} from '@angular/router';
+import {Router, Routes} from '@angular/router';
 import {Connect4Component} from "./sites/connect4/components/connect4.component";
 import {ProjectListComponent} from "./main/projects/components/project-list/project-list.component";
 import {ProjectInfoComponent} from "./main/projects/components/project-info/project-info.component";
@@ -15,6 +15,8 @@ import {GameStatsComponent} from "./main/games/components/stats/game-stats/game-
 import {ScotlandYardGameComponent} from "./sites/scotland-yard/components/game/game.component";
 import {ScotlandYardConfigComponent} from "./sites/scotland-yard/components/config/config.component";
 import {NobodyIsPerfectConfigComponent} from "./sites/nobody-is-perfect/components/config/config.component";
+import {GameRoomConfigComponent} from "./sites/core/ws/components/game-room-config.component";
+import {inject} from "@angular/core";
 
 export const routes: Routes = [
     //project routing
@@ -59,3 +61,4 @@ export const routes: Routes = [
     {path: 'projects/nobody-is-perfect/config', component: NobodyIsPerfectConfigComponent},
     {path: 'projects/nobody-is-perfect/game', component: ScotlandYardGameComponent},
 ];
+

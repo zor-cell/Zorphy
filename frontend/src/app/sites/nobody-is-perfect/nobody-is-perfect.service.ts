@@ -6,7 +6,7 @@ import {GameRoomState} from "./dto/GameRoomState";
   providedIn: 'root'
 })
 export class NobodyIsPerfectService extends GameRoomService<GameRoomState> {
-  protected override gameType: string = '';
+  protected override gameType: string = 'nobody-is-perfect';
 
   constructor() {
     super();
