@@ -1,9 +1,10 @@
-import {Component, effect, inject, input, model, OnDestroy, OnInit, signal, viewChild} from "@angular/core";
+import {Component, computed, effect, inject, input, model, OnDestroy, OnInit, signal, viewChild} from "@angular/core";
 import {MainHeaderComponent} from "../../../../main/core/components/main-header/main-header.component";
 import {GameRoomService} from "../game-room.service";
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {GameRoomStateBase} from "../dto/GameRoomStateBase";
 import {GameRoomLeavePopupComponent} from "./popups/leave-popup/leave-popup.component";
+import {GameRoomInvitePopupComponent} from "./popups/invite-popup/invite-popup.component";
 
 @Component({
   selector: 'game-room',
@@ -11,27 +12,32 @@ import {GameRoomLeavePopupComponent} from "./popups/leave-popup/leave-popup.comp
     MainHeaderComponent,
     FormsModule,
     ReactiveFormsModule,
-    GameRoomLeavePopupComponent
+    GameRoomLeavePopupComponent,
+    GameRoomInvitePopupComponent
   ],
   template: `
       @if (roomService().gameState(); as state) {
           <app-main-header [showBack]="false">
+              <button class="btn btn-primary" (click)="openInvitePopup()">
+                  <i class="bi bi-share-fill"></i>
+              </button>
               <button class="btn btn-danger" (click)="openLeavePopup()">
                   <i class="bi bi-box-arrow-right"></i>
               </button>
           </app-main-header>
 
           <div class="main-container">
-              <div>Room Id: {{state.room.roomId}}</div>
-              @for(a of state.room.members; track a.username) {
-                  <div>{{a.username}}</div>
+              <div>Room Id: {{ state.room.roomId }}</div>
+              @for (a of state.room.members; track a.username) {
+                  <div>{{ a.username }}</div>
               }
 
               <div>Connection: {{ roomService().connectionStatus() }}</div>
-              
+
               <ng-content></ng-content>
           </div>
 
+          <game-room-invite-popup #invitePopup [inviteLink]="inviteLink()"/>
           <game-room-leave-popup #leavePopup
                                  (leaveRoomEvent)="leaveRoom()"/>
       } @else {
@@ -72,10 +78,19 @@ import {GameRoomLeavePopupComponent} from "./popups/leave-popup/leave-popup.comp
 export class GameRoomComponent implements OnDestroy {
   private fb = inject(FormBuilder);
 
+  private invitePopup = viewChild.required<GameRoomInvitePopupComponent>('invitePopup');
   private leavePopup = viewChild.required<GameRoomLeavePopupComponent>('leavePopup');
 
   public roomService = input.required<GameRoomService<GameRoomStateBase>>()
   public roomId = input<string>('');
+
+  protected inviteLink = computed(() => {
+    const state = this.roomService().gameState();
+    if (!state) return '';
+
+    const baseUrl = window.location.origin + window.location.pathname;
+    return `${baseUrl}?roomId=${state.room.roomId}`;
+  });
 
   protected configForm = this.fb.group({
     username: this.fb.control<string>("", [Validators.required]),
@@ -111,6 +126,10 @@ export class GameRoomComponent implements OnDestroy {
 
   protected leaveRoom() {
     this.roomService().disconnect();
+  }
+
+  protected openInvitePopup() {
+    this.invitePopup().openPopup();
   }
 
   protected openLeavePopup() {

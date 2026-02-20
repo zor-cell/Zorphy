@@ -1,0 +1,21 @@
+<ng-template #invitePopup>
+    <div>Copy the link or scan the qr code to invite some friends:</div>
+<br>
+    <div class="flex-container flex-row gap-2">
+        <input class="form-control" disabled [value]="inviteLink()">
+        <button class="btn btn-outline-secondary" (click)="copyInviteLink()">
+            <i class="bi bi-clipboard2"></i>
+        </button>
+    </div>
+
+    <div class="flex-container">
+        <qrcode
+                [qrdata]="inviteLink()"
+                [width]="300"
+                [imageSrc]="'/assets/favicon.svg'"
+                [imageHeight]="50"
+                [imageWidth]="50"
+        />
+    </div>
+
+</ng-template>
