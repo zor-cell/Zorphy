@@ -10,7 +10,7 @@
                     <form [formGroup]="heatMapForm" class="inputs-container">
                         <h3 class="config-header">Mr. X</h3>
 
-                        <input class="number-input-lg position-input" type="number" placeholder="Mr. X Position"
+                        <input class="custom-input-lg position-input" type="number" placeholder="Mr. X Position"
                                formControlName="startNode">
 
                         <div class="move-config">
@@ -43,7 +43,7 @@
                         <h3 class="config-header">Detectives</h3>
 
                         <div class="move-config">
-                            <input class="number-input-lg position-input" type="number" placeholder="Detective Position"
+                            <input class="custom-input-lg position-input" type="number" placeholder="Detective Position"
                                    [formControl]="selectedPlayerControl">
 
                             <button class="small-btn" (click)="addPlayer()">

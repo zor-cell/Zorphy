@@ -1,7 +1,7 @@
 package net.zorphy.backend.site.nobodysperfect.service;
 
 import net.zorphy.backend.site.connect4.exception.InvalidOperationException;
-import net.zorphy.backend.site.core.ws.dto.RoomMember;
+import net.zorphy.backend.site.core.ws.dto.GameRoomMember;
 import net.zorphy.backend.site.core.ws.service.GameRoomBaseService;
 import net.zorphy.backend.site.nobodysperfect.dto.GameRoom;
 import net.zorphy.backend.site.nobodysperfect.dto.GameRoomState;
@@ -21,7 +21,7 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
     public GameRoomState createRoom(String username) {
         String roomId = UUID.randomUUID().toString().substring(0, 6);
 
-        var member = new RoomMember(username);
+        var member = new GameRoomMember(username);
         GameRoom room = new GameRoom(
                 Instant.now(),
                 roomId,
@@ -38,7 +38,7 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
 
     @Override
     public GameRoomState joinRoom(GameRoomState state, String username) {
-        var member = new RoomMember(username);
+        var member = new GameRoomMember(username);
 
         if(state.room().members().contains(member)) {
             throw new InvalidOperationException("Member with this username already exists");
@@ -51,7 +51,7 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
 
     @Override
     public GameRoomState leaveRoom(GameRoomState state, String username) {
-        var member = new RoomMember(username);
+        var member = new GameRoomMember(username);
 
         state.room().members().remove(member);
 
@@ -59,7 +59,7 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
     }
 
     @Override
-    public GameRoomState updateMembers(GameRoomState state, String username, List<RoomMember> members) {
+    public GameRoomState updateMembers(GameRoomState state, String username, List<GameRoomMember> members) {
         if(!state.room().host().username().equals(username)) {
             throw new InvalidOperationException("Only the host can reorder room members");
         }
@@ -71,7 +71,7 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
     }
 
     public GameRoomState addPrompt(GameRoomState state, String username, String message) {
-        RoomMember member = new RoomMember(username);
+        GameRoomMember member = new GameRoomMember(username);
         Prompt prompt = new Prompt(message, member);
 
         state.prompts().add(prompt);

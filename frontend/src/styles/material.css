@@ -22,3 +22,8 @@
 .success-snackbar .mat-mdc-snack-bar-action {
     color: var(--mat-sys-on-error) !important;
 }
+
+/* Popups */
+.mat-mdc-dialog-content {
+    font-size: 1rem !important;
+}

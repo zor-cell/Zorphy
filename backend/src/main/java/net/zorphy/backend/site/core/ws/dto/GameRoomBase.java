@@ -6,5 +6,5 @@ import java.util.List;
 public interface GameRoomBase {
     Instant createdAt();
     String roomId();
-    List<RoomMember> members();
+    List<GameRoomMember> members();
 }

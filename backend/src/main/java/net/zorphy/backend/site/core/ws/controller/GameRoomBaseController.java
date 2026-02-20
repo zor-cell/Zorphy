@@ -7,7 +7,7 @@ import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.site.connect4.exception.InvalidOperationException;
 import net.zorphy.backend.site.core.ws.dto.GameRoomBase;
 import net.zorphy.backend.site.core.ws.dto.GameRoomStateBase;
-import net.zorphy.backend.site.core.ws.dto.RoomMember;
+import net.zorphy.backend.site.core.ws.dto.GameRoomMember;
 import net.zorphy.backend.site.core.ws.service.GameRoomBaseService;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.event.EventListener;
@@ -105,7 +105,7 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
     }
 
     @MessageMapping("update-members/{roomId}")
-    public void updateMembers(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomId, @Payload List<RoomMember> members) {
+    public void updateMembers(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomId, @Payload List<GameRoomMember> members) {
         String targetUser = getUsername(headerAccessor);
 
         executeWithLock(roomId, () -> {

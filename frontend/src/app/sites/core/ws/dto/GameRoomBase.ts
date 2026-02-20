@@ -1,8 +1,8 @@
-import {RoomMember} from "./RoomMember";
+import {GameRoomMember} from "./GameRoomMember";
 
 export interface GameRoomBase {
   createdAt: string;
   roomId: string;
-  members: RoomMember[];
-  host: RoomMember;
+  members: GameRoomMember[];
+  host: GameRoomMember;
 }

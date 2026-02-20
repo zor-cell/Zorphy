@@ -19,7 +19,7 @@ import {GameRoomLeavePopupComponent} from "./popups/leave-popup/leave-popup.comp
 import {GameRoomInvitePopupComponent} from "./popups/invite-popup/invite-popup.component";
 import {MatTooltip} from "@angular/material/tooltip";
 import {CdkDrag, CdkDragDrop, CdkDragPreview, CdkDropList, moveItemInArray} from "@angular/cdk/drag-drop";
-import {RoomMember} from "../dto/RoomMember";
+import {GameRoomMember} from "../dto/GameRoomMember";
 import {Team} from "../../../../main/core/dto/Team";
 
 @Component({
@@ -107,6 +107,10 @@ import {Team} from "../../../../main/core/dto/Team";
         color: #ffc107;
         font-size: 0.85rem;
     }
+    
+    .custom-input-lg {
+        width: 140px;
+    }
   `],
   template: `
       @let startScreen = roomService().gameState() === null;
@@ -147,10 +151,9 @@ import {Team} from "../../../../main/core/dto/Team";
                                               class="drag-player"
                                               [class.is-host]="isHost()">
                                           <span class="player-number">{{ i + 1 }}. </span>
-                                          <span class="player-name">
-                                              {{ member.username }}
+                                          <span class="player-name">{{ member.username }}
                                               @if (member.username == state.room.host.username) {
-                                                  <i class="bi bi-star-fill host-icon"></i>
+                                                  <i class="bi bi-star-fill host-icon ps-1"></i>
                                               }
                                           </span>
                                           <!-- dragging preview -->
@@ -181,21 +184,23 @@ import {Team} from "../../../../main/core/dto/Team";
                       </div>
 
                       <div class="flex-container gap-4" [formGroup]="configForm">
-                          <input placeholder="Username" formControlName="username">
+                          <input class="custom-input-lg" placeholder="Username" formControlName="username">
 
                           <div class="flex-container">
                               <button class="btn btn-primary" [disabled]="configForm.controls.username.invalid"
-                                      (click)="createRoom()">Create New Room
+                                      (click)="createRoom()">Create Room
                               </button>
 
                               <div>
                                   <div class="text-center p-2">OR</div>
 
-                                  <input class="m-2" placeholder="Room Id" formControlName="roomId">
-                                  <button class="btn btn-secondary" [disabled]="configForm.invalid"
-                                          (click)="joinRoom()">
-                                      Join Room
-                                  </button>
+                                  <div class="flex-container flex-row gap-2">
+                                    <input class="custom-input-lg" placeholder="Room Id" formControlName="roomId">
+                                    <button class="btn btn-secondary" [disabled]="configForm.invalid"
+                                            (click)="joinRoom()">
+                                        Join Room
+                                    </button>
+                                  </div>
                               </div>
                           </div>
                       </div>
@@ -279,7 +284,7 @@ export class GameRoomComponent implements OnDestroy {
     this.leavePopup().openPopup();
   }
 
-  protected reorderMembers(event: CdkDragDrop<RoomMember[]>) {
+  protected reorderMembers(event: CdkDragDrop<GameRoomMember[]>) {
     if(event.previousIndex == event.currentIndex) {
       return;
     }

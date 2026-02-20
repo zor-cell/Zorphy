@@ -8,7 +8,7 @@ import {NotificationService} from "../../../main/core/services/notification.serv
 import {RxStompState} from "@stomp/rx-stomp";
 import {GameRoomState} from "../../nobody-is-perfect/dto/GameRoomState";
 import {GameRoomStateBase} from "./dto/GameRoomStateBase";
-import {RoomMember} from "./dto/RoomMember";
+import {GameRoomMember} from "./dto/GameRoomMember";
 
 @Injectable({
   providedIn: 'root'
@@ -52,7 +52,7 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
     this.connectAndSend(username, `join/${roomId}`);
   }
 
-  public reorderMembers(members: RoomMember[]) {
+  public reorderMembers(members: GameRoomMember[]) {
     this.sendMessage(`update-members/${this.roomId()}`, members);
   }
 

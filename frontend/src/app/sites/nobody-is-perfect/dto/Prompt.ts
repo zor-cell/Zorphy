@@ -1,6 +1,6 @@
-import {RoomMember} from "../../core/ws/dto/RoomMember";
+import {GameRoomMember} from "../../core/ws/dto/GameRoomMember";
 
 export interface Prompt {
   message: string;
-  author: RoomMember;
+  author: GameRoomMember;
 }

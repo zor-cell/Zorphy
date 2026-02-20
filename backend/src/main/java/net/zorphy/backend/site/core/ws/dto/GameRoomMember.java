@@ -1,6 +1,6 @@
 package net.zorphy.backend.site.core.ws.dto;
 
-public record RoomMember(
+public record GameRoomMember(
         String username
 ) {
 }
