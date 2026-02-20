@@ -8,6 +8,7 @@ import java.util.List;
 public record GameRoomState(
         GameRoom room,
         GameRoomMember gameMaster,
-        List<Prompt> prompts
+        List<Round> rounds
 ) implements GameRoomStateBase {
+
 }

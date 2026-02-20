@@ -50,15 +50,19 @@ public class GlobalWebSocketExceptionHandler {
 
     private void sendErrorToUser(SimpMessageHeaderAccessor headerAccessor, Exception ex, int code, boolean teardown) {
         String sessionId = headerAccessor.getSessionId();
-        var user = headerAccessor.getUser();
-
-        String targetUser = user != null ? user.getName() : sessionId;
 
         WebSocketError error = new WebSocketError(code, ex.getMessage(), teardown);
+
+        //send to sessionid
+        SimpMessageHeaderAccessor errorAccessor = SimpMessageHeaderAccessor.create();
+        errorAccessor.setSessionId(sessionId);
+        errorAccessor.setLeaveMutable(true);
+
         messagingTemplate.convertAndSendToUser(
-                targetUser,
+                sessionId,
                 "/queue/errors",
-                error
+                error,
+                errorAccessor.getMessageHeaders()
         );
     }
 }

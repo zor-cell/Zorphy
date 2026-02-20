@@ -4,9 +4,7 @@ import net.zorphy.backend.site.connect4.exception.InvalidOperationException;
 import net.zorphy.backend.site.core.ws.dto.GameRoomMember;
 import net.zorphy.backend.site.core.ws.exception.FatalWebsocketException;
 import net.zorphy.backend.site.core.ws.service.GameRoomBaseService;
-import net.zorphy.backend.site.nobodysperfect.dto.GameRoom;
-import net.zorphy.backend.site.nobodysperfect.dto.GameRoomState;
-import net.zorphy.backend.site.nobodysperfect.dto.Prompt;
+import net.zorphy.backend.site.nobodysperfect.dto.*;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -39,30 +37,78 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
 
     @Override
     public GameRoomState joinRoom(GameRoomState state, String username) {
+        List<GameRoomMember> members = new ArrayList<>(state.room().members());
         var member = new GameRoomMember(username);
 
         if(state.room().members().contains(member)) {
-            throw new FatalWebsocketException("Member with this username already exists");
+            throw new FatalWebsocketException("Another room member with this username already exists");
         }
 
-        state.room().members().add(member);
+        //reassign host and game master if room was empty
+        var host = state.room().host();
+        var gameMaster = state.gameMaster();
+        if(members.isEmpty()) {
+            host = member;
+            gameMaster = member;
+        }
 
-        return state;
+        members.add(member);
+
+        return new GameRoomState(
+                new GameRoom(
+                        state.room().createdAt(),
+                        state.room().roomId(),
+                        members,
+                        host
+                ),
+                gameMaster,
+                state.rounds()
+        );
     }
 
     @Override
     public GameRoomState leaveRoom(GameRoomState state, String username) {
+        List<GameRoomMember> members = new ArrayList<>(state.room().members());
         var member = new GameRoomMember(username);
 
-        state.room().members().remove(member);
+        members.remove(member);
 
-        return state;
+        //pick new host after host leaves the room
+        var host = state.room().host();
+        if(host.equals(member)) {
+            if(members.isEmpty()) {
+                host = null;
+            } else {
+                host = members.getFirst();
+            }
+        }
+
+        //pick new game master after game master leaves the room
+        var gameMaster = state.gameMaster();
+        if(gameMaster.equals(member)) {
+            if(members.isEmpty()) {
+                gameMaster = null;
+            } else {
+                gameMaster = members.getFirst();
+            }
+        }
+
+        return new GameRoomState(
+                new GameRoom(
+                        state.room().createdAt(),
+                        state.room().roomId(),
+                        members,
+                        host
+                ),
+                gameMaster,
+                state.rounds()
+        );
     }
 
     @Override
     public GameRoomState updateMembers(GameRoomState state, String username, List<GameRoomMember> members) {
         if(!state.room().host().username().equals(username)) {
-            throw new InvalidOperationException("Only the host can reorder room members");
+            throw new InvalidOperationException("Only the host can update room members");
         }
 
         state.room().members().clear();
@@ -71,12 +117,84 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
         return state;
     }
 
-    public GameRoomState addPrompt(GameRoomState state, String username, String message) {
-        GameRoomMember member = new GameRoomMember(username);
-        Prompt prompt = new Prompt(message, member);
+    public GameRoomState startRound(GameRoomState state, String username) {
+        if(!state.gameMaster().username().equals(username)) {
+            throw new InvalidOperationException("Only the game master can start a round");
+        }
 
-        state.prompts().add(prompt);
+        Round round = new Round(
+                Instant.now(),
+                RoundPhase.PROMPTING,
+                new ArrayList<>()
+        );
+        state.rounds().add(round);
 
         return state;
+    }
+
+    public GameRoomState addPrompt(GameRoomState state, String username, String message) {
+        if(state.rounds().isEmpty()) {
+            throw new InvalidOperationException("No round was started");
+        }
+
+        GameRoomMember member = new GameRoomMember(username);
+        Prompt prompt = new Prompt(
+                Instant.now(),
+                message,
+                member
+        );
+
+        var currentRound = state.rounds().getLast();
+        currentRound.prompts().add(prompt);
+
+        return state;
+    }
+
+    public GameRoomState startGuessRound(GameRoomState state, String username) {
+        if(!state.gameMaster().username().equals(username)) {
+            throw new InvalidOperationException("Only the game master can start the guess round");
+        } else if(state.rounds().isEmpty()) {
+            throw new InvalidOperationException("No round was started");
+        }
+
+        //update phase in current round
+        List<Round> rounds = new ArrayList<>(state.rounds());
+        var currentRound = rounds.getLast();
+
+        rounds.set(rounds.size() - 1, new Round(
+           currentRound.startedAt(),
+           RoundPhase.GUESSING,
+           currentRound.prompts()
+        ));
+
+        return new GameRoomState(
+                state.room(),
+                state.gameMaster(),
+                rounds
+        );
+    }
+
+    public GameRoomState revealRound(GameRoomState state, String username) {
+        if(!state.gameMaster().username().equals(username)) {
+            throw new InvalidOperationException("Only the game master can start the reveal round");
+        } else if(state.rounds().isEmpty()) {
+            throw new InvalidOperationException("No round was started");
+        }
+
+        //update phase in current round
+        List<Round> rounds = new ArrayList<>(state.rounds());
+        var currentRound = rounds.getLast();
+
+        rounds.set(rounds.size() - 1, new Round(
+                currentRound.startedAt(),
+                RoundPhase.REVEAL,
+                currentRound.prompts()
+        ));
+
+        return new GameRoomState(
+                state.room(),
+                state.gameMaster(),
+                rounds
+        );
     }
 }

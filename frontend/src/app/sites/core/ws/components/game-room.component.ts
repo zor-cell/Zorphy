@@ -103,9 +103,23 @@ import {Team} from "../../../../main/core/dto/Team";
         cursor: move;
     }
 
+    .player-name {
+        display: flex;
+        align-items: center;
+        
+        gap: 0.25rem;
+        
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        text-align: left;
+    }
+    
     .host-icon {
         color: #ffc107;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
+        line-height: 0.8rem;
     }
     
     .custom-input-lg {
@@ -151,9 +165,11 @@ import {Team} from "../../../../main/core/dto/Team";
                                               class="drag-player"
                                               [class.is-host]="isHost()">
                                           <span class="player-number">{{ i + 1 }}. </span>
-                                          <span class="player-name">{{ member.username }}
-                                              @if (member.username == state.room.host.username) {
-                                                  <i class="bi bi-star-fill host-icon ps-1"></i>
+                                          <span class="player-name" 
+                                                [class.fw-bold]="member.username === roomService().username()">
+                                              {{ member.username }}
+                                              @if (member.username === state.room.host.username) {
+                                                  <i class="bi bi-star-fill host-icon"></i>
                                               }
                                           </span>
                                           <!-- dragging preview -->

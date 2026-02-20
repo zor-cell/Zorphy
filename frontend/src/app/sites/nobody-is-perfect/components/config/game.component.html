@@ -1,0 +1,15 @@
+
+<game-room [roomService]="roomService" [roomId]="roomId()">
+    @if(roomService.gameState(); as state) {
+        @if(isGameMaster()) {
+            <div>You are the game master!</div>
+        } @else {
+            <div><span class="bold-text">{{state.gameMaster.username}}</span> is the game master!</div>
+        }
+    }
+</game-room>
+
+
+
+
+
