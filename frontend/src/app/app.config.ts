@@ -8,8 +8,8 @@ import {credentialInterceptor, errorInterceptor} from "./main/core/interceptors"
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {LIGHTBOX_CONFIG, LightboxConfig} from "ng-gallery/lightbox";
 import {GALLERY_CONFIG, GalleryConfig} from "ng-gallery";
-import {RxStompService} from "./sites/core/ws/rx-stomp.service";
-import {rxStompConfig} from "./sites/core/ws/rx-stomp-config";
+import {WebSocketService} from "./sites/core/ws/web-socket.service";
+import {webSocketConfig} from "./sites/core/ws/web-socket-config";
 
 const galleryProvider: {provide: any, useValue: GalleryConfig} = {
     provide: GALLERY_CONFIG,
@@ -40,6 +40,6 @@ export const appConfig: ApplicationConfig = {
         provideCharts(withDefaultRegisterables()),
         galleryProvider,
         lightBoxProvider,
-        RxStompService
+        WebSocketService
     ]
 };

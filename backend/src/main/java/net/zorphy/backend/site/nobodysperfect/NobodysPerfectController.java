@@ -1,6 +1,7 @@
 package net.zorphy.backend.site.nobodysperfect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.site.core.ws.controller.GameRoomBaseController;
 import net.zorphy.backend.site.nobodysperfect.dto.GameRoom;
 import net.zorphy.backend.site.nobodysperfect.dto.GameRoomState;
@@ -25,7 +26,14 @@ public class NobodysPerfectController extends GameRoomBaseController<GameRoom, G
                                     ServerProperties serverProperties,
                                     ObjectMapper objectMapper
     ) {
-        super(socketService, messagingTemplate, stringRedisTemplate, serverProperties, objectMapper, GameRoomState.class);
+        super(socketService,
+                messagingTemplate,
+                stringRedisTemplate,
+                serverProperties,
+                objectMapper,
+                GameRoomState.class,
+                GameType.NOBODY_IS_PERFECT
+        );
         this.socketService = socketService;
     }
 

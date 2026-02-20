@@ -30,19 +30,6 @@ export class PopupService {
             }
         });
 
-        /*const modalRef = this.modalService.open(PopupDialogComponent);
-
-        //set popup inputs
-        modalRef.componentInstance.formId.set(`form-${crypto.randomUUID()}`);
-        modalRef.componentInstance.title.set(title);
-
-        if (submitText) modalRef.componentInstance.submitText.set(submitText);
-        if (discardText) modalRef.componentInstance.discardText.set(discardText);
-        if (cancelText) modalRef.componentInstance.cancelText.set(cancelText);
-
-        if (submitValidator) modalRef.componentInstance.submitValidator.set(submitValidator);
-        modalRef.componentInstance.bodyTemplate.set(bodyTemplate);*/
-
         dialogRef.afterClosed().subscribe((res) => {
             callback(res ?? PopupResultType.CANCEL);
         });

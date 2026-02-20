@@ -1,11 +1,11 @@
 import {Injectable, signal} from '@angular/core';
 import {RxStomp, RxStompState} from '@stomp/rx-stomp';
-import {rxStompConfig} from "./rx-stomp-config";
+import {webSocketConfig} from "./web-socket-config";
 
 @Injectable({
     providedIn: 'root',
 })
-export class RxStompService extends RxStomp {
+export class WebSocketService extends RxStomp {
     constructor() {
         super();
     }
@@ -17,7 +17,7 @@ export class RxStompService extends RxStomp {
         }
 
         const finalConfig = {
-            ...rxStompConfig,
+            ...webSocketConfig,
             connectHeaders: {
                 'user-name': username,
             },

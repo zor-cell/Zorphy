@@ -1,10 +1,10 @@
 import {RxStompConfig} from "@stomp/rx-stomp";
 import SockJS from "sockjs-client";
+import {environment} from "../../../../environments/environment";
 
-export const rxStompConfig: RxStompConfig = {
+export const webSocketConfig: RxStompConfig = {
     webSocketFactory: () => {
-        const WEBSOCKET_ENDPOINT = 'http://localhost:8080/api/ws';
-        return new SockJS(WEBSOCKET_ENDPOINT) as WebSocket;
+        return new SockJS(environment.wsApiUrl) as WebSocket;
     },
     heartbeatIncoming: 0,
     heartbeatOutgoing: 20000,

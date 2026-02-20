@@ -1,13 +1,9 @@
-@if(!roomService.gameState()) {
-    <game-room-config [roomService]="roomService"/>
-} @else {
-    <div>{{roomService.gameState()?.room?.roomId}}</div>
-    @for(a of roomService.gameState()?.room?.members; track a.username) {
-        <div>{{a.username}}</div>
-    }
 
-    <div>Connection: {{ roomService.connectionStatus() }}</div>
-}
+<game-room [roomService]="roomService" [roomId]="roomId()">
+    <div>Some ngcontent</div>
+</game-room>
+
+
 
 
 

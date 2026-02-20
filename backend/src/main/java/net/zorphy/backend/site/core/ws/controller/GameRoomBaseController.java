@@ -3,6 +3,7 @@ package net.zorphy.backend.site.core.ws.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.zorphy.backend.main.core.exception.InvalidSessionException;
+import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.site.core.ws.dto.GameRoomBase;
 import net.zorphy.backend.site.core.ws.dto.GameRoomStateBase;
 import net.zorphy.backend.site.core.ws.service.GameRoomBaseService;
@@ -23,8 +24,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 
 public abstract class GameRoomBaseController<Room extends GameRoomBase, State extends GameRoomStateBase> {
-    private static final String REDIS_NAMESPACE = "zorphy";
-    private static final String REDIS_ROOM_NAMESPACE = "rooms";
+    private final String SESSION_KEY;
 
     private final ConcurrentHashMap<String, Lock> roomLocks = new ConcurrentHashMap<>();
     private final GameRoomBaseService<Room, State> roomBaseService;
@@ -40,7 +40,8 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
            StringRedisTemplate redisTemplate,
            ServerProperties serverProperties,
            ObjectMapper mapper,
-           Class<State> stateClass
+           Class<State> stateClass,
+           GameType gameType
     ) {
         this.roomBaseService = roomBaseService;
         this.messagingTemplate = messagingTemplate;
@@ -48,6 +49,7 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
         this.sessionTimeout = serverProperties.getServlet().getSession().getTimeout();
         this.mapper = mapper;
         this.stateClass = stateClass;
+        this.SESSION_KEY = "zorphy:rooms:" + gameType.toString();
     }
 
     @EventListener
@@ -59,6 +61,7 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
         }
 
         String username = accessor.getUser().getName();
+
         String roomId = accessor.getSessionAttributes().get("room-id").toString();
 
         executeWithLock(roomId, () -> {
@@ -75,6 +78,8 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
 
         State state = roomBaseService.createRoom(targetUser);
         setRoomState(state);
+
+        headerAccessor.getSessionAttributes().put("room-id", state.room().roomId());
 
         messagingTemplate.convertAndSendToUser(targetUser, "/queue/created", state);
     }
@@ -162,6 +167,6 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
     }
 
     private String getRoomKey(String roomId) {
-        return REDIS_NAMESPACE + ":" + REDIS_ROOM_NAMESPACE + ":" + roomId;
+        return SESSION_KEY + ":" + roomId;
     }
 }

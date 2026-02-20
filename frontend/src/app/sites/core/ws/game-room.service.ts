@@ -1,5 +1,5 @@
 import {inject, Injectable, OnDestroy, signal} from '@angular/core';
-import {RxStompService} from "./rx-stomp.service";
+import {WebSocketService} from "./web-socket.service";
 import {map, Observable, Subscription} from "rxjs";
 import {GameRoom} from "../../nobody-is-perfect/dto/GameRoom";
 import {IMessage} from "@stomp/stompjs";
@@ -13,7 +13,7 @@ import {GameRoomStateBase} from "./dto/GameRoomStateBase";
   providedIn: 'root'
 })
 export abstract class GameRoomService<State extends GameRoomStateBase> {
-  private stompService = inject(RxStompService);
+  private stompService = inject(WebSocketService);
   private notification = inject(NotificationService);
 
   protected abstract readonly gameType: string;
@@ -51,6 +51,9 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
     }
 
     this.stompService.disconnect();
+
+    this.gameState.set(null);
+    this.subscriptionsInitialized = false;
   }
 
   private connectAndSend(username: string, destination: string, body: any = '') {
@@ -75,8 +78,6 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
     const createdSubscription = this.watchAndMap<State>('/user/queue/created').subscribe(state => {
       this.gameState.set(state);
       this.notification.handleSuccess(`Room ${state.room.roomId} created`);
-
-      console.log(state);
 
       this.subscribeRoom(state.room.roomId);
     });

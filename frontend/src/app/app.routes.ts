@@ -15,7 +15,7 @@ import {GameStatsComponent} from "./main/games/components/stats/game-stats/game-
 import {ScotlandYardGameComponent} from "./sites/scotland-yard/components/game/game.component";
 import {ScotlandYardConfigComponent} from "./sites/scotland-yard/components/config/config.component";
 import {NobodyIsPerfectConfigComponent} from "./sites/nobody-is-perfect/components/config/config.component";
-import {GameRoomConfigComponent} from "./sites/core/ws/components/game-room-config.component";
+import {GameRoomComponent} from "./sites/core/ws/components/game-room.component";
 import {inject} from "@angular/core";
 
 export const routes: Routes = [
