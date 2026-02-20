@@ -1,6 +1,6 @@
 package net.zorphy.backend.site.nobodysperfect.service;
 
-import net.zorphy.backend.main.core.exception.InvalidSessionException;
+import net.zorphy.backend.site.connect4.exception.InvalidOperationException;
 import net.zorphy.backend.site.core.ws.dto.RoomMember;
 import net.zorphy.backend.site.core.ws.service.GameRoomBaseService;
 import net.zorphy.backend.site.nobodysperfect.dto.GameRoom;
@@ -25,12 +25,12 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
         GameRoom room = new GameRoom(
                 Instant.now(),
                 roomId,
-                new ArrayList<>(List.of(member))
+                new ArrayList<>(List.of(member)),
+                member
         );
 
         return new GameRoomState(
                 room,
-                member,
                 member,
                 new ArrayList<>()
         );
@@ -41,7 +41,7 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
         var member = new RoomMember(username);
 
         if(state.room().members().contains(member)) {
-            throw new InvalidSessionException("Member with this username already exists");
+            throw new InvalidOperationException("Member with this username already exists");
         }
 
         state.room().members().add(member);
@@ -54,6 +54,18 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
         var member = new RoomMember(username);
 
         state.room().members().remove(member);
+
+        return state;
+    }
+
+    @Override
+    public GameRoomState updateMembers(GameRoomState state, String username, List<RoomMember> members) {
+        if(!state.room().host().username().equals(username)) {
+            throw new InvalidOperationException("Only the host can reorder room members");
+        }
+
+        state.room().members().clear();
+        state.room().members().addAll(members);
 
         return state;
     }

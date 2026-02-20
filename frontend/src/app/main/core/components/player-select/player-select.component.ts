@@ -23,7 +23,6 @@ import {NotificationService} from "../../services/notification.service";
     NewPlayerPopupComponent
 ],
     templateUrl: './player-select.component.html',
-    
     styleUrl: './player-select.component.css',
     providers: [
         {

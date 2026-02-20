@@ -8,6 +8,7 @@ import {NotificationService} from "../../../main/core/services/notification.serv
 import {RxStompState} from "@stomp/rx-stomp";
 import {GameRoomState} from "../../nobody-is-perfect/dto/GameRoomState";
 import {GameRoomStateBase} from "./dto/GameRoomStateBase";
+import {RoomMember} from "./dto/RoomMember";
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,13 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
   private subscriptions: Subscription[] = [];
 
   public connectionStatus = signal('');
+
+  public username = signal<string | null>(null);
+  public roomId = signal<string | null>(null);
   public gameState = signal<State | null>(null);
+
+  //an intermediate username state, that holds the current username and only sets the signal after a successful operation
+  private pendingUsername: string | null = null;
 
   protected constructor() {
     this.stompService.connectionState$.subscribe(state => {
@@ -45,6 +52,10 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
     this.connectAndSend(username, `join/${roomId}`);
   }
 
+  public reorderMembers(members: RoomMember[]) {
+    this.sendMessage(`update-members/${this.roomId()}`, members);
+  }
+
   public disconnect() {
     for(const subscription of this.subscriptions) {
       subscription.unsubscribe();
@@ -52,11 +63,14 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
 
     this.stompService.disconnect();
 
+    this.username.set(null);
+    this.roomId.set(null);
     this.gameState.set(null);
     this.subscriptionsInitialized = false;
   }
 
   private connectAndSend(username: string, destination: string, body: any = '') {
+    this.pendingUsername = username;
     this.stompService.connect(username);
 
     if(!this.subscriptionsInitialized) {
@@ -76,7 +90,12 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
 
   protected subscribeDefaults() {
     const createdSubscription = this.watchAndMap<State>('/user/queue/created').subscribe(state => {
+      if(this.pendingUsername) {
+        this.username.set(this.pendingUsername);
+      }
+      this.roomId.set(state.room.roomId);
       this.gameState.set(state);
+
       this.notification.handleSuccess(`Room ${state.room.roomId} created`);
 
       this.subscribeRoom(state.room.roomId);
@@ -84,7 +103,12 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
     this.subscriptions.push(createdSubscription);
 
     const joinedSubscription = this.watchAndMap<State>('/user/queue/joined').subscribe(state => {
+      if(this.pendingUsername) {
+        this.username.set(this.pendingUsername);
+      }
+      this.roomId.set(state.room.roomId);
       this.gameState.set(state);
+
       this.notification.handleSuccess(`Room ${state.room.roomId} joined`);
 
       this.subscribeRoom(state.room.roomId);

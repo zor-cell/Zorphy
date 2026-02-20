@@ -1,7 +1,8 @@
-package net.zorphy.backend.config.ws;
+package net.zorphy.backend.site.core.ws.controller;
 
 import net.zorphy.backend.main.core.exception.InvalidSessionException;
 import net.zorphy.backend.main.core.exception.NotFoundException;
+import net.zorphy.backend.site.connect4.exception.InvalidOperationException;
 import net.zorphy.backend.site.core.ws.dto.WebSocketError;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -16,13 +17,18 @@ public class GlobalWebSocketExceptionHandler {
         this.messagingTemplate = messagingTemplate;
     }
 
-    @MessageExceptionHandler({InvalidSessionException.class, IllegalArgumentException.class})
-    public void handleBadRequestExceptions(Exception ex, SimpMessageHeaderAccessor headerAccessor) {
+    @MessageExceptionHandler({InvalidOperationException.class})
+    public void handleInvalidOperation(Exception ex, SimpMessageHeaderAccessor headerAccessor) {
         sendErrorToUser(headerAccessor, ex, 400);
     }
 
+    @MessageExceptionHandler({InvalidSessionException.class})
+    public void handlerInvalidSession(Exception ex, SimpMessageHeaderAccessor headerAccessor) {
+        sendErrorToUser(headerAccessor, ex, 403);
+    }
+
     @MessageExceptionHandler(NotFoundException.class)
-    public void handleNotFoundExceptions(Exception ex, SimpMessageHeaderAccessor headerAccessor) {
+    public void handleNotFound(Exception ex, SimpMessageHeaderAccessor headerAccessor) {
         sendErrorToUser(headerAccessor, ex, 404);
     }
 

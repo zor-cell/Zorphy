@@ -5,7 +5,6 @@ import {Prompt} from "./Prompt";
 
 export interface GameRoomState extends GameRoomStateBase {
   room: GameRoom;
-  host: RoomMember;
   gameMaster: RoomMember;
   prompts: Prompt[];
 }

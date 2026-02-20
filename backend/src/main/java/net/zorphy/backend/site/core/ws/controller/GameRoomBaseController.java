@@ -2,33 +2,36 @@ package net.zorphy.backend.site.core.ws.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.zorphy.backend.main.core.exception.InvalidSessionException;
+import net.zorphy.backend.main.core.exception.NotFoundException;
 import net.zorphy.backend.main.game.dto.GameType;
+import net.zorphy.backend.site.connect4.exception.InvalidOperationException;
 import net.zorphy.backend.site.core.ws.dto.GameRoomBase;
 import net.zorphy.backend.site.core.ws.dto.GameRoomStateBase;
+import net.zorphy.backend.site.core.ws.dto.RoomMember;
 import net.zorphy.backend.site.core.ws.service.GameRoomBaseService;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.integration.redis.util.RedisLockRegistry;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.time.Duration;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 
 public abstract class GameRoomBaseController<Room extends GameRoomBase, State extends GameRoomStateBase> {
     private final String SESSION_KEY;
 
-    private final ConcurrentHashMap<String, Lock> roomLocks = new ConcurrentHashMap<>();
     private final GameRoomBaseService<Room, State> roomBaseService;
     private final StringRedisTemplate redisTemplate;
+    private final RedisLockRegistry redisLockRegistry;
     private final Duration sessionTimeout;
     private final ObjectMapper mapper;
     private final Class<State> stateClass;
@@ -38,6 +41,7 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
            GameRoomBaseService<Room, State> roomBaseService,
            SimpMessagingTemplate messagingTemplate,
            StringRedisTemplate redisTemplate,
+           RedisLockRegistry redisLockRegistry,
            ServerProperties serverProperties,
            ObjectMapper mapper,
            Class<State> stateClass,
@@ -46,6 +50,7 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
         this.roomBaseService = roomBaseService;
         this.messagingTemplate = messagingTemplate;
         this.redisTemplate = redisTemplate;
+        this.redisLockRegistry = redisLockRegistry;
         this.sessionTimeout = serverProperties.getServlet().getSession().getTimeout();
         this.mapper = mapper;
         this.stateClass = stateClass;
@@ -99,17 +104,39 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
         });
     }
 
+    @MessageMapping("update-members/{roomId}")
+    public void updateMembers(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomId, @Payload List<RoomMember> members) {
+        String targetUser = getUsername(headerAccessor);
+
+        executeWithLock(roomId, () -> {
+            State state = roomBaseService.updateMembers(getRoomState(roomId), targetUser, members);
+            setRoomState(state);
+
+            messagingTemplate.convertAndSend("/topic/game/" + roomId, state);
+        });
+    }
+
     /**
      * Executes an action on a given {@code roomId} with a lock, so no race conditions can occur
      */
     protected void executeWithLock(String roomId, Runnable action) {
-        Lock lock = roomLocks.computeIfAbsent(roomId, k -> new ReentrantLock());
+        Lock lock = redisLockRegistry.obtain(roomId);
 
-        lock.lock();
+        boolean acquired = false;
         try {
+            acquired = lock.tryLock(5, java.util.concurrent.TimeUnit.SECONDS);
+            if (!acquired) {
+                throw new InvalidOperationException("Could not acquire lock for room " + roomId);
+            }
+
             action.run();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new InvalidOperationException("Interrupted while waiting for room lock");
         } finally {
-            lock.unlock();
+            if (acquired) {
+                lock.unlock();
+            }
         }
     }
 
@@ -123,12 +150,12 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
         try {
             String roomJson = redisTemplate.opsForValue().get(roomKey);
             if(roomJson == null) {
-                throw new InvalidSessionException("Room does not exist");
+                throw new NotFoundException("Room does not exist");
             }
 
             return mapper.readValue(roomJson, stateClass);
         } catch (JsonProcessingException e) {
-            throw new InvalidSessionException("Could not parse room state");
+            throw new InvalidOperationException("Could not parse room state");
         }
     }
 
@@ -145,7 +172,7 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
             redisTemplate.opsForValue().set(roomKey, value);
             redisTemplate.expire(roomKey, sessionTimeout);
         } catch (JsonProcessingException e) {
-            throw new InvalidSessionException("Could not parse room state");
+            throw new InvalidOperationException("Could not parse room state");
         }
     }
 
@@ -155,18 +182,18 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
     protected String getUsername(SimpMessageHeaderAccessor headerAccessor) {
         String sessionId = headerAccessor.getSessionId();
         if(sessionId == null || sessionId.isBlank()) {
-            throw new InvalidSessionException("Session ID is required");
+            throw new InvalidOperationException("Session ID is required");
         }
 
         var user = headerAccessor.getUser();
         if(user == null || user.getName() == null || user.getName().isBlank()) {
-            throw new InvalidSessionException("Username is required");
+            throw new InvalidOperationException("Username is required");
         }
 
         return user.getName();
     }
 
     private String getRoomKey(String roomId) {
-        return SESSION_KEY + ":" + roomId;
+        return SESSION_KEY + ":" + roomId.toLowerCase();
     }
 }

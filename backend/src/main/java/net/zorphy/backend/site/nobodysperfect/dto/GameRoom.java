@@ -9,6 +9,6 @@ import java.util.List;
 public record GameRoom(
         Instant createdAt,
         String roomId,
-        List<RoomMember> members
-) implements GameRoomBase {
-}
+        List<RoomMember> members,
+        RoomMember host
+) implements GameRoomBase { }

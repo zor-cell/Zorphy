@@ -7,7 +7,6 @@ import java.util.List;
 
 public record GameRoomState(
         GameRoom room,
-        RoomMember host,
         RoomMember gameMaster,
         List<Prompt> prompts
 ) implements GameRoomStateBase {

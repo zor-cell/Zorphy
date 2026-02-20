@@ -1,4 +1,16 @@
-import {Component, computed, effect, inject, input, model, OnDestroy, OnInit, signal, viewChild} from "@angular/core";
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  linkedSignal,
+  model,
+  OnDestroy,
+  OnInit,
+  signal,
+  viewChild
+} from "@angular/core";
 import {MainHeaderComponent} from "../../../../main/core/components/main-header/main-header.component";
 import {GameRoomService} from "../game-room.service";
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
@@ -6,6 +18,9 @@ import {GameRoomStateBase} from "../dto/GameRoomStateBase";
 import {GameRoomLeavePopupComponent} from "./popups/leave-popup/leave-popup.component";
 import {GameRoomInvitePopupComponent} from "./popups/invite-popup/invite-popup.component";
 import {MatTooltip} from "@angular/material/tooltip";
+import {CdkDrag, CdkDragDrop, CdkDragPreview, CdkDropList, moveItemInArray} from "@angular/cdk/drag-drop";
+import {RoomMember} from "../dto/RoomMember";
+import {Team} from "../../../../main/core/dto/Team";
 
 @Component({
   selector: 'game-room',
@@ -15,7 +30,10 @@ import {MatTooltip} from "@angular/material/tooltip";
     ReactiveFormsModule,
     GameRoomLeavePopupComponent,
     GameRoomInvitePopupComponent,
-    MatTooltip
+    MatTooltip,
+    CdkDrag,
+    CdkDropList,
+    CdkDragPreview
   ],
   styles: [`
     .status-indicator {
@@ -36,34 +54,117 @@ import {MatTooltip} from "@angular/material/tooltip";
     .status-indicator.connecting { 
         background-color: #fd7e14;
     }
+
+    .list-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .drag-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        gap: 0.1rem;
+    }
+
+    .drag-element {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+
+        height: 1.75rem;
+    }
+
+    .drag-player {
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+        gap: 0.2rem;
+        align-items: center;
+
+        overflow: clip;
+
+        border-radius: 10px;
+        background: white;
+        border: 1px solid #ccc;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+
+        width: 140px;
+        height: 1.75rem;
+    }
+    
+    .drag-player.is-host {
+        cursor: move;
+    }
+
+    .host-icon {
+        color: #ffc107;
+        font-size: 0.85rem;
+    }
   `],
   template: `
       @let startScreen = roomService().gameState() === null;
       <app-main-header [showBack]="startScreen">
-              <span [matTooltip]="'Connection status: ' + roomService().connectionStatus()" matTooltipPosition="right" ngProjectAs="middle" class="status-indicator me-auto"
+              <span [matTooltip]="'Connection status: ' + roomService().connectionStatus()" matTooltipPosition="right"
+                    ngProjectAs="middle" class="status-indicator me-auto"
                     [class.connected]="roomService().connectionStatus() === 'CONNECTED'"
                     [class.connecting]="roomService().connectionStatus() === 'CONNECTING' || roomService().connectionStatus() === 'UNKNOWN'">
                   
               </span>
-          
-          @if(!startScreen) {
-          <button class="btn btn-primary" (click)="openInvitePopup()">
-              <i class="bi bi-share"></i>
-          </button>
-          <button class="btn btn-danger" (click)="openLeavePopup()">
-              <i class="bi bi-box-arrow-right"></i>
-          </button>
+
+          @if (!startScreen) {
+              <button class="btn btn-primary" (click)="openInvitePopup()">
+                  <i class="bi bi-share"></i>
+              </button>
+              <button class="btn btn-danger" (click)="openLeavePopup()">
+                  <i class="bi bi-box-arrow-right"></i>
+              </button>
           }
       </app-main-header>
-      
-      @if (roomService().gameState(); as state) {
-          <div class="main-container">
-              <div>Room Id: {{ state.room.roomId }}</div>
-              @for (a of state.room.members; track a.username) {
-                  <div>{{ a.username }}</div>
-              }
 
-              <div>Connection: {{ roomService().connectionStatus() }}</div>
+      @if (roomService().gameState(); as state) {
+          <div class="main-container flex-container gap-5">
+              <div class="flex-container gap-3">
+                  <h3 class="config-header">Room {{ state.room.roomId }}</h3>
+
+                  <div class="flex-container gap-2">
+                      <div class="list-container">
+                          <div cdkDropList
+                               [cdkDropListData]="members()"
+                               (cdkDropListDropped)="reorderMembers($event)"
+                               [cdkDropListDisabled]="!isHost()"
+                               class="drag-container"
+                          >
+                              @for (member of members(); track member.username; let i = $index) {
+                                  <div class="drag-element">
+                                      <button cdkDrag
+                                              class="drag-player"
+                                              [class.is-host]="isHost()">
+                                          <span class="player-number">{{ i + 1 }}. </span>
+                                          <span class="player-name">
+                                              {{ member.username }}
+                                              @if (member.username == state.room.host.username) {
+                                                  <i class="bi bi-star-fill host-icon"></i>
+                                              }
+                                          </span>
+                                          <!-- dragging preview -->
+                                          <div *cdkDragPreview class="drag-player">
+                                              <span class="player-number">{{ i + 1 }}. </span>
+                                              <span class="player-name">{{ member.username }}</span>
+                                          </div>
+                                      </button>
+                                  </div>
+                              }
+                          </div>
+                      </div>
+                  </div>
+              </div>
 
               <ng-content></ng-content>
           </div>
@@ -120,6 +221,18 @@ export class GameRoomComponent implements OnDestroy {
     const baseUrl = window.location.origin + window.location.pathname;
     return `${baseUrl}?roomId=${state.room.roomId}`;
   });
+  protected isHost = computed(() => {
+    const state = this.roomService().gameState();
+    const username = this.roomService().username();
+    if (!state || !username) return false;
+
+    return state.room.host.username === username;
+  })
+
+  protected members = linkedSignal({
+    source: () => this.roomService().gameState()?.room?.members || [],
+    computation: (sourceMembers) => [...sourceMembers]
+  });
 
   protected configForm = this.fb.group({
     username: this.fb.control<string>("", [Validators.required]),
@@ -155,6 +268,7 @@ export class GameRoomComponent implements OnDestroy {
 
   protected leaveRoom() {
     this.roomService().disconnect();
+    this.configForm.reset();
   }
 
   protected openInvitePopup() {
@@ -163,5 +277,17 @@ export class GameRoomComponent implements OnDestroy {
 
   protected openLeavePopup() {
     this.leavePopup().openPopup();
+  }
+
+  protected reorderMembers(event: CdkDragDrop<RoomMember[]>) {
+    if(event.previousIndex == event.currentIndex) {
+      return;
+    }
+
+    const members = [...this.members()];
+    moveItemInArray(members, event.previousIndex, event.currentIndex);
+
+    this.members.set(members);
+    this.roomService().reorderMembers(this.members());
   }
 }

@@ -5,4 +5,5 @@ export interface GameRoom extends GameRoomBase {
     createdAt: string;
     roomId: string;
     members: RoomMember[];
+    host: RoomMember;
 }
