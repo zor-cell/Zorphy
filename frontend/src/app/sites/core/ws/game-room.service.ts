@@ -17,7 +17,7 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
   private notification = inject(NotificationService);
 
   protected abstract readonly gameType: string;
-  protected readonly APP_PREFIX = '/app/';
+  protected readonly APP_PREFIX = '/app';
 
   private subscriptionsInitialized: boolean = false;
   private subscriptions: Subscription[] = [];
@@ -69,7 +69,7 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
 
   protected sendMessage(destination: string, body: any = '') {
     this.stompService.publish({
-      destination: `${this.APP_PREFIX}${this.gameType}/${destination}`,
+      destination: `${this.APP_PREFIX}/${this.gameType}/${destination}`,
       body: JSON.stringify(body)
     });
   }

@@ -5,6 +5,7 @@ import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angula
 import {GameRoomStateBase} from "../dto/GameRoomStateBase";
 import {GameRoomLeavePopupComponent} from "./popups/leave-popup/leave-popup.component";
 import {GameRoomInvitePopupComponent} from "./popups/invite-popup/invite-popup.component";
+import {MatTooltip} from "@angular/material/tooltip";
 
 @Component({
   selector: 'game-room',
@@ -13,19 +14,49 @@ import {GameRoomInvitePopupComponent} from "./popups/invite-popup/invite-popup.c
     FormsModule,
     ReactiveFormsModule,
     GameRoomLeavePopupComponent,
-    GameRoomInvitePopupComponent
+    GameRoomInvitePopupComponent,
+    MatTooltip
   ],
+  styles: [`
+    .status-indicator {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        display: inline-block;
+        background-color: #dc3545;
+        box-shadow:
+                inset 0 2px 4px rgba(255,255,255,0.25),
+                inset 0 -2px 4px rgba(0,0,0,0.25);
+    }
+    
+    .status-indicator.connected { 
+        background-color: #198754;
+    }
+    
+    .status-indicator.connecting { 
+        background-color: #fd7e14;
+    }
+  `],
   template: `
+      @let startScreen = roomService().gameState() === null;
+      <app-main-header [showBack]="startScreen">
+              <span [matTooltip]="'Connection status: ' + roomService().connectionStatus()" matTooltipPosition="right" ngProjectAs="middle" class="status-indicator me-auto"
+                    [class.connected]="roomService().connectionStatus() === 'CONNECTED'"
+                    [class.connecting]="roomService().connectionStatus() === 'CONNECTING' || roomService().connectionStatus() === 'UNKNOWN'">
+                  
+              </span>
+          
+          @if(!startScreen) {
+          <button class="btn btn-primary" (click)="openInvitePopup()">
+              <i class="bi bi-share"></i>
+          </button>
+          <button class="btn btn-danger" (click)="openLeavePopup()">
+              <i class="bi bi-box-arrow-right"></i>
+          </button>
+          }
+      </app-main-header>
+      
       @if (roomService().gameState(); as state) {
-          <app-main-header [showBack]="false">
-              <button class="btn btn-primary" (click)="openInvitePopup()">
-                  <i class="bi bi-share-fill"></i>
-              </button>
-              <button class="btn btn-danger" (click)="openLeavePopup()">
-                  <i class="bi bi-box-arrow-right"></i>
-              </button>
-          </app-main-header>
-
           <div class="main-container">
               <div>Room Id: {{ state.room.roomId }}</div>
               @for (a of state.room.members; track a.username) {
@@ -41,8 +72,6 @@ import {GameRoomInvitePopupComponent} from "./popups/invite-popup/invite-popup.c
           <game-room-leave-popup #leavePopup
                                  (leaveRoomEvent)="leaveRoom()"/>
       } @else {
-          <app-main-header/>
-
           <div class="main-container">
               <section class="config-container" style="grid-template-columns: 1fr; justify-items: center;">
                   <div class="config-grid-container">
