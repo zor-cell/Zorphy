@@ -67,6 +67,7 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
     this.roomId.set(null);
     this.gameState.set(null);
     this.subscriptionsInitialized = false;
+    this.subscriptions = [];
   }
 
   private connectAndSend(username: string, destination: string, body: any = '') {
@@ -117,6 +118,11 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
 
     const errorsSubscription = this.watchAndMap<WebSocketError>('/user/queue/errors').subscribe(error => {
       this.notification.handleError(error);
+
+      //tear down connection
+      if(error.teardown) {
+        this.disconnect();
+      }
     });
     this.subscriptions.push(errorsSubscription);
   }

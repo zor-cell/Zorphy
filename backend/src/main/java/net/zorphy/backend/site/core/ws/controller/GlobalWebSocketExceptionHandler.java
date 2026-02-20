@@ -4,6 +4,7 @@ import net.zorphy.backend.main.core.exception.InvalidSessionException;
 import net.zorphy.backend.main.core.exception.NotFoundException;
 import net.zorphy.backend.site.connect4.exception.InvalidOperationException;
 import net.zorphy.backend.site.core.ws.dto.WebSocketError;
+import net.zorphy.backend.site.core.ws.exception.FatalWebsocketException;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -15,6 +16,11 @@ public class GlobalWebSocketExceptionHandler {
 
     public GlobalWebSocketExceptionHandler(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
+    }
+
+    @MessageExceptionHandler({FatalWebsocketException.class})
+    public void handleFatalWebsocket(Exception ex, SimpMessageHeaderAccessor headerAccessor) {
+        sendErrorToUser(headerAccessor, ex, 400, true);
     }
 
     @MessageExceptionHandler({InvalidOperationException.class})
@@ -39,12 +45,16 @@ public class GlobalWebSocketExceptionHandler {
 
 
     private void sendErrorToUser(SimpMessageHeaderAccessor headerAccessor, Exception ex, int code) {
+        sendErrorToUser(headerAccessor, ex, code, false);
+    }
+
+    private void sendErrorToUser(SimpMessageHeaderAccessor headerAccessor, Exception ex, int code, boolean teardown) {
         String sessionId = headerAccessor.getSessionId();
         var user = headerAccessor.getUser();
 
         String targetUser = user != null ? user.getName() : sessionId;
 
-        WebSocketError error = new WebSocketError(code, ex.getMessage());
+        WebSocketError error = new WebSocketError(code, ex.getMessage(), teardown);
         messagingTemplate.convertAndSendToUser(
                 targetUser,
                 "/queue/errors",

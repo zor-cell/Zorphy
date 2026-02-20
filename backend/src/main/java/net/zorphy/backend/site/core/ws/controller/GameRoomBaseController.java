@@ -2,12 +2,12 @@ package net.zorphy.backend.site.core.ws.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.zorphy.backend.main.core.exception.NotFoundException;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.site.connect4.exception.InvalidOperationException;
 import net.zorphy.backend.site.core.ws.dto.GameRoomBase;
 import net.zorphy.backend.site.core.ws.dto.GameRoomStateBase;
 import net.zorphy.backend.site.core.ws.dto.GameRoomMember;
+import net.zorphy.backend.site.core.ws.exception.FatalWebsocketException;
 import net.zorphy.backend.site.core.ws.service.GameRoomBaseService;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.event.EventListener;
@@ -28,6 +28,7 @@ import java.util.concurrent.locks.Lock;
 
 public abstract class GameRoomBaseController<Room extends GameRoomBase, State extends GameRoomStateBase> {
     private final String SESSION_KEY;
+    private final String SESSION_ROOM_KEY = "room-id";
 
     private final GameRoomBaseService<Room, State> roomBaseService;
     private final StringRedisTemplate redisTemplate;
@@ -66,8 +67,7 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
         }
 
         String username = accessor.getUser().getName();
-
-        String roomId = accessor.getSessionAttributes().get("room-id").toString();
+        String roomId = getSessionAttribute(accessor, SESSION_ROOM_KEY);
 
         executeWithLock(roomId, () -> {
             State state = roomBaseService.leaveRoom(getRoomState(roomId), username);
@@ -84,7 +84,7 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
         State state = roomBaseService.createRoom(targetUser);
         setRoomState(state);
 
-        headerAccessor.getSessionAttributes().put("room-id", state.room().roomId());
+        addSessionAttribute(headerAccessor, SESSION_ROOM_KEY, state.room().roomId());
 
         messagingTemplate.convertAndSendToUser(targetUser, "/queue/created", state);
     }
@@ -97,7 +97,7 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
             State state = roomBaseService.joinRoom(getRoomState(roomId), targetUser);
             setRoomState(state);
 
-            headerAccessor.getSessionAttributes().put("room-id", roomId);
+            addSessionAttribute(headerAccessor, SESSION_ROOM_KEY, roomId);
 
             messagingTemplate.convertAndSendToUser(targetUser, "/queue/joined", state);
             messagingTemplate.convertAndSend("/topic/game/" + roomId, state);
@@ -120,6 +120,8 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
      * Executes an action on a given {@code roomId} with a lock, so no race conditions can occur
      */
     protected void executeWithLock(String roomId, Runnable action) {
+        if(roomId == null) return;
+
         Lock lock = redisLockRegistry.obtain(roomId);
 
         boolean acquired = false;
@@ -150,7 +152,7 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
         try {
             String roomJson = redisTemplate.opsForValue().get(roomKey);
             if(roomJson == null) {
-                throw new NotFoundException("Room does not exist");
+                throw new FatalWebsocketException("Room does not exist");
             }
 
             return mapper.readValue(roomJson, stateClass);
@@ -191,6 +193,21 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
         }
 
         return user.getName();
+    }
+
+    private void addSessionAttribute(SimpMessageHeaderAccessor accessor, String key, String value) {
+        if(accessor.getSessionAttributes() == null) return;
+
+        accessor.getSessionAttributes().put(key, value);
+    }
+
+    private String getSessionAttribute(SimpMessageHeaderAccessor accessor, String key) {
+        if(accessor.getSessionAttributes() == null) return null;
+
+        Object value = accessor.getSessionAttributes().get(key);
+        if(value == null) return null;
+
+        return value.toString();
     }
 
     private String getRoomKey(String roomId) {

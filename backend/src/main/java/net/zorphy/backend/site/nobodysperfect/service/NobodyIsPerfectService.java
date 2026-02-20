@@ -2,6 +2,7 @@ package net.zorphy.backend.site.nobodysperfect.service;
 
 import net.zorphy.backend.site.connect4.exception.InvalidOperationException;
 import net.zorphy.backend.site.core.ws.dto.GameRoomMember;
+import net.zorphy.backend.site.core.ws.exception.FatalWebsocketException;
 import net.zorphy.backend.site.core.ws.service.GameRoomBaseService;
 import net.zorphy.backend.site.nobodysperfect.dto.GameRoom;
 import net.zorphy.backend.site.nobodysperfect.dto.GameRoomState;
@@ -41,7 +42,7 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
         var member = new GameRoomMember(username);
 
         if(state.room().members().contains(member)) {
-            throw new InvalidOperationException("Member with this username already exists");
+            throw new FatalWebsocketException("Member with this username already exists");
         }
 
         state.room().members().add(member);
