@@ -19,13 +19,11 @@ export class GameRoomInvitePopupComponent {
   public inviteLink = input.required<string>();
 
   private inviteTemplate = viewChild.required<TemplateRef<any>>('invitePopup');
-  public clearSessionEvent = output<void>();
 
   public openPopup() {
     this.popupService.createPopup(
       'Invite Friends',
-      this.inviteTemplate(),
-      this.callback.bind(this)
+      this.inviteTemplate()
     );
   }
 
@@ -33,11 +31,5 @@ export class GameRoomInvitePopupComponent {
     navigator.clipboard.writeText(this.inviteLink()).then(() => {
       this.notificationService.handleSuccess('Invite link copied to clipboard');
     });
-  }
-
-  private callback(result: PopupResultType) {
-    if (result === PopupResultType.SUBMIT) {
-      this.clearSessionEvent.emit();
-    }
   }
 }

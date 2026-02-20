@@ -11,7 +11,7 @@ export class PopupService {
 
     public createPopup(title: string,
                 bodyTemplate: TemplateRef<any>,
-                callback: (success: PopupResultType) => void,
+                callback?: (success: PopupResultType) => void,
                 submitValidator?: () => boolean,
                 submitText?: string,
                 discardText?: string,
@@ -23,15 +23,17 @@ export class PopupService {
                 formId: `form-${crypto.randomUUID()}`,
                 title: title,
                 bodyTemplate: bodyTemplate,
-                submitText: submitText ?? 'Submit',
+                submitText: submitText,
                 discardText: discardText,
                 cancelText: cancelText ?? 'Cancel',
                 submitValidator: submitValidator
             }
         });
 
-        dialogRef.afterClosed().subscribe((res) => {
-            callback(res ?? PopupResultType.CANCEL);
-        });
+        if(callback) {
+            dialogRef.afterClosed().subscribe((res) => {
+                callback(res ?? PopupResultType.CANCEL);
+            });
+        }
     }
 }
