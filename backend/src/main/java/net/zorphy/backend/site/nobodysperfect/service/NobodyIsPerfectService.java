@@ -132,7 +132,7 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
         return state;
     }
 
-    public GameRoomState addPrompt(GameRoomState state, String username, String message) {
+    public GameRoomState submitPrompt(GameRoomState state, String username, String message) {
         if(state.rounds().isEmpty()) {
             throw new InvalidOperationException("No round was started");
         }
@@ -150,7 +150,7 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
         return state;
     }
 
-    public GameRoomState startGuessRound(GameRoomState state, String username) {
+    public GameRoomState showPrompts(GameRoomState state, String username) {
         if(!state.gameMaster().username().equals(username)) {
             throw new InvalidOperationException("Only the game master can start the guess round");
         } else if(state.rounds().isEmpty()) {
@@ -174,7 +174,7 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
         );
     }
 
-    public GameRoomState revealRound(GameRoomState state, String username) {
+    public GameRoomState revealRoundResults(GameRoomState state, String username) {
         if(!state.gameMaster().username().equals(username)) {
             throw new InvalidOperationException("Only the game master can start the reveal round");
         } else if(state.rounds().isEmpty()) {
@@ -194,6 +194,35 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
         return new GameRoomState(
                 state.room(),
                 state.gameMaster(),
+                rounds
+        );
+    }
+
+    public GameRoomState finishRound(GameRoomState state, String username) {
+        if(!state.gameMaster().username().equals(username)) {
+            throw new InvalidOperationException("Only the game master can finish the round");
+        } else if(state.rounds().isEmpty()) {
+            throw new InvalidOperationException("No round was started");
+        }
+
+        //update game master
+        int gameMasterIndex = state.room().members().indexOf(state.gameMaster());
+        int newGameMasterIndex = (gameMasterIndex + 1) % state.room().members().size();
+        GameRoomMember gameMaster = state.room().members().get(newGameMasterIndex);
+
+        //update phase in current round
+        List<Round> rounds = new ArrayList<>(state.rounds());
+        var currentRound = rounds.getLast();
+
+        rounds.set(rounds.size() - 1, new Round(
+                currentRound.startedAt(),
+                RoundPhase.FINISHED,
+                currentRound.prompts()
+        ));
+
+        return new GameRoomState(
+                state.room(),
+                gameMaster,
                 rounds
         );
     }

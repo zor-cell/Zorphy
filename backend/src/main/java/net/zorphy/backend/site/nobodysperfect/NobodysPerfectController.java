@@ -15,6 +15,8 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -53,36 +55,49 @@ public class NobodysPerfectController extends GameRoomBaseController<GameRoom, G
         });
     }
 
-    @MessageMapping("add-prompt/{roomId}")
-    public void addPrompt(SimpMessageHeaderAccessor headerAccessor, @Payload String message, @DestinationVariable String roomId) {
+    @MessageMapping("submit-prompt/{roomId}")
+    public void submitPrompt(SimpMessageHeaderAccessor headerAccessor, @Payload String message, @DestinationVariable String roomId) {
         String username = getUsername(headerAccessor);
 
         executeWithLock(roomId, () -> {
-            GameRoomState state = socketService.addPrompt(getRoomState(roomId), username, message);
+            GameRoomState state = socketService.submitPrompt(getRoomState(roomId), username, message);
+            setRoomState(state);
+
+            messagingTemplate.convertAndSendToUser(username, "/queue/prompt-submitted", true);
+            messagingTemplate.convertAndSend("/topic/game/" + roomId, sanitizeState(state));
+        });
+    }
+
+    @MessageMapping("show-prompts/{roomId}")
+    public void showPrompts(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomId) {
+        String username = getUsername(headerAccessor);
+
+        executeWithLock(roomId, () -> {
+            GameRoomState state = socketService.showPrompts(getRoomState(roomId), username);
             setRoomState(state);
 
             messagingTemplate.convertAndSend("/topic/game/" + roomId, sanitizeState(state));
         });
     }
 
-    @MessageMapping("guess-round/{roomId}")
-    public void startGuessRound(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomId) {
+    @MessageMapping("reveal-results/{roomId}")
+    public void revealRoundResults(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomId) {
         String username = getUsername(headerAccessor);
 
         executeWithLock(roomId, () -> {
-            GameRoomState state = socketService.startGuessRound(getRoomState(roomId), username);
+            GameRoomState state = socketService.revealRoundResults(getRoomState(roomId), username);
             setRoomState(state);
 
-            messagingTemplate.convertAndSend("/topic/game/" + roomId, sanitizeState(state));
+            messagingTemplate.convertAndSend("/topic/game/" + roomId, state);
         });
     }
 
-    @MessageMapping("reveal-round/{roomId}")
-    public void revealRound(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomId) {
+    @MessageMapping("finish-round/{roomId}")
+    public void finishRound(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomId) {
         String username = getUsername(headerAccessor);
 
         executeWithLock(roomId, () -> {
-            GameRoomState state = socketService.revealRound(getRoomState(roomId), username);
+            GameRoomState state = socketService.finishRound(getRoomState(roomId), username);
             setRoomState(state);
 
             messagingTemplate.convertAndSend("/topic/game/" + roomId, state);
@@ -94,17 +109,23 @@ public class NobodysPerfectController extends GameRoomBaseController<GameRoom, G
 
         var currentRound = state.rounds().getLast();
 
-        List<Prompt> anonymousPrompts = currentRound.prompts().stream()
+        List<Prompt> anonymousPrompts = new ArrayList<>(currentRound.prompts().stream()
                 .map(p -> new Prompt(p.createdAt(), p.message(), null))
-                .toList();
+                .toList());
+        Collections.shuffle(anonymousPrompts);
 
-        state.rounds().set(state.rounds().size() - 1, new Round(
+        List<Round> safeRounds = new ArrayList<>(state.rounds());
+        safeRounds.set(safeRounds.size() - 1, new Round(
                 currentRound.startedAt(),
                 currentRound.phase(),
                 anonymousPrompts)
         );
 
-        return state;
+        return new GameRoomState(
+                state.room(),
+                state.gameMaster(),
+                safeRounds
+        );
     }
 
 }

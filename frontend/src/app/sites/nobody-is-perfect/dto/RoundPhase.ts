@@ -1,0 +1,6 @@
+export enum RoundPhase {
+  PROMPTING = 'PROMPTING',
+  GUESSING = 'GUESSING',
+  REVEAL = 'REVEAL',
+  FINISHED = 'FINISHED'
+}

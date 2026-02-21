@@ -1,11 +1,56 @@
-
 <game-room [roomService]="roomService" [roomId]="roomId()">
-    @if(roomService.gameState(); as state) {
-        @if(isGameMaster()) {
-            <div>You are the game master!</div>
-        } @else {
-            <div><span class="bold-text">{{state.gameMaster.username}}</span> is the game master!</div>
-        }
+    @if (roomService.gameState(); as state) {
+        <div class="flex-container gap-3">
+            @if (isGameMaster()) {
+                <div>You are the game master!</div>
+            } @else {
+                <div><span class="bold-text">{{ state.gameMaster.username }}</span> is the game master!</div>
+            }
+
+            @if (currentRound(); as round) {
+                @switch (round.phase) {
+                    @case (RoundPhase.PROMPTING) {
+                        @if(!roomService.submittedPrompt()) {
+                            <textarea [(ngModel)]="promptText" class="prompt-input" placeholder="Enter prompt"></textarea>
+
+                            <button class="btn btn-primary" (click)="submitPrompt()" [disabled]="promptText().length === 0">Submit</button>
+                        } @else {
+                            <div>Your prompt was submitted!</div>
+                        }
+
+                        @if(isGameMaster()) {
+                            <button class="btn btn-primary" (click)="showPrompts()">Show Prompts</button>
+                        }
+                    }
+                    @case (RoundPhase.GUESSING) {
+                        <div class="flex-container gap-1">
+                            @for(prompt of round.prompts;track prompt.message) {
+                                <div>{{$index + 1}}. {{ prompt.message }}</div>
+                            }
+                        </div>
+
+                        @if(isGameMaster()) {
+                            <button class="btn btn-primary" (click)="revealResults()">Reveal Results</button>
+                        }
+                    }
+                    @case (RoundPhase.REVEAL) {
+                        <div class="flex-container gap-1">
+                            @for(prompt of round.prompts;track prompt.message) {
+                                <div>{{$index + 1}}. {{ prompt.message }} - {{prompt.author.username}}</div>
+                            }
+                        </div>
+
+                        @if(isGameMaster()) {
+                            <button class="btn btn-primary" (click)="finishRound()">Finish Round</button>
+                        }
+                    }
+                }
+            } @else {
+                @if (isGameMaster()) {
+                    <button class="btn btn-primary" (click)="startRound()">Start</button>
+                }
+            }
+        </div>
     }
 </game-room>
 

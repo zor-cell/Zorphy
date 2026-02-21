@@ -15,7 +15,7 @@ import {GameRoomMember} from "./dto/GameRoomMember";
 })
 export abstract class GameRoomService<State extends GameRoomStateBase> {
   private stompService = inject(WebSocketService);
-  private notification = inject(NotificationService);
+  protected notificationService = inject(NotificationService);
 
   protected abstract readonly gameType: string;
   protected readonly APP_PREFIX = '/app';
@@ -63,23 +63,13 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
 
     this.stompService.disconnect();
 
+    this.cleanupBeforeDisconnect();
+
     this.username.set(null);
     this.roomId.set(null);
     this.gameState.set(null);
     this.subscriptionsInitialized = false;
     this.subscriptions = [];
-  }
-
-  private connectAndSend(username: string, destination: string, body: any = '') {
-    this.pendingUsername = username;
-    this.stompService.connect(username);
-
-    if(!this.subscriptionsInitialized) {
-      this.subscribeDefaults();
-      this.subscriptionsInitialized = true;
-    }
-
-    this.sendMessage(destination, body);
   }
 
   protected sendMessage(destination: string, body: any = '') {
@@ -89,7 +79,51 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
     });
   }
 
-  protected subscribeDefaults() {
+  /**
+   * Gets called when the service disconnects from the session.
+   * Use this method to reset state signals etc
+   * @protected
+   */
+  protected abstract cleanupBeforeDisconnect() : void;
+
+  /**
+   * Gets called when the service subscribes to server channels.
+   * Use this method to subscribe to additional channels used in the service
+   */
+  protected abstract subscribeGameSpecifics(): void;
+
+  /**
+   * Adds a subscription to the services subscriptions
+   */
+  protected addSubscription(subscription: Subscription): void {
+    this.subscriptions.push(subscription);
+  }
+
+  /**
+   * Returns an observable of the given destination.
+   * Use this method to create a new subscription of a destination.
+   */
+  protected watchAndMap<T>(destination: string): Observable<T> {
+    return this.stompService.watch(`${destination}`)
+      .pipe(
+        map((message: IMessage) => JSON.parse(message.body) as T)
+      );
+  }
+
+  private connectAndSend(username: string, destination: string, body: any = '') {
+    this.pendingUsername = username;
+    this.stompService.connect(username);
+
+    if(!this.subscriptionsInitialized) {
+      this.subscribeDefaults();
+      this.subscribeGameSpecifics();
+      this.subscriptionsInitialized = true;
+    }
+
+    this.sendMessage(destination, body);
+  }
+
+  private subscribeDefaults() {
     const createdSubscription = this.watchAndMap<State>('/user/queue/created').subscribe(state => {
       if(this.pendingUsername) {
         this.username.set(this.pendingUsername);
@@ -97,11 +131,11 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
       this.roomId.set(state.room.roomId);
       this.gameState.set(state);
 
-      this.notification.handleSuccess(`Room ${state.room.roomId} created`);
+      this.notificationService.handleSuccess(`Room ${state.room.roomId} created`);
 
       this.subscribeRoom(state.room.roomId);
     });
-    this.subscriptions.push(createdSubscription);
+    this.addSubscription(createdSubscription);
 
     const joinedSubscription = this.watchAndMap<State>('/user/queue/joined').subscribe(state => {
       if(this.pendingUsername) {
@@ -110,35 +144,27 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
       this.roomId.set(state.room.roomId);
       this.gameState.set(state);
 
-      this.notification.handleSuccess(`Room ${state.room.roomId} joined`);
+      this.notificationService.handleSuccess(`Room ${state.room.roomId} joined`);
 
       this.subscribeRoom(state.room.roomId);
     });
-    this.subscriptions.push(joinedSubscription);
+    this.addSubscription(joinedSubscription);
 
     const errorsSubscription = this.watchAndMap<WebSocketError>('/user/queue/errors').subscribe(error => {
-      this.notification.handleError(error);
+      this.notificationService.handleError(error);
 
       //tear down connection
       if(error.teardown) {
         this.disconnect();
       }
     });
-    this.subscriptions.push(errorsSubscription);
+    this.addSubscription(errorsSubscription);
   }
 
   private subscribeRoom(roomId: string) {
     const topicSubscription = this.watchAndMap<State>(`/topic/game/${roomId}`).subscribe(state => {
       this.gameState.set(state);
     });
-    this.subscriptions.push(topicSubscription);
+    this.addSubscription(topicSubscription);
   }
-
-  protected watchAndMap<T>(destination: string): Observable<T> {
-    return this.stompService.watch(`${destination}`)
-        .pipe(
-            map((message: IMessage) => JSON.parse(message.body) as T)
-        );
-  }
-
 }
