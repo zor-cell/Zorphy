@@ -17,17 +17,14 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
   private stompService = inject(WebSocketService);
   protected notificationService = inject(NotificationService);
 
-  protected abstract readonly gameType: string;
-  protected readonly APP_PREFIX = '/app';
-
+  private readonly APP_PREFIX = '/app';
   private subscriptionsInitialized: boolean = false;
   private subscriptions: Subscription[] = [];
-
-  public connectionStatus = signal('');
 
   public username = signal<string | null>(null);
   public roomId = signal<string | null>(null);
   public gameState = signal<State | null>(null);
+  public connectionStatus = signal('');
 
   //an intermediate username state, that holds the current username and only sets the signal after a successful operation
   private pendingUsername: string | null = null;
@@ -44,26 +41,55 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
     });
   }
 
+  /**
+   * The game type used for routing to game-specific destinations
+   */
+  protected abstract readonly gameType: string;
+
+  /**
+   * Gets called when the service disconnects from the session.
+   * Use this method to reset state signals etc
+   */
+  protected abstract onDisconnect() : void;
+
+  /**
+   * Gets called when the service subscribes to server channels.
+   * Use this method to subscribe to additional channels used in the service
+   */
+  protected abstract onSubscribe(roomId: string): void;
+
+  /**
+   * Creates a new room
+   */
   public createRoom(username: string) {
     this.connectAndSend(username,'create');
   }
 
+  /**
+   * Joins an existing room given by roomId
+   */
   public joinRoom(username: string, roomId: string) {
     this.connectAndSend(username, `join/${roomId}`);
   }
 
-  public reorderMembers(members: GameRoomMember[]) {
+  /**
+   * Updates the members of an existing room given by roomId
+   */
+  public updateMembers(members: GameRoomMember[]) {
     this.sendMessage(`update-members/${this.roomId()}`, members);
   }
 
+  /**
+   * Disconnects the client from the websocket connection and cleans up all states
+   */
   public disconnect() {
+    this.onDisconnect();
+
     for(const subscription of this.subscriptions) {
       subscription.unsubscribe();
     }
 
     this.stompService.disconnect();
-
-    this.cleanupBeforeDisconnect();
 
     this.username.set(null);
     this.roomId.set(null);
@@ -72,25 +98,15 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
     this.subscriptions = [];
   }
 
+  /**
+   * Sends a message to a given destination
+   */
   protected sendMessage(destination: string, body: any = '') {
     this.stompService.publish({
       destination: `${this.APP_PREFIX}/${this.gameType}/${destination}`,
       body: JSON.stringify(body)
     });
   }
-
-  /**
-   * Gets called when the service disconnects from the session.
-   * Use this method to reset state signals etc
-   * @protected
-   */
-  protected abstract cleanupBeforeDisconnect() : void;
-
-  /**
-   * Gets called when the service subscribes to server channels.
-   * Use this method to subscribe to additional channels used in the service
-   */
-  protected abstract subscribeGameSpecifics(): void;
 
   /**
    * Adds a subscription to the services subscriptions
@@ -116,7 +132,6 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
 
     if(!this.subscriptionsInitialized) {
       this.subscribeDefaults();
-      this.subscribeGameSpecifics();
       this.subscriptionsInitialized = true;
     }
 
@@ -124,7 +139,7 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
   }
 
   private subscribeDefaults() {
-    const createdSubscription = this.watchAndMap<State>('/user/queue/created').subscribe(state => {
+    const createdRoom = this.watchAndMap<State>('/user/queue/created').subscribe(state => {
       if(this.pendingUsername) {
         this.username.set(this.pendingUsername);
       }
@@ -135,9 +150,9 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
 
       this.subscribeRoom(state.room.roomId);
     });
-    this.addSubscription(createdSubscription);
+    this.addSubscription(createdRoom);
 
-    const joinedSubscription = this.watchAndMap<State>('/user/queue/joined').subscribe(state => {
+    const joinedRoom = this.watchAndMap<State>('/user/queue/joined').subscribe(state => {
       if(this.pendingUsername) {
         this.username.set(this.pendingUsername);
       }
@@ -148,9 +163,9 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
 
       this.subscribeRoom(state.room.roomId);
     });
-    this.addSubscription(joinedSubscription);
+    this.addSubscription(joinedRoom);
 
-    const errorsSubscription = this.watchAndMap<WebSocketError>('/user/queue/errors').subscribe(error => {
+    const errors = this.watchAndMap<WebSocketError>('/user/queue/errors').subscribe(error => {
       this.notificationService.handleError(error);
 
       //tear down connection
@@ -158,13 +173,15 @@ export abstract class GameRoomService<State extends GameRoomStateBase> {
         this.disconnect();
       }
     });
-    this.addSubscription(errorsSubscription);
+    this.addSubscription(errors);
   }
 
   private subscribeRoom(roomId: string) {
-    const topicSubscription = this.watchAndMap<State>(`/topic/game/${roomId}`).subscribe(state => {
+    const topic = this.watchAndMap<State>(`/topic/game/${roomId}`).subscribe(state => {
       this.gameState.set(state);
     });
-    this.addSubscription(topicSubscription);
+    this.addSubscription(topic);
+
+    this.onSubscribe(roomId);
   }
 }

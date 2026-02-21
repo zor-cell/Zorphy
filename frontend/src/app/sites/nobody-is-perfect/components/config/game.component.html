@@ -10,6 +10,7 @@
             @if (currentRound(); as round) {
                 @switch (round.phase) {
                     @case (RoundPhase.PROMPTING) {
+                        <div>{{round.prompts.length}} / {{state.room.members.length}}</div>
                         @if(!roomService.submittedPrompt()) {
                             <textarea [(ngModel)]="promptText" class="prompt-input" placeholder="Enter prompt"></textarea>
 
@@ -18,7 +19,7 @@
                             <div>Your prompt was submitted!</div>
                         }
 
-                        @if(isGameMaster()) {
+                        @if(isGameMaster() && round.prompts.length >= state.room.members.length) {
                             <button class="btn btn-primary" (click)="showPrompts()">Show Prompts</button>
                         }
                     }

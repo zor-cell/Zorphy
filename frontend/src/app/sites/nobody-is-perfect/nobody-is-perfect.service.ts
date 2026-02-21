@@ -1,8 +1,7 @@
 import {Injectable, signal} from '@angular/core';
 import {GameRoomService} from "../core/ws/game-room.service";
 import {GameRoomState} from "./dto/GameRoomState";
-import {State} from "sockjs-client";
-import {state} from "@angular/animations";
+import {Prompt} from "./dto/Prompt";
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +19,8 @@ export class NobodyIsPerfectService extends GameRoomService<GameRoomState> {
     this.sendMessage(`start-round/${this.roomId()}`);
   }
 
-  public submitPrompt(message: string) {
-    this.sendMessage(`submit-prompt/${this.roomId()}`, message);
+  public submitPrompt(prompt: Prompt) {
+    this.sendMessage(`submit-prompt/${this.roomId()}`, prompt);
   }
 
   public showPrompts() {
@@ -36,15 +35,21 @@ export class NobodyIsPerfectService extends GameRoomService<GameRoomState> {
     this.sendMessage(`finish-round/${this.roomId()}`);
   }
 
-  protected override subscribeGameSpecifics(): void {
-    const promptSubmittedSubscription = this.watchAndMap<boolean>('/user/queue/prompt-submitted').subscribe((success) => {
+  protected override onSubscribe(roomId: string): void {
+    const promptSubmitted = this.watchAndMap<boolean>('/user/queue/prompt-submitted').subscribe((success) => {
       this.submittedPrompt.set(true);
       this.notificationService.handleSuccess('Prompt submitted');
     });
-    this.addSubscription(promptSubmittedSubscription);
+    this.addSubscription(promptSubmitted);
+
+    const roundFinished = this.watchAndMap<GameRoomState>(`/topic/game/${roomId}/round-finished`).subscribe(state => {
+      this.gameState.set(state);
+      this.submittedPrompt.set(false);
+    });
+    this.addSubscription(roundFinished);
   }
 
-  protected override cleanupBeforeDisconnect(): void {
+  protected override onDisconnect(): void {
     this.submittedPrompt.set(false);
   }
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -161,10 +162,17 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
         List<Round> rounds = new ArrayList<>(state.rounds());
         var currentRound = rounds.getLast();
 
+        if(currentRound.prompts().size() < state.room().members().size()) {
+            throw new InvalidOperationException("Prompts can only be shown after all members submitted");
+        }
+
+        List<Prompt> prompts = new ArrayList<>(currentRound.prompts());
+        Collections.shuffle(prompts);
+
         rounds.set(rounds.size() - 1, new Round(
            currentRound.startedAt(),
            RoundPhase.GUESSING,
-           currentRound.prompts()
+           prompts
         ));
 
         return new GameRoomState(

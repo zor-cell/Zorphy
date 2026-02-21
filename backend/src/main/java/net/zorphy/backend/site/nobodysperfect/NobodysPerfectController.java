@@ -16,7 +16,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -51,20 +50,20 @@ public class NobodysPerfectController extends GameRoomBaseController<GameRoom, G
             GameRoomState state = socketService.startRound(getRoomState(roomId), username);
             setRoomState(state);
 
-            messagingTemplate.convertAndSend("/topic/game/" + roomId, state);
+            messagingTemplate.convertAndSend("/topic/game/%s".formatted(roomId), state);
         });
     }
 
     @MessageMapping("submit-prompt/{roomId}")
-    public void submitPrompt(SimpMessageHeaderAccessor headerAccessor, @Payload String message, @DestinationVariable String roomId) {
+    public void submitPrompt(SimpMessageHeaderAccessor headerAccessor, @Payload Prompt prompt, @DestinationVariable String roomId) {
         String username = getUsername(headerAccessor);
 
         executeWithLock(roomId, () -> {
-            GameRoomState state = socketService.submitPrompt(getRoomState(roomId), username, message);
+            GameRoomState state = socketService.submitPrompt(getRoomState(roomId), username, prompt.message());
             setRoomState(state);
 
             messagingTemplate.convertAndSendToUser(username, "/queue/prompt-submitted", true);
-            messagingTemplate.convertAndSend("/topic/game/" + roomId, sanitizeState(state));
+            messagingTemplate.convertAndSend("/topic/game/%s".formatted(roomId), sanitizeState(state));
         });
     }
 
@@ -76,7 +75,7 @@ public class NobodysPerfectController extends GameRoomBaseController<GameRoom, G
             GameRoomState state = socketService.showPrompts(getRoomState(roomId), username);
             setRoomState(state);
 
-            messagingTemplate.convertAndSend("/topic/game/" + roomId, sanitizeState(state));
+            messagingTemplate.convertAndSend("/topic/game/%s".formatted(roomId), sanitizeState(state));
         });
     }
 
@@ -88,7 +87,7 @@ public class NobodysPerfectController extends GameRoomBaseController<GameRoom, G
             GameRoomState state = socketService.revealRoundResults(getRoomState(roomId), username);
             setRoomState(state);
 
-            messagingTemplate.convertAndSend("/topic/game/" + roomId, state);
+            messagingTemplate.convertAndSend("/topic/game/%s".formatted(roomId), state);
         });
     }
 
@@ -100,7 +99,7 @@ public class NobodysPerfectController extends GameRoomBaseController<GameRoom, G
             GameRoomState state = socketService.finishRound(getRoomState(roomId), username);
             setRoomState(state);
 
-            messagingTemplate.convertAndSend("/topic/game/" + roomId, state);
+            messagingTemplate.convertAndSend("/topic/game/%s/round-finished".formatted(roomId), state);
         });
     }
 
@@ -112,7 +111,6 @@ public class NobodysPerfectController extends GameRoomBaseController<GameRoom, G
         List<Prompt> anonymousPrompts = new ArrayList<>(currentRound.prompts().stream()
                 .map(p -> new Prompt(p.createdAt(), p.message(), null))
                 .toList());
-        Collections.shuffle(anonymousPrompts);
 
         List<Round> safeRounds = new ArrayList<>(state.rounds());
         safeRounds.set(safeRounds.size() - 1, new Round(

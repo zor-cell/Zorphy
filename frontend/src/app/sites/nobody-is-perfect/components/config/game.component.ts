@@ -1,9 +1,10 @@
-import {Component, computed, inject, input, signal} from '@angular/core';
+import {Component, computed, inject, input, linkedSignal, signal} from '@angular/core';
 import {NobodyIsPerfectService} from "../../nobody-is-perfect.service";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {GameRoomComponent} from "../../../core/ws/components/game-room.component";
 import {RoundPhase} from "../../dto/RoundPhase";
 import {NotificationService} from "../../../../main/core/services/notification.service";
+import {Prompt} from "../../dto/Prompt";
 
 @Component({
   selector: 'nobody-is-perfect-game',
@@ -40,14 +41,24 @@ export class NobodyIsPerfectGameComponent {
     return round;
   });
 
-  protected promptText = signal('');
+  protected promptText = linkedSignal({
+    source: this.roomService.submittedPrompt,
+    computation: () => ''
+  })
 
   protected startRound() {
     this.roomService.startRound();
   }
 
   protected submitPrompt() {
-    this.roomService.submitPrompt(this.promptText());
+    const prompt: Prompt = {
+      message: this.promptText(),
+      author: {
+        username: this.roomService.username()!
+      }
+    };
+
+    this.roomService.submitPrompt(prompt);
     this.promptText.set('');
   }
 

@@ -73,7 +73,7 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
             State state = roomBaseService.leaveRoom(getRoomState(roomId), username);
             setRoomState(state);
 
-            messagingTemplate.convertAndSend("/topic/game/" + roomId, state);
+            messagingTemplate.convertAndSend("/topic/game/%s".formatted(roomId), state);
         });
     }
 
@@ -81,7 +81,19 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
     public void createRoom(SimpMessageHeaderAccessor headerAccessor) {
         String targetUser = getUsername(headerAccessor);
 
-        State state = roomBaseService.createRoom(targetUser);
+        State state;
+        int attempts = 0;
+
+        //create room up to 10 times if room id already exists
+        do {
+            state = roomBaseService.createRoom(targetUser);
+            attempts++;
+
+            if (attempts >= 10) {
+                throw new InvalidOperationException("Could not create room, server might be full");
+            }
+        } while (roomExists(state.room().roomId()));
+
         setRoomState(state);
 
         addSessionAttribute(headerAccessor, SESSION_ROOM_KEY, state.room().roomId());
@@ -100,7 +112,7 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
             addSessionAttribute(headerAccessor, SESSION_ROOM_KEY, roomId);
 
             messagingTemplate.convertAndSendToUser(targetUser, "/queue/joined", state);
-            messagingTemplate.convertAndSend("/topic/game/" + roomId, state);
+            messagingTemplate.convertAndSend("/topic/game/%s".formatted(roomId), state);
         });
     }
 
@@ -112,7 +124,7 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
             State state = roomBaseService.updateMembers(getRoomState(roomId), targetUser, members);
             setRoomState(state);
 
-            messagingTemplate.convertAndSend("/topic/game/" + roomId, state);
+            messagingTemplate.convertAndSend("/topic/game/%s".formatted(roomId), state);
         });
     }
 
@@ -195,6 +207,12 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
         return user.getName();
     }
 
+    private boolean roomExists(String roomId) {
+        String roomKey = getRoomKey(roomId);
+        String roomJson = redisTemplate.opsForValue().get(roomKey);
+        return roomJson != null;
+    }
+
     private void addSessionAttribute(SimpMessageHeaderAccessor accessor, String key, String value) {
         if(accessor.getSessionAttributes() == null) return;
 
@@ -211,6 +229,6 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
     }
 
     private String getRoomKey(String roomId) {
-        return SESSION_KEY + ":" + roomId.toLowerCase();
+        return SESSION_KEY + ":" + roomId.trim().toLowerCase();
     }
 }

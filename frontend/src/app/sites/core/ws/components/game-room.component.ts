@@ -309,6 +309,6 @@ export class GameRoomComponent implements OnDestroy {
     moveItemInArray(members, event.previousIndex, event.currentIndex);
 
     this.members.set(members);
-    this.roomService().reorderMembers(this.members());
+    this.roomService().updateMembers(this.members());
   }
 }
