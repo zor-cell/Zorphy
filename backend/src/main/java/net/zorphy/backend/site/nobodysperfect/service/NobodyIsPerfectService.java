@@ -139,13 +139,17 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
         }
 
         GameRoomMember member = new GameRoomMember(username);
+
+        var currentRound = state.rounds().getLast();
+        if(currentRound.prompts().stream().anyMatch(p -> username.equals(p.author().username()))) {
+            throw new InvalidOperationException("Member already submitted a prompt in this round");
+        }
+
         Prompt prompt = new Prompt(
                 Instant.now(),
                 message,
                 member
         );
-
-        var currentRound = state.rounds().getLast();
         currentRound.prompts().add(prompt);
 
         return state;

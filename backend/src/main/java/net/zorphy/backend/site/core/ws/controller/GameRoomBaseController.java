@@ -90,7 +90,7 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
             attempts++;
 
             if (attempts >= 10) {
-                throw new InvalidOperationException("Could not create room, server might be full");
+                throw new FatalWebsocketException("Could not create room");
             }
         } while (roomExists(state.room().roomId()));
 
