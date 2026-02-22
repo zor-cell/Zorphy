@@ -11,7 +11,7 @@
                 @switch (round.phase) {
                     @case (RoundPhase.PROMPTING) {
                         <div>{{round.prompts.length}} / {{state.room.members.length}}</div>
-                        @if(!roomService.submittedPrompt()) {
+                        @if(!roomService.userState()?.submittedPrompt) {
                             <textarea [(ngModel)]="promptText" class="prompt-input" placeholder="Enter prompt"></textarea>
 
                             <button class="btn btn-primary" (click)="submitPrompt()" [disabled]="promptText().length === 0">Submit</button>
@@ -26,6 +26,13 @@
                     @case (RoundPhase.GUESSING) {
                         <div class="flex-container gap-1">
                             @for(prompt of round.prompts;track prompt.message) {
+                                <div class="prompt-display gap-1">
+                                    <div>{{$index + 1}}. {{ prompt.message }}</div>
+                                    <div class="prompt-meta">
+                                        <div>author</div>
+                                        <div>createdAt</div>
+                                    </div>
+                                </div>
                                 <div>{{$index + 1}}. {{ prompt.message }}</div>
                             }
                         </div>

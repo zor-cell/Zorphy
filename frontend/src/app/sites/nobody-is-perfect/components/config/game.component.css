@@ -4,3 +4,20 @@
 
     resize: none;
 }
+
+.prompt-display {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+
+    border: 1px solid lightgray;
+
+    width: 300px;
+    height: fit-content;
+}
+
+.prompt-meta {
+    display: flex;
+
+}

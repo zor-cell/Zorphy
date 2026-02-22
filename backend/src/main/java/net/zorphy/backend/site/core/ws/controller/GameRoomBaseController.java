@@ -73,20 +73,20 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
             State state = roomBaseService.leaveRoom(getRoomState(roomId), username);
             setRoomState(state);
 
-            messagingTemplate.convertAndSend("/topic/game/%s".formatted(roomId), state);
+            messagingTemplate.convertAndSend("/topic/game/%s".formatted(roomId), state.toPublicState());
         });
     }
 
     @MessageMapping("create")
     public void createRoom(SimpMessageHeaderAccessor headerAccessor) {
-        String targetUser = getUsername(headerAccessor);
+        String username = getUsername(headerAccessor);
 
         State state;
         int attempts = 0;
 
         //create room up to 10 times if room id already exists
         do {
-            state = roomBaseService.createRoom(targetUser);
+            state = roomBaseService.createRoom(username);
             attempts++;
 
             if (attempts >= 10) {
@@ -98,33 +98,35 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
 
         addSessionAttribute(headerAccessor, SESSION_ROOM_KEY, state.room().roomId());
 
-        messagingTemplate.convertAndSendToUser(targetUser, "/queue/created", state);
+        messagingTemplate.convertAndSendToUser(username, "/queue/state", state.toPrivateState(username));
+        messagingTemplate.convertAndSendToUser(username, "/queue/created", state.toPublicState());
     }
 
     @MessageMapping("join/{roomId}")
     public void joinRoom(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomId) {
-        String targetUser = getUsername(headerAccessor);
+        String username = getUsername(headerAccessor);
 
         executeWithLock(roomId, () -> {
-            State state = roomBaseService.joinRoom(getRoomState(roomId), targetUser);
+            State state = roomBaseService.joinRoom(getRoomState(roomId), username);
             setRoomState(state);
 
             addSessionAttribute(headerAccessor, SESSION_ROOM_KEY, roomId);
 
-            messagingTemplate.convertAndSendToUser(targetUser, "/queue/joined", state);
-            messagingTemplate.convertAndSend("/topic/game/%s".formatted(roomId), state);
+            messagingTemplate.convertAndSendToUser(username, "/queue/state", state.toPrivateState(username));
+            messagingTemplate.convertAndSendToUser(username, "/queue/joined", state.toPublicState());
+            messagingTemplate.convertAndSend("/topic/game/%s".formatted(roomId), state.toPublicState());
         });
     }
 
     @MessageMapping("update-members/{roomId}")
     public void updateMembers(SimpMessageHeaderAccessor headerAccessor, @DestinationVariable String roomId, @Payload List<GameRoomMember> members) {
-        String targetUser = getUsername(headerAccessor);
+        String username = getUsername(headerAccessor);
 
         executeWithLock(roomId, () -> {
-            State state = roomBaseService.updateMembers(getRoomState(roomId), targetUser, members);
+            State state = roomBaseService.updateMembers(getRoomState(roomId), username, members);
             setRoomState(state);
 
-            messagingTemplate.convertAndSend("/topic/game/%s".formatted(roomId), state);
+            messagingTemplate.convertAndSend("/topic/game/%s".formatted(roomId), state.toPublicState());
         });
     }
 

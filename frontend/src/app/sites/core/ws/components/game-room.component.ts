@@ -21,6 +21,7 @@ import {MatTooltip} from "@angular/material/tooltip";
 import {CdkDrag, CdkDragDrop, CdkDragPreview, CdkDropList, moveItemInArray} from "@angular/cdk/drag-drop";
 import {GameRoomMember} from "../dto/GameRoomMember";
 import {Team} from "../../../../main/core/dto/Team";
+import {GameRoomPrivateStateBase} from "../dto/GameRoomPrivateStateBase";
 
 @Component({
   selector: 'game-room',
@@ -226,13 +227,13 @@ import {Team} from "../../../../main/core/dto/Team";
       }
   `
 })
-export class GameRoomComponent implements OnDestroy {
+export class GameRoomComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
 
   private invitePopup = viewChild.required<GameRoomInvitePopupComponent>('invitePopup');
   private leavePopup = viewChild.required<GameRoomLeavePopupComponent>('leavePopup');
 
-  public roomService = input.required<GameRoomService<GameRoomStateBase>>()
+  public roomService = input.required<GameRoomService<GameRoomStateBase, GameRoomPrivateStateBase>>()
   public roomId = input<string>('');
 
   protected inviteLink = computed(() => {
@@ -267,6 +268,10 @@ export class GameRoomComponent implements OnDestroy {
         this.configForm.patchValue({roomId: roomId});
       }
     });
+  }
+
+  ngOnInit() {
+    this.roomService().restoreSession();
   }
 
   ngOnDestroy() {

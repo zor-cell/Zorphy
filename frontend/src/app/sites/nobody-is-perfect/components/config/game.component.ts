@@ -42,7 +42,7 @@ export class NobodyIsPerfectGameComponent {
   });
 
   protected promptText = linkedSignal({
-    source: this.roomService.submittedPrompt,
+    source: this.roomService.userState,
     computation: () => ''
   })
 
