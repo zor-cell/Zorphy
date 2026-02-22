@@ -10,4 +10,5 @@ export interface GameStats {
     closedRate: number,
     maxOutInOneStreak: GameStatsStreak,
     maxClosedStreak: GameStatsStreak,
+    jokersPerRound: number
 }

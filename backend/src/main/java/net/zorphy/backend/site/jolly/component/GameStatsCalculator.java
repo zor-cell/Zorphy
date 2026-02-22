@@ -44,6 +44,9 @@ public class GameStatsCalculator implements GameSpecificStatsCalculator {
         int outInOneCount = 0;
         int closedCount = 0;
 
+        int roundsPlayedWithJokerTracking = 0;
+        int jokerCount = 0;
+
         GameStatsMetricAggregator<Duration> roundDurationMetrics = new GameStatsMetricAggregator<>(new DurationArithmeticStrategy());
         GameStatsMetricAggregator<Double> roundScoreMetrics = new GameStatsMetricAggregator<>(new DoubleArithmeticStrategy());
         GameStatsStreakAggregator outInOneStreak = new GameStatsStreakAggregator();
@@ -80,6 +83,10 @@ public class GameStatsCalculator implements GameSpecificStatsCalculator {
                     if(result.hasClosed()) {
                         closedCount++;
                     }
+                    if(result.jokers() != null) {
+                        roundsPlayedWithJokerTracking++;
+                        jokerCount += result.jokers();
+                    }
 
                     //score data
                     int curScore = result.score();
@@ -112,7 +119,8 @@ public class GameStatsCalculator implements GameSpecificStatsCalculator {
                 GameStatsUtil.computeFraction(outInOneCount, roundsPlayed),
                 GameStatsUtil.computeFraction(closedCount, roundsPlayed),
                 outInOneStreak.calculate().maxStreak(),
-                closedStreak.calculate().maxStreak()
+                closedStreak.calculate().maxStreak(),
+                GameStatsUtil.computeFraction(jokerCount, roundsPlayedWithJokerTracking)
         );
     }
 }

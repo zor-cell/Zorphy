@@ -7,15 +7,17 @@
           <th scope="col" class="text-center w-25">Score</th>
           <th scope="col" class="text-center w-25">Closed</th>
           <th scope="col" class="text-center w-25">Out In One</th>
+          <th scope="col" class="text-center w-25">Jokers</th>
         </tr>
       </thead>
       <tbody>
         @for (team of teams(); track team; let i = $index) {
           <tr [formGroupName]="team.name">
-            <td><input type="text" disabled class="form-control" [value]="team.name"></td>
+            <td><input type="text" readonly class="form-control" [value]="team.name"></td>
             <td><input type="number" class="form-control" formControlName="score"></td>
             <td><input type="checkbox" class="form-check" formControlName="hasClosed"></td>
             <td><input type="checkbox" class="form-check" formControlName="outInOne"></td>
+            <td><input type="number" class="form-control" formControlName="jokers"></td>
           </tr>
         }
       </tbody>

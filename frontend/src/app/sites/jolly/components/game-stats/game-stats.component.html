@@ -1,19 +1,23 @@
 <div class="meta">
     <div>
-        <game-stats-simple label="Rounds Played" [text]="stats().roundsPlayed.toString()"/>
-        <game-stats-simple label="Round Win Rate" [text]="(stats().roundWinRate * 100).toFixed(2) + '%'"/>
+        <game-stats-simple label="Rounds played" [text]="stats().roundsPlayed.toString()"/>
+        <game-stats-simple label="Round win rate" [text]="(stats().roundWinRate * 100).toFixed(2) + '%'"/>
     </div>
 
-    <game-stats-metrics [metric]="stats().roundScoreMetrics" label="Round Score"/>
-    <game-stats-metrics [metric]="stats().roundDurationMetrics" label="Round Duration" [pipe]="DurationPipe"/>
+    <game-stats-metrics [metric]="stats().roundScoreMetrics" label="round score"/>
+    <game-stats-metrics [metric]="stats().roundDurationMetrics" label="round duration" [pipe]="DurationPipe"/>
 
     <div>
         <game-stats-simple label="Closed rate" [text]="(stats().closedRate * 100).toFixed(2) + '%'"/>
-        <game-stats-streak label="Max Closed Streak" [streak]="stats().maxClosedStreak"/>
+        <game-stats-streak label="Max closed streak" [streak]="stats().maxClosedStreak"/>
     </div>
 
     <div>
-        <game-stats-simple label="Out In One Rate" [text]="(stats().outInOneRate * 100).toFixed(2) + '%'"/>
-        <game-stats-streak label="Max Out In One Streak" [streak]="stats().maxOutInOneStreak"/>
+        <game-stats-simple label="Out in one rate" [text]="(stats().outInOneRate * 100).toFixed(2) + '%'"/>
+        <game-stats-streak label="Max out in one streak" [streak]="stats().maxOutInOneStreak"/>
+    </div>
+
+    <div>
+        <game-stats-simple label="Jokers per round" [text]="stats().jokersPerRound.toFixed(2)"/>
     </div>
 </div>

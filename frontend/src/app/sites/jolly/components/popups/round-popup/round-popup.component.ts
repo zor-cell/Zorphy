@@ -22,6 +22,7 @@ interface RoundForm {
   score: FormControl<number | null>;
   hasClosed: FormControl<boolean>;
   outInOne: FormControl<boolean>;
+  jokers: FormControl<number | null>;
 }
 
 
@@ -32,7 +33,6 @@ interface RoundForm {
     FileUploadComponent
 ],
   templateUrl: './round-popup.component.html',
-  
   styleUrl: './round-popup.component.css'
 })
 export class RoundPopupComponent implements OnInit {
@@ -58,7 +58,8 @@ export class RoundPopupComponent implements OnInit {
       group[team.name] = this.fb.group({
         score: this.fb.control<number | null>(null, {validators: Validators.required}),
         hasClosed: this.fb.control<boolean>(false, {nonNullable: true}),
-        outInOne: this.fb.control<boolean>(false, {nonNullable: true})
+        outInOne: this.fb.control<boolean>(false, {nonNullable: true}),
+        jokers: this.fb.control<number | null>(null)
       });
     }
 
@@ -100,7 +101,8 @@ export class RoundPopupComponent implements OnInit {
         formControl.patchValue({
           score: result.score,
           hasClosed: result.hasClosed,
-          outInOne: result.outInOne
+          outInOne: result.outInOne,
+          jokers: result.jokers
         });
       }
 
@@ -132,7 +134,8 @@ export class RoundPopupComponent implements OnInit {
       team: team,
       score: Number(formValue[team.name].score),
       hasClosed: formValue[team.name].hasClosed,
-      outInOne: formValue[team.name].outInOne
+      outInOne: formValue[team.name].outInOne,
+      jokers: formValue[team.name].jokers
     }));
 
     if(this.rounds()) {

@@ -6,6 +6,7 @@ public record RoundResult(
         TeamDetails team,
         int score,
         boolean hasClosed,
-        boolean outInOne
+        boolean outInOne,
+        Integer jokers
 ) {
 }

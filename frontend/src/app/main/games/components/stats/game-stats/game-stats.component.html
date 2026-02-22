@@ -18,13 +18,13 @@
                 <div class="stats-header">Default Stats</div>
                 <div class="meta">
                   <div>
-                    <game-stats-simple label="Games Played" [text]="stats.gamesPlayed.toString()"/>
-                    <game-stats-simple label="Win Rate" [text]="(stats.winRate * 100).toFixed(2) + '%'"/>
-                    <game-stats-streak label="Current Win Streak" [streak]="stats.winStreaks.currentStreak"/>
-                    <game-stats-streak label="Max Win Streak" [streak]="stats.winStreaks.maxStreak"/>
+                    <game-stats-simple label="Games played" [text]="stats.gamesPlayed.toString()"/>
+                    <game-stats-simple label="Win rate" [text]="(stats.winRate * 100).toFixed(2) + '%'"/>
+                    <game-stats-streak label="Current win streak" [streak]="stats.winStreaks.currentStreak"/>
+                    <game-stats-streak label="Max win streak" [streak]="stats.winStreaks.maxStreak"/>
                   </div>
-                  <game-stats-metrics [metric]="stats.scoreMetrics" label="Score"/>
-                  <game-stats-metrics [metric]="stats.durationMetrics" label="Duration" [pipe]="DurationPipe" />
+                  <game-stats-metrics [metric]="stats.scoreMetrics" label="score"/>
+                  <game-stats-metrics [metric]="stats.durationMetrics" label="duration" [pipe]="DurationPipe" />
                   <div>
                     <game-stats-simple label="Nemesis" subLabel="(Worst win rate)" [text]="stats.nemesis?.name"/>
                     <game-stats-simple label="Victim" subLabel="(Best win rate)" [text]="stats.victim?.name"/>

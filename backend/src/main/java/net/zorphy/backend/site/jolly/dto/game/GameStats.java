@@ -15,6 +15,7 @@ public record GameStats(
         double outInOneRate,
         double closedRate,
         GameStatsStreak maxOutInOneStreak,
-        GameStatsStreak maxClosedStreak
+        GameStatsStreak maxClosedStreak,
+        double jokersPerRound
 ) implements GameSpecificStats {
 }
