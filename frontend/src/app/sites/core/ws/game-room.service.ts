@@ -17,8 +17,8 @@ export abstract class GameRoomService<State extends GameRoomStateBase, PrivateSt
   protected notificationService = inject(NotificationService);
 
   private readonly APP_PREFIX = '/app';
-  private readonly SESSION_USERNAME = 'game_room_username';
-  private readonly SESSION_ROOM_ID = 'game_room_roomId';
+  private readonly SESSION_USERNAME = 'GAME_ROOM_USERNAME';
+  private readonly SESSION_ROOM_ID = 'GAME_ROOM_ROOM_ID';
   private subscriptionsInitialized: boolean = false;
   private subscriptions: Subscription[] = [];
 
@@ -82,8 +82,8 @@ export abstract class GameRoomService<State extends GameRoomStateBase, PrivateSt
   }
 
   public restoreSession() {
-    const savedUsername = sessionStorage.getItem(this.SESSION_USERNAME);
-    const savedRoomId = sessionStorage.getItem(this.SESSION_ROOM_ID);
+    const savedUsername = this.getSessionState<string | null>(this.SESSION_USERNAME);
+    const savedRoomId = this.getSessionState<string | null>(this.SESSION_ROOM_ID);
 
     if (savedUsername && savedRoomId) {
       this.joinRoom(savedUsername, savedRoomId);
@@ -93,7 +93,7 @@ export abstract class GameRoomService<State extends GameRoomStateBase, PrivateSt
   /**
    * Disconnects the client from the websocket connection and cleans up all states
    */
-  public disconnect() {
+  public disconnect(clearSession: boolean) {
     this.onDisconnect();
 
     for (const subscription of this.subscriptions) {
@@ -102,17 +102,17 @@ export abstract class GameRoomService<State extends GameRoomStateBase, PrivateSt
 
     this.stompService.disconnect();
 
-    this.username.set(null);
-    sessionStorage.removeItem(this.SESSION_USERNAME);
-
-    this.roomId.set(null);
-    sessionStorage.removeItem(this.SESSION_ROOM_ID);
+    if(clearSession) {
+      this.removeSessionState(this.SESSION_USERNAME, this.username);
+      this.removeSessionState(this.SESSION_ROOM_ID, this.roomId);
+    } else {
+      this.username.set(null);
+      this.roomId.set(null);
+    }
 
     this.gameState.set(null);
     this.subscriptionsInitialized = false;
     this.subscriptions = [];
-
-    console.log("disconnect")
   }
 
   /**
@@ -159,14 +159,14 @@ export abstract class GameRoomService<State extends GameRoomStateBase, PrivateSt
     const createdRoom = this.watchAndMap<State>('/user/queue/created').subscribe(state => {
       this.initStates(state);
       this.subscribeTopic(state.room.roomId);
-      this.notificationService.handleSuccess(`Room ${state.room.roomId} created`);
+      this.notificationService.handleSuccess(`Created room ${state.room.roomId}`);
     });
     this.addSubscription(createdRoom);
 
     const joinedRoom = this.watchAndMap<State>('/user/queue/joined').subscribe(state => {
       this.initStates(state);
       this.subscribeTopic(state.room.roomId);
-      this.notificationService.handleSuccess(`Room ${state.room.roomId} joined`);
+      this.notificationService.handleSuccess(`Joined room ${state.room.roomId}`);
     });
     this.addSubscription(joinedRoom);
 
@@ -180,7 +180,7 @@ export abstract class GameRoomService<State extends GameRoomStateBase, PrivateSt
 
       //tear down connection
       if (error.teardown) {
-        this.disconnect();
+        this.disconnect(true);
       }
     });
     this.addSubscription(errors);
@@ -197,22 +197,28 @@ export abstract class GameRoomService<State extends GameRoomStateBase, PrivateSt
 
   private initStates(state: State) {
     if (this.pendingUsername) {
-      this.username.set(this.pendingUsername);
-      //sessionStorage.setItem(this.SESSION_USERNAME, this.pendingUsername);
+      this.setSessionState(this.SESSION_USERNAME, this.pendingUsername, this.username);
     }
-    this.roomId.set(state.room.roomId);
-    //sessionStorage.setItem(this.SESSION_ROOM_ID, state.room.roomId);
+    this.setSessionState(this.SESSION_ROOM_ID, state.room.roomId, this.roomId);
 
     this.gameState.set(state);
   }
 
+  private getSessionState<T>(key: string): T | null {
+    const jsonValue = sessionStorage.getItem(key);
+    if(jsonValue == null) {
+      return null;
+    }
 
-  protected setSessionState<T>(key: string, value: T, stateSignal: WritableSignal<T>) {
+    return JSON.parse(jsonValue);
+  }
+
+  private setSessionState<T>(key: string, value: T, stateSignal: WritableSignal<T>) {
     stateSignal.set(value);
     sessionStorage.setItem(key, JSON.stringify(value));
   }
 
-  protected removeSessionState<T>(key: string, stateSignal: WritableSignal<T | null>) {
+  private removeSessionState<T>(key: string, stateSignal: WritableSignal<T | null>) {
     stateSignal.set(null);
     sessionStorage.removeItem(key);
   }

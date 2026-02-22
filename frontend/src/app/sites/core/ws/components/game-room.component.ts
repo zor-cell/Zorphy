@@ -275,7 +275,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.roomService().disconnect();
+    this.roomService().disconnect(false);
   }
 
   protected createRoom() {
@@ -293,7 +293,7 @@ export class GameRoomComponent implements OnInit, OnDestroy {
   }
 
   protected leaveRoom() {
-    this.roomService().disconnect();
+    this.roomService().disconnect(true);
     this.configForm.reset();
   }
 

@@ -5,6 +5,7 @@ import {GameRoomComponent} from "../../../core/ws/components/game-room.component
 import {RoundPhase} from "../../dto/RoundPhase";
 import {NotificationService} from "../../../../main/core/services/notification.service";
 import {Prompt} from "../../dto/Prompt";
+import {DurationPipe} from "../../../../main/core/pipes/DurationPipe";
 
 @Component({
   selector: 'nobody-is-perfect-game',
@@ -52,9 +53,10 @@ export class NobodyIsPerfectGameComponent {
 
   protected submitPrompt() {
     const prompt: Prompt = {
+      createdAt: '',
       message: this.promptText(),
       author: {
-        username: this.roomService.username()!
+        username: ''
       }
     };
 
@@ -72,6 +74,19 @@ export class NobodyIsPerfectGameComponent {
 
   protected finishRound() {
     this.roomService.finishRound();
+  }
+
+  protected getDuration(a: string, b: string) {
+    const ad = new Date(a);
+    const bd = new Date(b);
+
+    const diffInMilliseconds = Math.abs(bd.getTime() - ad.getTime());
+
+    const diffInSeconds = diffInMilliseconds / 1000;
+
+    const seconds = Math.floor(diffInSeconds);
+
+    return DurationPipe.fromSeconds(seconds);
   }
 
   protected readonly RoundPhase = RoundPhase;

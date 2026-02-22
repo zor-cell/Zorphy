@@ -12,12 +12,31 @@
     align-items: center;
 
     border: 1px solid lightgray;
+    border-radius: 10px;
 
+    padding: 0.6rem;
     width: 300px;
     height: fit-content;
 }
 
-.prompt-meta {
-    display: flex;
+.prompt-display.correct {
+    background-color: rgba(0, 255, 0, 0.02); /* Very soft, subtle green background */
+    border: 1px solid #22c55e; /* Vibrant green border */
 
+    /* The glowing green shadow */
+    box-shadow: 0 8px 20px rgba(34, 197, 94, 0.25);
+}
+
+.prompt-text {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+
+    gap: 1rem;
+}
+
+.prompt-meta {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
 }

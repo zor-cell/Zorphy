@@ -10,6 +10,6 @@ export const webSocketConfig: RxStompConfig = {
     heartbeatOutgoing: 20000,
     reconnectDelay: 0,
     debug: (msg: string): void => {
-        // console.log(new Date(), msg);
+        //console.log(msg);
     },
 };

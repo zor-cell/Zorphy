@@ -139,9 +139,6 @@ export class ProjectUpdatePopupComponent implements OnInit {
         /*const { content: _pContent, ...project } = this.project();
         const { content: _fContent, ...form } = this.formToDetails();
 
-        console.log(JSON.stringify(project))
-        console.log(JSON.stringify(form))
-
         return JSON.stringify(project) === JSON.stringify(form);*/
         return false;
     }
