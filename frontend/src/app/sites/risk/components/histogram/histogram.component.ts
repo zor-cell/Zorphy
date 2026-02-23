@@ -1,14 +1,11 @@
-import {Component, computed, effect, input, linkedSignal, signal, viewChild} from '@angular/core';
+import {Component, computed, effect, input, linkedSignal, signal, untracked, viewChild} from '@angular/core';
 import {BaseChartDirective} from "ng2-charts";
 import {DataEntry} from "../../dto/DataEntry";
-import {ChartData, ChartOptions} from "chart.js";
 import {MatSlider, MatSliderRangeThumb} from "@angular/material/slider";
 import {FormsModule} from "@angular/forms";
-
-interface Range {
-  min: number;
-  max: number;
-}
+import {Range} from '../../dto/Range';
+import {ProbabilityChart} from "../../dto/charts/ProbabilityChart";
+import {Plugin} from 'chart.js';
 
 @Component({
   selector: 'risk-histogram',
@@ -22,17 +19,29 @@ interface Range {
   styleUrl: './histogram.component.css'
 })
 export class RiskHistogramComponent {
-  public dataEntries = input.required<DataEntry[]>();
-  public isVisible = input<boolean>(true);
   private chart = viewChild.required(BaseChartDirective);
 
-  protected totalRange = computed<Range>(() => {
+  public dataEntries = input.required<DataEntry[]>();
+  public isVisible = input<boolean>(true);
+
+  protected labels = computed(() => {
+    const entries = this.dataEntries();
+    if (entries.length === 0) return [];
+
+    const min = Math.min(...entries.map(e => e.result));
+    const max = Math.max(...entries.map(e => e.result));
+
+    const continuousArr = [];
+    for (let i = min; i <= max; i++) {
+      continuousArr.push(i);
+    }
+    return continuousArr;
+  });
+
+  protected totalRange = computed<Range | null>(() => {
     const labels = this.labels();
     if(labels.length === 0) {
-      return {
-        min: 0,
-        max: 0,
-      };
+      return null;
     }
 
     return {
@@ -40,121 +49,74 @@ export class RiskHistogramComponent {
       max: Math.max(...labels)
     }
   });
-  protected selectedRange = linkedSignal<Range>(() => this.totalRange());
 
-  protected labels = computed(() => {
-    return this.dataEntries().map(d => d.result).sort((a, b) => a - b);
-  });
+  protected selectedRange = linkedSignal<Range>(() => {
+    const total = this.totalRange();
 
-  protected labelData = computed(() => {
-    const a = new Array(this.labels().length).fill(0);
-
-    this.labels().forEach((label, i) => {
-      const entry: DataEntry = this.dataEntries().find(x => x.result == label)!;
-      a[i] = entry.count;
-    });
-
-    return a;
-  });
-
-  protected labelDataProb = computed(() => {
-    const total = this.labelData().reduce((a, b) => a + b, 0);
-    return this.labelData().map(d => d / total);
+    return {
+      min: 1,
+      max: total ? total.max : 1
+    };
   });
 
   protected probability = computed(() => {
     const min = this.selectedRange().min;
     const max = this.selectedRange().max;
+    const entries = this.dataEntries();
 
-    let sum = 0;
-    this.labels().forEach((label, i) => {
-      if (label >= min && label <= max) {
-        sum += this.labelDataProb()[i];
-      }
-    });
+    const totalCount = entries.reduce((sum, e) => sum + e.count, 0);
+    if (totalCount === 0) return 0;
 
-    return sum;
+    const inRangeCount = entries
+      .filter(e => e.result >= min && e.result <= max)
+      .reduce((sum, e) => sum + e.count, 0);
+
+    return inRangeCount / totalCount;
   });
 
-  protected barColors = computed(() => {
-    const min = this.selectedRange().min;
-    const max = this.selectedRange().max;
+  protected sliderLeft = signal<number>(57);
+  protected sliderRight = signal<number>(20);
 
-    return this.labels().map(label => {
-      // 100% opacity for bars in range, 20% opacity for bars outside
-      return (label >= min && label <= max)
-        ? 'rgba(54, 162, 235, 0.8)'
-        : 'rgba(54, 162, 235, 0.4)';
-    });
-  });
+  public chartPlugins: Plugin[] = [{
+    id: 'sync-slider-bounds',
+    afterLayout: (chart) => {
+      const meta = chart.getDatasetMeta(0);
 
-  protected chartData: ChartData<any, number[], number> = {
-    labels: [],
-    datasets: []
-  };
-  protected chartOptions: ChartOptions = {
-    maintainAspectRatio: false,
-    animations: {
-      x: {
-        duration: 500,
-        easing: 'easeOutQuart'
-      },
-      y: {
-        duration: 500,
-        easing: 'easeOutQuart'
-      },
-    },
-    plugins: {
-      title: {
-        display: true,
-        text: 'Histogram of Attacks',
-        font: {
-          size: 18,
-          weight: 'bold',
-        },
+      // Ensure data exists and is rendered
+      if (meta && meta.data && meta.data.length > 0) {
+        const firstBar = meta.data[0];
+        const lastBar = meta.data[meta.data.length - 1];
+
+        const leftOffset = firstBar.x;
+        // The right offset is the total canvas width minus the last bar's x coordinate
+        const rightOffset = chart.width - lastBar.x;
+
+        // Use setTimeout to push updates to the next tick, avoiding Angular's ExpressionChangedAfterItHasBeenCheckedError
+        setTimeout(() => {
+          this.sliderLeft.set(leftOffset);
+          this.sliderRight.set(rightOffset);
+        });
       }
-    },
-    scales: {
-      x: {
-        stacked: true
-      },
-      y: {
-        stacked: true,
-        beginAtZero: true,
-      }
-    },
-  };
+    }
+  }];
+
+  protected probabilityChart = new ProbabilityChart();
 
   constructor() {
     effect(() => {
-      if(this.dataEntries()) {
-        this.refillChartData();
+      const entries = this.dataEntries();
+      if(entries) {
+        const currentRange = untracked(() => this.selectedRange());
+        this.probabilityChart.refresh(entries, currentRange);
+
+        this.chart().update();
       }
     });
 
-    //update chart colors for selection
     effect(() => {
-      const colors = this.barColors();
-      const chartInstance = this.chart();
-
-      if (chartInstance && this.chartData.datasets.length > 0) {
-        this.chartData.datasets[0].backgroundColor = colors;
-        chartInstance.update();
-      }
+      this.probabilityChart.refreshSlider(this.selectedRange());
+      this.chart().update('none');
     });
-  }
-
-  private refillChartData() {
-    const dataset = {
-      type: 'bar',
-      label: 'Attackers left',
-      data: this.labelDataProb()
-    };
-
-    this.chartData.labels = this.labels();
-    this.chartData.datasets = [dataset];
-
-    this.chart().update();
   }
 
   protected updateRange(isMax: boolean, value: number) {
@@ -166,4 +128,6 @@ export class RiskHistogramComponent {
       }
     });
   }
+
+  protected readonly input = input;
 }

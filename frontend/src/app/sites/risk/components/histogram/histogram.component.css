@@ -11,8 +11,8 @@
 .histogram-inputs {
     position: absolute;
     top: 0;
-    right: 0;
-    padding: 1rem;
+    left: 0;
+    padding: 0.5rem;
     width: fit-content;
 }
 
@@ -26,18 +26,39 @@
 
 .slider-input {
     display: inline-block;
-    width: 40px;
+    width: 33px;
+    padding: 2px;
 
     text-align: center;
 }
 
 .slider-input-lg {
-    width: 50px;
+    width: 40px;
 }
 
 .slider-overlay mat-slider {
     width: 100%;
     margin: 0;
+}
+
+/* Slide styling for probabilities */
+::ng-deep .slider-overlay mat-slider .mdc-slider__track--active_fill,
+::ng-deep .slider-overlay mat-slider .mdc-slider__track--inactive {
+    background: transparent !important;
+    border: none !important;
+}
+
+::ng-deep mat-slider .mdc-slider__thumb-knob {
+    /* Match your chart's exact blue color */
+    background-color: black !important;
+
+    border-radius: 0 !important;
+    border: none !important;
+
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+
+    width: 12px !important;
+    height: 12px !important;
 }
 
 @media (max-width: 400px) {
