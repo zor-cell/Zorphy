@@ -10,6 +10,7 @@ import java.time.Duration;
 public record GameStats(
         int roundsPlayed,
         double roundWinRate,
+        GameStatsMetrics<Double> roundsMetrics,
         GameStatsMetrics<Double> roundScoreMetrics,
         GameStatsMetrics<Duration> roundDurationMetrics,
         double outInOneRate,

@@ -47,6 +47,7 @@ public class GameStatsCalculator implements GameSpecificStatsCalculator {
         int roundsPlayedWithJokerTracking = 0;
         int jokerCount = 0;
 
+        GameStatsMetricAggregator<Double> roundsMetrics = new GameStatsMetricAggregator<>(new DoubleArithmeticStrategy());
         GameStatsMetricAggregator<Duration> roundDurationMetrics = new GameStatsMetricAggregator<>(new DurationArithmeticStrategy());
         GameStatsMetricAggregator<Double> roundScoreMetrics = new GameStatsMetricAggregator<>(new DoubleArithmeticStrategy());
         GameStatsStreakAggregator outInOneStreak = new GameStatsStreakAggregator();
@@ -106,6 +107,8 @@ public class GameStatsCalculator implements GameSpecificStatsCalculator {
                         roundsWon++;
                     }
                 }
+
+                roundsMetrics.update(game.getId(), (double) gameState.rounds().size());
             } catch(Exception e) {
                 //continue if object mapping to game state failed
             }
@@ -114,6 +117,7 @@ public class GameStatsCalculator implements GameSpecificStatsCalculator {
         return new GameStats(
                 roundsPlayed,
                 GameStatsUtil.computeFraction(roundsWon, roundsPlayed),
+                roundsMetrics.aggregate(),
                 roundScoreMetrics.aggregate(),
                 roundDurationMetrics.aggregate(),
                 GameStatsUtil.computeFraction(outInOneCount, roundsPlayed),

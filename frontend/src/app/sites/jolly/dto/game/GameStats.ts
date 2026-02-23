@@ -4,6 +4,7 @@ import {GameStatsStreak} from "../../../../main/games/dto/stats/streaks/GameStat
 export interface GameStats {
     roundsPlayed: number,
     roundWinRate: number,
+    roundsMetrics: GameStatsMetrics<number>,
     roundScoreMetrics: GameStatsMetrics<number>,
     roundDurationMetrics: GameStatsMetrics<string>,
     outInOneRate: number,

@@ -4,6 +4,7 @@
         <game-stats-simple label="Round win rate" [text]="(stats().roundWinRate * 100).toFixed(2) + '%'"/>
     </div>
 
+    <game-stats-metrics [metric]="stats().roundsMetrics" label="rounds"/>
     <game-stats-metrics [metric]="stats().roundScoreMetrics" label="round score"/>
     <game-stats-metrics [metric]="stats().roundDurationMetrics" label="round duration" [pipe]="DurationPipe"/>
 
