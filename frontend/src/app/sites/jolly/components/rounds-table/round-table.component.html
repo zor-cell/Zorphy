@@ -5,12 +5,18 @@
       @for (team of gameState().gameConfig.teams; track team.name) {
         <th scope="col" class="text-truncate-clip">{{ team.name }}</th>
       }
-      <th scope="col" class="text-truncate">Duration</th>
+      <th scope="col" class="text-truncate-clip text-center">
+          <i class="bi bi-hourglass-split"></i>
+      </th>
       @if (showImages()) {
-        <th scope="col" class="text-truncate">Image</th>
+        <th scope="col" class="text-truncate-clip">
+            <i class="bi bi-image"></i>
+        </th>
       }
       @if (isEditable()) {
-        <th scope="col" class="text-truncate">Actions</th>
+        <th scope="col" class="text-truncate-clip">
+            <i class="bi bi-pencil-fill"></i>
+        </th>
       }
     </tr>
   </thead>

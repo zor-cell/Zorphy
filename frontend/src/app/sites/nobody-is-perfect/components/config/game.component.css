@@ -38,5 +38,5 @@
 .prompt-meta {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
 }

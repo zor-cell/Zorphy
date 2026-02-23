@@ -76,18 +76,5 @@ export class NobodyIsPerfectGameComponent {
     this.roomService.finishRound();
   }
 
-  protected getDuration(a: string, b: string) {
-    const ad = new Date(a);
-    const bd = new Date(b);
-
-    const diffInMilliseconds = Math.abs(bd.getTime() - ad.getTime());
-
-    const diffInSeconds = diffInMilliseconds / 1000;
-
-    const seconds = Math.floor(diffInSeconds);
-
-    return DurationPipe.fromSeconds(seconds);
-  }
-
   protected readonly RoundPhase = RoundPhase;
 }
