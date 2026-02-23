@@ -7,6 +7,7 @@ import java.time.Instant;
 public record Prompt(
         Instant createdAt,
         String message,
-        GameRoomMember author
+        GameRoomMember author,
+        Boolean isTruth
 ) {
 }

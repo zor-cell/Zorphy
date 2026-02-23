@@ -57,7 +57,8 @@ export class NobodyIsPerfectGameComponent {
       message: this.promptText(),
       author: {
         username: ''
-      }
+      },
+      isTruth: false
     };
 
     this.roomService.submitPrompt(prompt);

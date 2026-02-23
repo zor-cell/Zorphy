@@ -42,7 +42,7 @@
                     @case (RoundPhase.REVEAL) {
                         <div class="flex-container gap-1">
                             @for(prompt of round.prompts;track prompt.message) {
-                                <div class="prompt-display gap-1" [class.correct]="prompt.author.username === state.gameMaster.username">
+                                <div class="prompt-display gap-1" [class.correct]="prompt.isTruth">
                                     <div class="prompt-text">
                                         <span class="fw-bold">{{$index + 1}}.</span>
                                         <span>{{ prompt.message }}</span>

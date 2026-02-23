@@ -145,10 +145,18 @@ public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, Gam
             throw new InvalidOperationException("Member already submitted a prompt in this round");
         }
 
+        boolean isTruth = false;
+        if(member.username().equals(state.gameMaster().username())) {
+            //if another prompt is already the truth, the game master left the room after submit
+            //in that case the prompt should be labeled false
+            isTruth = currentRound.prompts().stream().noneMatch(Prompt::isTruth);
+        }
+
         Prompt prompt = new Prompt(
                 Instant.now(),
                 message,
-                member
+                member,
+                isTruth
         );
         currentRound.prompts().add(prompt);
 

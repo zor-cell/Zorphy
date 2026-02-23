@@ -4,4 +4,5 @@ export interface Prompt {
   createdAt: string;
   message: string;
   author: GameRoomMember;
+  isTruth: boolean;
 }
