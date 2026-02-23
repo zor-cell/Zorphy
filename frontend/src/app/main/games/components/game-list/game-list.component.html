@@ -1,58 +1,64 @@
 <app-main-header>
-  <game-search class="w-100" ngProjectAs="middle" (changeFiltersEvent)="searchFiltersChanged($event)"/>
-  <button class="btn btn-primary" (click)="openGameStats()">
-    <i class="bi bi-graph-up"></i>
-  </button>
+    <game-search class="w-100" ngProjectAs="middle" (changeFiltersEvent)="searchFiltersChanged($event)"/>
+    <button class="btn btn-primary" (click)="openGameStats()">
+        <i class="bi bi-graph-up"></i>
+    </button>
 </app-main-header>
 
 <div class="main-container games-container">
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Game Type</th>
-        <th scope="col">Date</th>
-        <th scope="col">Duration</th>
-        <th scope="col">Players</th>
-        <th scope="col">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      @if (isLoading()) {
+    <table class="table">
+        <thead>
         <tr>
-          <td colspan="6" class="text-center border-bottom-0">
-            <div class="spinner-border spinner-border-sm" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          </td>
+            <th scope="col">#</th>
+            <th scope="col">Game Type</th>
+            <th scope="col">Date</th>
+            <th scope="col">Duration</th>
+            <th scope="col">Players</th>
+            <th scope="col">Actions</th>
         </tr>
-      } @else {
-        @for (game of games(); track game.id; let i = $index) {
-          <tr>
-            <th scope="row">{{ i + 1 }}</th>
-            <td>{{ game.gameType }}</td>
-            <td>{{ game.playedAt |  date:dateFormat }}</td>
-            <td>{{ game.duration |  duration }}</td>
-            <td>{{ game.players.length }}</td>
-            <td class="row-actions">
-              <button class="btn btn-sm btn-primary" (click)="openGameInfo(game.id)">
-                <i class="bi bi-info-circle"></i>
-              </button>
-              @if (authService.isAdmin()) {
-                <button class="btn btn-sm btn-warning">
-                  <i class="bi bi-pencil-square"></i>
-                </button>
-              }
-            </td>
-          </tr>
-        } @empty {
-          <tr>
-            <td colspan="6" class="text-center border-bottom-0">
-              No games found
-            </td>
-          </tr>
-        }
-      }
-    </tbody>
-  </table>
+        </thead>
+        <tbody>
+            @if (isLoading()) {
+                <tr>
+                    <td colspan="6" class="text-center border-bottom-0">
+                        <div class="spinner-border spinner-border-sm" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </td>
+                </tr>
+            } @else {
+                @for (game of games(); track game.id; let i = $index) {
+                    <tr>
+                        <th scope="row">{{ (pageable().page * pageable().size) + i + 1 }}</th>
+                        <td>{{ game.gameType }}</td>
+                        <td>{{ game.playedAt |  date:dateFormat }}</td>
+                        <td>{{ game.duration |  duration }}</td>
+                        <td>{{ game.players.length }}</td>
+                        <td class="row-actions">
+                            <button class="btn btn-sm btn-primary" (click)="openGameInfo(game.id)">
+                                <i class="bi bi-info-circle"></i>
+                            </button>
+                            @if (authService.isAdmin()) {
+                                <button class="btn btn-sm btn-warning">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                            }
+                        </td>
+                    </tr>
+                } @empty {
+                    <tr>
+                        <td colspan="6" class="text-center border-bottom-0">
+                            No games found
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    @if(!isLoading() && games().length > 0) {
+        <div class="align-self-end">
+            <app-paginator (pageChanged)="pageChanged()" [(pageable)]="pageable"/>
+        </div>
+    }
 </div>

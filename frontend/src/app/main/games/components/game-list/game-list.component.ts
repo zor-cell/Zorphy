@@ -8,6 +8,9 @@ import {MainHeaderComponent} from '../../../core/components/main-header/main-hea
 import {GameSearchComponent} from "../game-search/game-search.component";
 import {GameFilters} from "../../dto/GameFilters";
 import {AuthService} from "../../../core/services/auth.service";
+import {MatPaginator, PageEvent} from "@angular/material/paginator";
+import {PaginatorComponent} from "../../../core/components/paginator/paginator.component";
+import {Pageable} from "../../../core/dto/Pageable";
 
 @Component({
   selector: 'game-list',
@@ -15,10 +18,10 @@ import {AuthService} from "../../../core/services/auth.service";
     DatePipe,
     DurationPipe,
     MainHeaderComponent,
-    GameSearchComponent
-],
+    GameSearchComponent,
+    PaginatorComponent
+  ],
   templateUrl: './game-list.component.html',
-  
   styleUrl: './game-list.component.css'
 })
 export class GameListComponent implements OnInit {
@@ -29,6 +32,10 @@ export class GameListComponent implements OnInit {
   protected dateFormat = 'MMM d, yyyy HH:mm';
   protected games = signal<GameMetadata[]>([]);
   protected isLoading = signal<boolean>(false);
+  private currentFilters = signal<GameFilters | null>(null);
+
+  //pagination
+  protected pageable = signal<Pageable>({page: 0, size: 10, totalItems: 0});
 
   ngOnInit(): void {
     //adjust date format
@@ -49,15 +56,25 @@ export class GameListComponent implements OnInit {
   }
 
   protected searchFiltersChanged(filters: GameFilters) {
-    this.searchGames(filters);
+    this.currentFilters.set(filters);
+    this.pageable.update(p => ({...p, page: 0}));
+
+    this.searchGames();
   }
 
-  private searchGames(filters: GameFilters | null = null) {
+  protected pageChanged() {
+    this.searchGames();
+  }
+
+  private searchGames() {
     this.isLoading.set(true);
-    this.gameService.searchGames(filters).subscribe({
+    console.log("search", this.pageable())
+    this.gameService.searchGames(this.currentFilters(), this.pageable()).subscribe({
       next: res => {
           this.isLoading.set(false);
-          this.games.set(res);
+          this.games.set(res.content);
+
+          this.pageable.update(p => ({...p, totalItems: res.page.totalElements}))
         },
       error: err => {
         this.isLoading.set(false);

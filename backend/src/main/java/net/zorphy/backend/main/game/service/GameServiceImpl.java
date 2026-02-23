@@ -21,6 +21,8 @@ import net.zorphy.backend.site.core.http.dto.result.ResultStateBase;
 import net.zorphy.backend.site.core.http.dto.state.PausableGameState;
 import net.zorphy.backend.site.core.shared.service.GameSpecificDelete;
 import net.zorphy.backend.site.connect4.exception.InvalidOperationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,16 +67,17 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public List<GameMetadata> searchGames(GameFilters gameFilters) {
-        List<Game> games;
+    public Page<GameMetadata> searchGames(GameFilters gameFilters, Pageable pageable) {
+        Page<Game> gamePage;
+
         if(gameFilters == null) {
-            games = gameRepository.findAll();
+            gamePage = gameRepository.findAll(pageable);
         } else {
             Specification<Game> specs = GameSpecifications.search(gameFilters);
-            games = gameRepository.findAll(specs);
+            gamePage = gameRepository.findAll(specs, pageable);
         }
 
-        return mapList(games);
+        return gamePage.map(gameMapper::gameToGameMetadata);
     }
 
     @Override

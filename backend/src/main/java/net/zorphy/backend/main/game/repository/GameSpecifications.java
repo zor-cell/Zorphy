@@ -19,9 +19,6 @@ public class GameSpecifications {
             List<Predicate> wherePredicates = new ArrayList<>();
             List<Predicate> havingPredicates = new ArrayList<>();
 
-            //joins
-            Join<Game, Player> playerJoin = root.join(Game_.players, JoinType.LEFT);
-
             //playedAt
             Path<Instant> playedAt = root.get(Game_.playedAt);
             Predicate playedAtPredicate = null;
@@ -62,12 +59,12 @@ public class GameSpecifications {
             //game type
             if(gameFilters.gameTypes() != null && !gameFilters.gameTypes().isEmpty()) {
                 Path<String> gameType = root.get(Game_.gameType);
-                Predicate all = cb.or();
+                List<Predicate> all = new ArrayList<>();
                 for(GameType filterGameType : gameFilters.gameTypes()) {
                     Predicate cur = cb.like(cb.lower(gameType), "%" + filterGameType.toString().toLowerCase() + "%");
-                    all = cb.or(cur, all);
+                    all.add(cur);
                 }
-                wherePredicates.add(all);
+                wherePredicates.add(cb.or(all.toArray(new Predicate[0])));
             }
 
             //text
@@ -106,6 +103,8 @@ public class GameSpecifications {
 
             //player related (having clause)
             if(gameFilters.minPlayers() != null || gameFilters.maxPlayers() != null || (gameFilters.players() != null && !gameFilters.players().isEmpty())) {
+                Join<Game, Player> playerJoin = root.join(Game_.players, JoinType.LEFT);
+                query.distinct(true);
                 query.groupBy(root.get(Game_.id));
 
                 //player count

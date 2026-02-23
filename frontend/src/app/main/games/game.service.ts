@@ -7,6 +7,8 @@ import {GameFilters} from "./dto/GameFilters";
 import {GameStats} from "./dto/stats/GameStats";
 import {environment} from "../../../environments/environment";
 import {NotificationService} from "../core/services/notification.service";
+import {Page} from "../core/dto/Page";
+import {Pageable} from "../core/dto/Pageable";
 
 @Injectable({
   providedIn: 'root'
@@ -16,22 +18,26 @@ export class GameService {
   private notification = inject(NotificationService);
 
   private readonly baseUri = environment.httpApiUrl + '/games';
-  
+
   getGames(): Observable<GameMetadata[]> {
     return this.httpClient.get<GameMetadata[]>(this.baseUri);
   }
 
-  searchGames(gameFilters: GameFilters | null): Observable<GameMetadata[]> {
+  searchGames(gameFilters: GameFilters | null, pageable: Pageable): Observable<Page<GameMetadata>> {
     let params = new HttpParams();
-    if(gameFilters) {
+
+    if (gameFilters) {
       params = this.filtersToParams(gameFilters);
     }
-    return this.httpClient.get<GameMetadata[]>(this.baseUri + '/search', {params});
+
+    params = this.appendPageableToParams(params, pageable);
+
+    return this.httpClient.get<Page<GameMetadata>>(this.baseUri + '/search', {params});
   }
 
   getStats(gameFilters: GameFilters | null): Observable<GameStats[]> {
     let params = new HttpParams();
-    if(gameFilters) {
+    if (gameFilters) {
       params = this.filtersToParams(gameFilters);
     }
     return this.httpClient.get<GameStats[]>(this.baseUri + '/stats', {params});
@@ -43,9 +49,21 @@ export class GameService {
 
   deleteGame(id: string) {
     return this.httpClient.delete<GameDetails>(this.baseUri + '/' + id).pipe(
-        tap(() => {
-          this.notification.handleSuccess('Deleted game data');
-        }));
+      tap(() => {
+        this.notification.handleSuccess('Deleted game data');
+      }));
+  }
+
+  private appendPageableToParams(params: HttpParams, pageable: Pageable): HttpParams {
+    params = params
+      .set('page', pageable.page)
+      .set('size', pageable.size);
+
+    if(pageable.sort) {
+      params = params.set('sort', pageable.sort);
+    }
+
+    return params;
   }
 
   private filtersToParams(gameFilters: GameFilters): HttpParams {

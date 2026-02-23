@@ -8,6 +8,8 @@ import net.zorphy.backend.main.game.dto.stats.GameStats;
 import net.zorphy.backend.site.core.http.dto.TeamDetails;
 import net.zorphy.backend.site.core.http.dto.state.GameStateBase;
 import net.zorphy.backend.site.core.http.dto.result.ResultStateBase;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -16,7 +18,7 @@ import java.util.UUID;
 public interface GameService {
     List<GameMetadata> getGames();
 
-    List<GameMetadata> searchGames(GameFilters gameFilters);
+    Page<GameMetadata> searchGames(GameFilters gameFilters, Pageable pageable);
 
     List<GameStats> getStats(GameFilters gameFilters);
 

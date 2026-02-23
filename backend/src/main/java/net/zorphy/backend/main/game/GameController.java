@@ -5,6 +5,10 @@ import net.zorphy.backend.main.game.dto.GameFilters;
 import net.zorphy.backend.main.game.dto.GameMetadata;
 import net.zorphy.backend.main.game.dto.stats.GameStats;
 import net.zorphy.backend.main.game.service.GameService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +30,14 @@ public class GameController {
     }
 
     @GetMapping("/search")
-    public List<GameMetadata> searchGames(@ModelAttribute GameFilters gameFilters) {
-        return gameService.searchGames(gameFilters);
+    public Page<GameMetadata> searchGames(@ModelAttribute GameFilters gameFilters,
+                                          @PageableDefault(
+                                                  size = 25,
+                                                  sort = {"playedAt"},
+                                                  direction = Sort.Direction.DESC
+                                          ) Pageable pageable
+    ) {
+        return gameService.searchGames(gameFilters, pageable);
     }
 
     @GetMapping("/stats")
