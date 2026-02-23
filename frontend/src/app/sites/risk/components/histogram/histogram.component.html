@@ -4,4 +4,19 @@
             [data]="chartData"
             [options]="chartOptions">
     </canvas>
+    <div class="slider-overlay">
+        <mat-slider [min]="totalRange().min" [max]="totalRange().max">
+            <input matSliderStartThumb [ngModel]="selectedRange().min" (ngModelChange)="updateRange(false, $event)">
+            <input matSliderEndThumb [ngModel]="selectedRange().max" (ngModelChange)="updateRange(true, $event)">
+        </mat-slider>
+    </div>
+
+    <div class="histogram-inputs flex-container flex-row gap-1">
+        <div>P(<input class="form-control form-control-sm slider-input" [(ngModel)]="selectedRange().min">
+            &leq; X &leq;
+            <input class="form-control form-control-sm slider-input" [(ngModel)]="selectedRange().max">)
+            =
+            <input class="form-control form-control-sm slider-input slider-input-lg" disabled [value]="probability().toFixed(2)">
+        </div>
+    </div>
 </section>

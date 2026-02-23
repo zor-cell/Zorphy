@@ -1,9 +1,43 @@
 .histogram-container {
+    position: relative;
+
     border-radius: 7px;
     border: 2px solid rgba(0, 0, 0, 0.1);
 
     max-width: 1100px;
     height: 500px;
+}
+
+.histogram-inputs {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1rem;
+    width: fit-content;
+}
+
+.slider-overlay {
+    position: absolute;
+    bottom: 5px;
+    left: 57px;
+    right: 20px;
+    z-index: 10;
+}
+
+.slider-input {
+    display: inline-block;
+    width: 40px;
+
+    text-align: center;
+}
+
+.slider-input-lg {
+    width: 50px;
+}
+
+.slider-overlay mat-slider {
+    width: 100%;
+    margin: 0;
 }
 
 @media (max-width: 400px) {

@@ -1,3 +1,9 @@
+:root {
+    /* Sliders */
+    --mat-slider-handle-width: 14px;
+    --mat-slider-handle-height: 14px;
+}
+
 /* Snackbar */
 .error-snackbar.mat-mdc-snack-bar-container .mdc-snackbar__surface  {
     background-color: var(--mat-sys-error) !important;
@@ -27,3 +33,5 @@
 .mat-mdc-dialog-content {
     font-size: 1rem !important;
 }
+
+.mdc-slider__thumb {}
