@@ -1,17 +1,17 @@
 <ng-template #roundPopup let-formId="formId">
   <form [formGroup]="saveForm" [id]="formId" novalidate class="main-flex">
-    <table class="table">
+    <table class="table" style="table-layout: fixed;">
       <thead>
         <tr>
-          <th scope="col" class="text-center w-25">Team</th>
-          <th scope="col" class="text-center w-25">Score</th>
-          <th scope="col" class="text-center w-25">Closed</th>
-          <th scope="col" class="text-center w-25">Out In One</th>
-          <th scope="col" class="text-center w-25">Jokers</th>
+          <th scope="col" class="text-center" style="width: 25%;">Team</th>
+          <th scope="col" class="text-center" style="width: 20%;">Score</th>
+          <th scope="col" class="text-center" style="width: 20%;">Closed</th>
+          <th scope="col" class="text-center" style="width: 15%;">Out In One</th>
+          <th scope="col" class="text-center" style="width: 20%;">Jokers</th>
         </tr>
       </thead>
       <tbody>
-        @for (team of teams(); track team; let i = $index) {
+        @for (team of teams(); track team) {
           <tr [formGroupName]="team.name">
             <td><input type="text" readonly class="form-control" [value]="team.name"></td>
             <td><input type="number" class="form-control" formControlName="score"></td>

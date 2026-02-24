@@ -1,76 +1,77 @@
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      @for (team of gameState().gameConfig.teams; track team.name) {
-        <th scope="col" class="text-truncate-clip">{{ team.name }}</th>
-      }
-      <th scope="col" class="text-truncate-clip text-center">
-          <i class="bi bi-hourglass-split"></i>
-      </th>
-      @if (showImages()) {
-        <th scope="col" class="text-truncate-clip">
-            <i class="bi bi-image"></i>
-        </th>
-      }
-      @if (isEditable()) {
-        <th scope="col" class="text-truncate-clip">
-            <i class="bi bi-pencil-fill"></i>
-        </th>
-      }
-    </tr>
-  </thead>
-  <tbody>
-    @for (roundInfo of gameState().rounds; track roundInfo.endTime; let i = $index) {
-      <tr>
-        <th scope="row">{{ i + 1 }}</th>
-        @for (round of roundInfo.results; track $index) {
-          <td class="score-cell">
-            <span [class.closed]="round.hasClosed">{{ round.score }}</span>
-            @if (round.outInOne) {
-              <span class="out-in-one">•</span>
+<div class="table-scroll-container">
+    <table class="table">
+        <thead class="sticky-header">
+        <tr>
+            <th scope="col">#</th>
+            @for (team of gameState().gameConfig.teams; track team.name) {
+                <th scope="col" class="text-truncate-clip">{{ team.name }}</th>
             }
-          </td>
-        }
-        <td>{{ getDuration(i) }}</td>
-        @if (showImages()) {
-          <td>
-            <div [lightbox]="i" [gallery]="galleryName">
-              <img [ngSrc]="roundInfo.imageUrl" width="20" height="20" alt="" loading="lazy">
-            </div>
-          </td>
-        }
-        @if (isEditable()) {
-          <td style="width: 20px">
-            <button class="btn btn-sm btn-primary" (click)="openRoundPopup(i)">
-              <i class="bi bi-pencil-square"></i>
-            </button>
-          </td>
-        }
-      </tr>
-    }
-  </tbody>
-  <tfoot>
-    <tr class="table-light fw-bold">
-      <th scope="row">Total</th>
-      @for (team of gameState().gameConfig.teams; track team.name) {
-        <td>
-          {{ getTotalScore(team) }}
-        </td>
-      }
-      <td>{{ getTotalDuration() }}</td>
-      @if (showImages()) {
-        <td>-</td>
-      }
-      @if (isEditable()) {
-        <td>-</td>
-      }
-    </tr>
-  </tfoot>
-</table>
-
+            <th scope="col" class="text-truncate-clip text-center">
+                <i class="bi bi-hourglass-split"></i>
+            </th>
+            @if (showImages()) {
+                <th scope="col" class="text-truncate-clip">
+                    <i class="bi bi-image"></i>
+                </th>
+            }
+            @if (isEditable()) {
+                <th scope="col" class="text-truncate-clip">
+                    <i class="bi bi-pencil-fill"></i>
+                </th>
+            }
+        </tr>
+        </thead>
+        <tbody>
+            @for (roundInfo of gameState().rounds; track roundInfo.endTime; let i = $index) {
+                <tr>
+                    <th scope="row">{{ i + 1 }}</th>
+                    @for (round of roundInfo.results; track $index) {
+                        <td class="score-cell">
+                            <span [class.closed]="round.hasClosed">{{ round.score }}</span>
+                            @if (round.outInOne) {
+                                <span class="out-in-one">•</span>
+                            }
+                        </td>
+                    }
+                    <td>{{ getDuration(i) }}</td>
+                    @if (showImages()) {
+                        <td>
+                            <div [lightbox]="i" [gallery]="galleryName">
+                                <img [ngSrc]="roundInfo.imageUrl" width="20" height="20" alt="" loading="lazy">
+                            </div>
+                        </td>
+                    }
+                    @if (isEditable()) {
+                        <td style="width: 20px">
+                            <button class="btn btn-sm btn-primary" (click)="openRoundPopup(i)">
+                                <i class="bi bi-pencil-square"></i>
+                            </button>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+        <tfoot class="sticky-footer">
+        <tr class="table-light fw-bold">
+            <th scope="row">Total</th>
+            @for (team of gameState().gameConfig.teams; track team.name) {
+                <td>
+                    {{ getTotalScore(team) }}
+                </td>
+            }
+            <td>{{ getTotalDuration() }}</td>
+            @if (showImages()) {
+                <td>-</td>
+            }
+            @if (isEditable()) {
+                <td>-</td>
+            }
+        </tr>
+        </tfoot>
+    </table>
+</div>
 <jolly-round-popup #updateRoundPopup
-  [teams]="gameState().gameConfig.teams"
-  [rounds]="gameState().rounds"
-  (updateRoundEvent)="updateRound($event)"
-  />
+                   [teams]="gameState().gameConfig.teams"
+                   [rounds]="gameState().rounds"
+                   (updateRoundEvent)="updateRound($event)"
+/>
