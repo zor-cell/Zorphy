@@ -38,7 +38,7 @@ export class QwirkleGameComponent implements OnInit {
     protected selectedMove = signal<MoveGroup | null>(null);
 
     protected bestMoves = signal<MoveGroup[] | null>(null);
-    selectionInfo: SelectionInfo | null = null;
+    protected selectionInfo = signal<SelectionInfo | null>(null);
 
     editMode: boolean = false;
 
@@ -79,9 +79,9 @@ export class QwirkleGameComponent implements OnInit {
 
     selectedInHand(selectionInfo: SelectionInfo) {
         if(selectionInfo.tiles.length === 0) {
-            this.selectionInfo = null;
+            this.selectionInfo.set(null);
         } else {
-            this.selectionInfo = selectionInfo;
+            this.selectionInfo.set(selectionInfo);
         }
     }
 
@@ -91,14 +91,15 @@ export class QwirkleGameComponent implements OnInit {
     }
 
     selectedInStack(selectionInfo: SelectionInfo) {
-       this.selectionInfo = selectionInfo;
+       this.selectionInfo.set(selectionInfo);
     }
 
     //events from board
     chooseValidMove(moveIndex: number) {
-        if(!this.selectionInfo) return;
+        const info = this.selectionInfo();
+        if(!info) return;
 
-        this.selectedMove.set(this.selectionInfo.moves[moveIndex]);
+        this.selectedMove.set(info.moves[moveIndex]);
     }
 
     makeBestMove(moveIndex: number) {
@@ -118,7 +119,7 @@ export class QwirkleGameComponent implements OnInit {
 
     makeSelectedMove(direction: Direction) {
         const selectedMove = this.selectedMove();
-        if (!selectedMove || !this.selectionInfo) return;
+        if (!selectedMove || !this.selectionInfo()) return;
 
         const move: Move = {
             position: selectedMove.position,
@@ -126,7 +127,7 @@ export class QwirkleGameComponent implements OnInit {
             tiles: selectedMove.tiles
         }
         this.selectedMove.set(null);
-        this.selectionInfo = null;
+        this.selectionInfo.set(null);
 
         this.makeMove(move, this.editMode);
     }

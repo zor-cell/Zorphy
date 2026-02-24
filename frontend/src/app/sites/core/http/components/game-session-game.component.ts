@@ -116,7 +116,7 @@ export class GameSessionGameComponent<
     })
     protected isPaused = computed(() => {
        const state = this.gameState();
-       if(!state || state.pauseEntries.length === 0) return false;
+       if(!state || !state.pauseEntries || state.pauseEntries.length === 0) return false;
 
        const last = state.pauseEntries[state.pauseEntries.length - 1];
        return last.resumeTime === null;

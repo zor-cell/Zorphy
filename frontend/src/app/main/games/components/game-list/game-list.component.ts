@@ -68,7 +68,6 @@ export class GameListComponent implements OnInit {
 
   private searchGames() {
     this.isLoading.set(true);
-    console.log("search", this.pageable())
     this.gameService.searchGames(this.currentFilters(), this.pageable()).subscribe({
       next: res => {
           this.isLoading.set(false);

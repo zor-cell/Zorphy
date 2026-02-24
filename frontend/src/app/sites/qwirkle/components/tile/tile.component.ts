@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, computed, inject, input, Input, OnInit} from '@angular/core';
 import {Tile} from "../../dto/tile/Tile";
 import {Color} from "../../dto/enums/Color";
 import {SafeHtml} from "@angular/platform-browser";
@@ -13,17 +13,25 @@ import {Observable} from "rxjs";
     NgClass
 ],
     templateUrl: './tile.component.html',
-    
     styleUrl: './tile.component.css'
 })
-export class QwirkleTileComponent implements OnInit {
-    @Input({required: true}) tile!: Tile;
-    @Input() tileSize: number = 40;
-    @Input() tileText: number | null = null;
-    @Input() isInteractive: boolean = true;
-    @Input() isDisabled: boolean = false;
+export class QwirkleTileComponent {
+    private imageCacheService = inject(ImageCacheService);
 
-    svgContent!: Observable<SafeHtml>;
+    public tile = input.required<Tile>();
+    public tileSize = input(40);
+    public tileText = input<number | null>(null);
+    public isInteractive = input<boolean>(true);
+    public isDisabled = input<boolean>(false);
+
+    protected svgContent = computed(() => {
+        return this.imageCacheService.getSVG(
+          `assets/qwirkle/${this.tile().shape.toLowerCase()}.svg`,
+          this.ColorRGBMap[this.tile().color],
+          this.tileSize(),
+          this.tileSize()
+        );
+    })
 
     private readonly ColorRGBMap: Record<Color, string> = {
         [Color.ORANGE]: "rgb(255, 165, 0)",
@@ -33,16 +41,4 @@ export class QwirkleTileComponent implements OnInit {
         [Color.GREEN]: "rgb(0, 128, 0)",
         [Color.BLUE]: "rgb(0, 0, 255)"
     };
-
-    constructor(private imageCacheService: ImageCacheService) {
-    }
-
-    ngOnInit() {
-        this.svgContent = this.imageCacheService.getSVG(
-            `assets/qwirkle/${this.tile.shape.toLowerCase()}.svg`,
-            this.ColorRGBMap[this.tile.color],
-            this.tileSize,
-            this.tileSize
-        );
-    }
 }

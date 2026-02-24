@@ -1,4 +1,4 @@
-import {Component, effect, inject, input, output} from '@angular/core';
+import {Component, effect, inject, input, output, signal, untracked} from '@angular/core';
 import {StackTile} from "../../dto/tile/StackTile";
 import {QwirkleTileComponent} from "../tile/tile.component";
 
@@ -15,17 +15,16 @@ import {SelectionInfo} from "../../dto/SelectionInfo";
     FormsModule
 ],
     templateUrl: './stack.component.html',
-    
     styleUrl: './stack.component.css'
 })
 export class QwirkleStackComponent {
-    stack = input.required<StackTile[]>();
-    tileDrawn = output<GameState>();
-    tileSelected = output<SelectionInfo>();
-    editModeChanged = output<boolean>();
+    public stack = input.required<StackTile[]>();
+    public tileDrawn = output<GameState>();
+    public tileSelected = output<SelectionInfo>();
+    public editModeChanged = output<boolean>();
 
     protected editMode: boolean = false;
-    protected selected: Tile[] = [];
+    protected selected = signal<Tile[]>([]);
 
     private changeEffect = effect(() => {
         //detect stack changes
@@ -52,23 +51,26 @@ export class QwirkleStackComponent {
 
         if (this.editMode) {
             const tile = stackTile.tile;
-            const selectedIndex = this.selected.indexOf(tile);
-            if(selectedIndex > -1) {
-                this.selected.splice(selectedIndex, 1);
-            } else {
-                this.selected.push(tile)
-            }
+            this.selected.update(prev => {
+                const selectedIndex = prev.indexOf(tile);
+                if(selectedIndex > -1) {
+                    return prev.filter(t => t != tile);
+                } else {
+                    return [...prev, tile];
+                }
+            })
 
-            this.getSelectionInfo();
+            this.getSelectionInfo(this.selected());
         } else {
             this.drawTile(stackTile.tile);
         }
     }
 
     private resetSelection() {
-        this.selected = [];
+        this.selected.set([]);
         if(this.editMode) {
-            this.getSelectionInfo();
+            const selected = untracked(() => this.selected());
+            this.getSelectionInfo(selected);
         }
     }
 
@@ -78,8 +80,8 @@ export class QwirkleStackComponent {
         });
     }
 
-    private getSelectionInfo() {
-        this.qwirkleService.getSelectionInfo(this.selected, true).subscribe(res => {
+    private getSelectionInfo(selected: Tile[]) {
+        this.qwirkleService.getSelectionInfo(selected, true).subscribe(res => {
             this.tileSelected.emit(res);
         });
     }

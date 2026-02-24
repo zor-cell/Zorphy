@@ -6,9 +6,10 @@
   </div>
   <div class="highlighted-container hand-wrapper">
     <div class="hand">
-      @for (tile of paddedHand; track $index; let i = $index) {
+      @for (tile of paddedHand(); track $index; let i = $index) {
         @if (tile) {
-          @if (selectionInfo && selectionInfo.tiles[i] && !selectionInfo.tiles[i].valid && !selected.includes(tile)) {
+            @let selection = selectionInfo();
+          @if (selection && selection.tiles[i] && !selection.tiles[i].valid && !selected().includes(tile)) {
             <qwirkle-tile
               [tile]="tile"
               [tileSize]="tileSize"
@@ -18,9 +19,9 @@
               <qwirkle-tile
                 [tile]="tile"
                 [tileSize]="tileSize"
-                [tileText]="selected.includes(tile) ? selected.indexOf(tile) + 1 : null"
+                [tileText]="selected().includes(tile) ? selected().indexOf(tile) + 1 : null"
                 (click)="selectTile(i)"
-                [class.selected]="selected.includes(tile)"
+                [class.selected]="selected().includes(tile)"
                 />
               }
             } @else {

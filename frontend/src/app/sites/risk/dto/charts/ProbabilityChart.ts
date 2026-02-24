@@ -169,7 +169,7 @@ export class ProbabilityChart extends BaseChart {
       const color = BaseChart.colors[0];
       return (label >= range.min && label <= range.max)
         ? color
-        : this.applyOpacity(color, 0.2);
+        : this.applyOpacity(color, 0.3);
     });
   }
 }
