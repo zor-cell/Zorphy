@@ -52,6 +52,7 @@ export class RiskHistogramComponent {
 
   protected selectedRange = linkedSignal<Range>(() => {
     const total = this.totalRange();
+    const entries = this.dataEntries(); //detect entries change as well
 
     return {
       min: 1,

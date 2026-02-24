@@ -34,19 +34,51 @@ export class ProbabilityChart extends BaseChart {
       title: {
         display: true,
         text: 'Histogram of Attacks',
+        font: BaseChart.titleFont
+      },
+      subtitle: {
+        display: false,
+        text: 'Note: Negative numbers (e.g., -10) indicate the number of surviving defenders.',
         font: {
-          size: 18,
-          weight: 'bold',
+          size: 13,
+          style: 'italic'
         },
-      }
+        padding: { bottom: 15 },
+        color: '#666'
+      },
+      legend: {
+        onClick: () => {}, //disable legend hiding
+        labels: {
+          generateLabels: (chart) => {
+            return chart.data.datasets.map((dataset, i) => ({
+              text: dataset.label || '',
+              fillStyle: BaseChart.colors[0],
+              strokeStyle: BaseChart.colors[0],
+              lineWidth: 0,
+              hidden: !chart.isDatasetVisible(i),
+              datasetIndex: i
+            }));
+          }
+        }
+      },
     },
     scales: {
       x: {
-        stacked: true
+        stacked: true,
+        title: {
+          display: true,
+          text: 'Survivors',
+          font: BaseChart.axisFont
+        },
       },
       y: {
         stacked: true,
         beginAtZero: true,
+        title: {
+          display: true,
+          text: 'Probability',
+          font: BaseChart.axisFont
+        },
       }
     },
   };
@@ -72,7 +104,6 @@ export class ProbabilityChart extends BaseChart {
         let width = firstBar.getProps(['width'], true)?.width ?? 0;
         width = Math.max(Math.min(width / 2, 12), 8);
 
-        console.log(leftOffset, rightOffset);
         const distFromBottom = chart.height - bottom;
 
         this.chartSliderInfo.set({
@@ -113,11 +144,7 @@ export class ProbabilityChart extends BaseChart {
     //bar colors
     let colors: string[] = [];
     if(range) {
-      colors = labels.map(label => {
-        return (label >= range.min && label <= range.max)
-          ? BaseChart.colors[0]
-          : 'rgba(54, 162, 235, 0.2)';
-      });
+      colors = this.getLabelColors(labels, range);
     }
 
     const dataset = {
@@ -131,14 +158,19 @@ export class ProbabilityChart extends BaseChart {
     this.data.datasets = [dataset];
   }
 
-  public refreshSlider(selectedRange: Range) {
+  public refreshSlider(range: Range) {
     if(this.data.labels) {
-      this.data.datasets[0].backgroundColor = this.data.labels.map(label => {
-        return (label >= selectedRange.min && label <= selectedRange.max)
-          ? BaseChart.colors[0]
-          : 'rgba(54, 162, 235, 0.2)';
-      });
+      this.data.datasets[0].backgroundColor = this.getLabelColors(this.data.labels, range);
     }
+  }
+
+  private getLabelColors(labels: number[], range: Range) {
+    return labels.map(label => {
+      const color = BaseChart.colors[0];
+      return (label >= range.min && label <= range.max)
+        ? color
+        : this.applyOpacity(color, 0.2);
+    });
   }
 }
 

@@ -74,4 +74,21 @@ export abstract class BaseChart {
             }
         },
     };
+
+    protected applyOpacity(color: string, opacity: number): string {
+        //apply to hex
+        if (color.startsWith('#')) {
+            const hex = color.replace('#', '');
+            const alpha = Math.round(opacity * 255).toString(16).padStart(2, '0');
+            return `#${hex}${alpha}`;
+        }
+        //apply to rgb
+        else if (color.startsWith('rgb')) {
+            const parts = color.match(/[\d.]+/g);
+            if (parts && parts.length >= 3) {
+                return `rgba(${parts[0]}, ${parts[1]}, ${parts[2]}, ${opacity})`;
+            }
+        }
+        return color;
+    }
 }
