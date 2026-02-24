@@ -1,7 +1,9 @@
 import {BaseChart} from "../../../catan/dto/charts/BaseChart";
-import {ChartData, ChartOptions} from "chart.js";
+import {BarElement, ChartData, ChartOptions, Plugin} from "chart.js";
 import {DataEntry} from "../DataEntry";
 import {Range} from '../Range';
+import {signal} from "@angular/core";
+import {Position} from "../../../../main/core/dto/Position";
 
 export class ProbabilityChart extends BaseChart {
   public data: ChartData<any, number[], number> = {
@@ -11,6 +13,13 @@ export class ProbabilityChart extends BaseChart {
 
   public options: ChartOptions = {
     maintainAspectRatio: false,
+    transitions: {
+      resize: {
+        animation: {
+          duration: 0
+        }
+      }
+    },
     animations: {
       x: {
         duration: 500,
@@ -41,6 +50,43 @@ export class ProbabilityChart extends BaseChart {
       }
     },
   };
+
+  public plugins: Plugin[] = [{
+    id: 'sync-slider-bounds',
+    afterLayout: (chart) => {
+      const {top, left, right, bottom} = chart.chartArea;
+      this.chartBounds.set({
+        x: left,
+        y: top
+      });
+
+      const meta = chart.getDatasetMeta(0);
+
+      if (meta && meta.data && meta.data.length > 0) {
+        const firstBar = meta.data[0] as BarElement;
+        const lastBar = meta.data[meta.data.length - 1];
+
+        const leftOffset = firstBar.x;
+        const rightOffset = chart.width - lastBar.x;
+
+        let width = firstBar.getProps(['width'], true)?.width ?? 0;
+        width = Math.max(Math.min(width / 2, 12), 8);
+
+        console.log(leftOffset, rightOffset);
+        const distFromBottom = chart.height - bottom;
+
+        this.chartSliderInfo.set({
+          left: leftOffset - 3,
+          right: rightOffset - 3,
+          bottom: distFromBottom - 24,
+          size: width
+        });
+      }
+    }
+  }];
+
+  public chartSliderInfo = signal<SliderInfo>({left: 0, right: 0, bottom: 0, size: 0});
+  public chartBounds = signal<Position>({x: 0, y: 0});
 
   public refresh(data: DataEntry[], range: Range | null = null) {
     //get labels
@@ -94,4 +140,11 @@ export class ProbabilityChart extends BaseChart {
       });
     }
   }
+}
+
+export interface SliderInfo {
+  left: number;
+  right: number;
+  bottom: number;
+  size: number;
 }

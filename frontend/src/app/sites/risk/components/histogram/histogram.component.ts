@@ -74,32 +74,6 @@ export class RiskHistogramComponent {
     return inRangeCount / totalCount;
   });
 
-  protected sliderLeft = signal<number>(57);
-  protected sliderRight = signal<number>(20);
-
-  public chartPlugins: Plugin[] = [{
-    id: 'sync-slider-bounds',
-    afterLayout: (chart) => {
-      const meta = chart.getDatasetMeta(0);
-
-      // Ensure data exists and is rendered
-      if (meta && meta.data && meta.data.length > 0) {
-        const firstBar = meta.data[0];
-        const lastBar = meta.data[meta.data.length - 1];
-
-        const leftOffset = firstBar.x;
-        // The right offset is the total canvas width minus the last bar's x coordinate
-        const rightOffset = chart.width - lastBar.x;
-
-        // Use setTimeout to push updates to the next tick, avoiding Angular's ExpressionChangedAfterItHasBeenCheckedError
-        setTimeout(() => {
-          this.sliderLeft.set(leftOffset);
-          this.sliderRight.set(rightOffset);
-        });
-      }
-    }
-  }];
-
   protected probabilityChart = new ProbabilityChart();
 
   constructor() {

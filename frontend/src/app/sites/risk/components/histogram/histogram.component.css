@@ -1,3 +1,7 @@
+:root {
+    --thumb-size: 12px;
+}
+
 .histogram-container {
     position: relative;
 
@@ -10,17 +14,12 @@
 
 .histogram-inputs {
     position: absolute;
-    top: 0;
-    left: 0;
     padding: 0.5rem;
     width: fit-content;
 }
 
 .slider-overlay {
     position: absolute;
-    bottom: 5px;
-    left: 57px;
-    right: 20px;
     z-index: 10;
 }
 
@@ -49,7 +48,6 @@
 }
 
 ::ng-deep mat-slider .mdc-slider__thumb-knob {
-    /* Match your chart's exact blue color */
     background-color: black !important;
 
     border-radius: 0 !important;
@@ -57,12 +55,30 @@
 
     clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 
-    width: 12px !important;
-    height: 12px !important;
+    width: var(--thumb-size) !important;
+    height: var(--thumb-size)!important;
 }
 
 @media (max-width: 400px) {
     .histogram-container {
         height: 400px;
+    }
+
+    .histogram-inputs {
+        font-size: 0.75rem;
+    }
+
+    .histogram-inputs .slider-input {
+        width: 26px;
+        font-size: 0.75rem;
+    }
+
+    .histogram-inputs .slider-input-lg {
+        width: 34px;
+        font-size: 0.75rem;
+    }
+
+    .histogram-inputs div {
+        letter-spacing: -0.5px;
     }
 }
