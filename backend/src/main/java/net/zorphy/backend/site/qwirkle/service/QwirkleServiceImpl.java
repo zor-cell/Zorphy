@@ -63,6 +63,7 @@ public class QwirkleServiceImpl implements QwirkleService {
 
         return new GameState(
                 false,
+                new ArrayList<>(),
                 Instant.now(),
                 config,
                 0,
@@ -115,6 +116,7 @@ public class QwirkleServiceImpl implements QwirkleService {
 
         return new GameState(
                 oldState.isSaved(),
+                oldState.pauseEntries(),
                 oldState.startTime(),
                 oldState.gameConfig(),
                 oldState.currentPlayerTurn(),
@@ -266,6 +268,7 @@ public class QwirkleServiceImpl implements QwirkleService {
 
         return new GameState(
                 oldState.isSaved(),
+                oldState.pauseEntries(),
                 oldState.startTime(),
                 oldState.gameConfig(),
                 oldState.currentPlayerTurn(),
@@ -298,6 +301,7 @@ public class QwirkleServiceImpl implements QwirkleService {
 
         return new GameState(
                 oldState.isSaved(),
+                oldState.pauseEntries(),
                 oldState.startTime(),
                 oldState.gameConfig(),
                 oldState.currentPlayerTurn(),
@@ -375,6 +379,7 @@ public class QwirkleServiceImpl implements QwirkleService {
 
         return new GameState(
                 oldState.isSaved(),
+                oldState.pauseEntries(),
                 oldState.startTime(),
                 oldState.gameConfig(),
                 currentPlayerTurn,

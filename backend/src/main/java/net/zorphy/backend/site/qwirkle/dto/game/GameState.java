@@ -1,5 +1,7 @@
 package net.zorphy.backend.site.qwirkle.dto.game;
 
+import net.zorphy.backend.site.core.http.dto.PauseEntry;
+import net.zorphy.backend.site.core.http.dto.state.PausableGameState;
 import net.zorphy.backend.site.core.http.dto.state.SavableGameState;
 import net.zorphy.backend.site.qwirkle.dto.PositionInfo;
 import net.zorphy.backend.site.qwirkle.dto.move.Move;
@@ -12,6 +14,7 @@ import java.util.List;
 
 public record GameState(
         boolean isSaved,
+        List<PauseEntry> pauseEntries,
         Instant startTime,
         GameConfig gameConfig,
         int currentPlayerTurn,
@@ -20,9 +23,9 @@ public record GameState(
         List<StackTile> stack,
         List<BoardTile> board,
         List<PositionInfo> openPositions
-) implements SavableGameState {
+) implements SavableGameState, PausableGameState {
     @Override
     public SavableGameState withSaved(boolean saved) {
-        return new GameState(saved, startTime, gameConfig, currentPlayerTurn, moves, hand, stack, board, openPositions);
+        return new GameState(saved, pauseEntries, startTime, gameConfig, currentPlayerTurn, moves, hand, stack, board, openPositions);
     }
 }

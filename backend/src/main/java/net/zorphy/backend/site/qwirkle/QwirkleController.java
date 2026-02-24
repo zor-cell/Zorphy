@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.site.core.http.controller.GameSessionController;
+import net.zorphy.backend.site.core.http.controller.PausableController;
 import net.zorphy.backend.site.core.http.controller.SavableController;
 import net.zorphy.backend.site.core.http.dto.result.ResultState;
 import net.zorphy.backend.site.core.http.service.SavableService;
@@ -24,7 +25,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/qwirkle")
 public class QwirkleController extends GameSessionController<GameConfig, GameState> implements
-        SavableController<GameState, ResultState>
+        SavableController<GameState, ResultState>,
+        PausableController<GameState>
 {
     private final QwirkleService qwirkleService;
 
