@@ -1,3 +1,6 @@
 <game-room [roomService]="roomService">
     Test
+    {{geoService.location()?.lat}}
+    {{geoService.location()?.lng}}
+    {{geoService.location()?.accuracy}}
 </game-room>
