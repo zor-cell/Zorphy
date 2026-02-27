@@ -14,9 +14,10 @@ import {RiskSimulationComponent} from "./sites/risk/components/simulation/simula
 import {GameStatsComponent} from "./main/games/components/stats/game-stats/game-stats.component";
 import {ScotlandYardGameComponent} from "./sites/scotland-yard/components/game/game.component";
 import {ScotlandYardConfigComponent} from "./sites/scotland-yard/components/config/config.component";
-import {NobodyIsPerfectGameComponent} from "./sites/nobody-is-perfect/components/config/game.component";
+import {NobodyIsPerfectGameComponent} from "./sites/nobody-is-perfect/components/game/game.component";
 import {GameRoomComponent} from "./sites/core/ws/components/game-room.component";
 import {inject} from "@angular/core";
+import {AirsoftGameComponent} from "./sites/airsoft/components/game/game.component";
 
 export const routes: Routes = [
     //project routing
@@ -59,5 +60,9 @@ export const routes: Routes = [
     // nobody is perfect routing
     {path: 'projects/nobody-is-perfect', redirectTo: 'projects/nobody-is-perfect/game', pathMatch: 'full'},
     {path: 'projects/nobody-is-perfect/game', component: NobodyIsPerfectGameComponent},
+
+    // airsoft routing
+    {path: 'projects/airsoft', redirectTo: 'projects/airsoft/game', pathMatch: 'full'},
+    {path: 'projects/airsoft/game', component: AirsoftGameComponent},
 ];
 

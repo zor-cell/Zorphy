@@ -1,5 +1,5 @@
-import {GameRoomMember} from "../../core/ws/dto/GameRoomMember";
-import {GameRoomBase} from "../../core/ws/dto/GameRoomBase";
+import {GameRoomMember} from "./GameRoomMember";
+import {GameRoomBase} from "./GameRoomBase";
 
 export interface GameRoom extends GameRoomBase {
     createdAt: string;
