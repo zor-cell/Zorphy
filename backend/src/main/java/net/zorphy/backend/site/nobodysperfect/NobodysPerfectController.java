@@ -18,7 +18,7 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 @MessageMapping("nobody-is-perfect")
-public class NobodysPerfectController extends GameRoomBaseController<GameRoom, GameRoomState> {
+public class NobodysPerfectController extends GameRoomBaseController<GameRoomState> {
     private final NobodyIsPerfectService socketService;
 
     public NobodysPerfectController(NobodyIsPerfectService socketService,

@@ -1,6 +1,7 @@
 package net.zorphy.backend.site.nobodysperfect.service;
 
 import net.zorphy.backend.site.connect4.exception.InvalidOperationException;
+import net.zorphy.backend.site.core.ws.dto.GameRoom;
 import net.zorphy.backend.site.core.ws.dto.GameRoomMember;
 import net.zorphy.backend.site.core.ws.exception.FatalWebsocketException;
 import net.zorphy.backend.site.core.ws.service.GameRoomBaseService;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class NobodyIsPerfectService implements GameRoomBaseService<GameRoom, GameRoomState> {
+public class NobodyIsPerfectService implements GameRoomBaseService<GameRoomState> {
     public NobodyIsPerfectService() { }
 
     @Override

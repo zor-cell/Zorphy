@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.site.connect4.exception.InvalidOperationException;
-import net.zorphy.backend.site.core.ws.dto.GameRoomBase;
 import net.zorphy.backend.site.core.ws.dto.GameRoomStateBase;
 import net.zorphy.backend.site.core.ws.dto.GameRoomMember;
 import net.zorphy.backend.site.core.ws.exception.FatalWebsocketException;
@@ -26,11 +25,11 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 
 
-public abstract class GameRoomBaseController<Room extends GameRoomBase, State extends GameRoomStateBase> {
+public abstract class GameRoomBaseController<State extends GameRoomStateBase> {
     private final String SESSION_KEY;
     private final String SESSION_ROOM_KEY = "room-id";
 
-    private final GameRoomBaseService<Room, State> roomBaseService;
+    private final GameRoomBaseService<State> roomBaseService;
     private final StringRedisTemplate redisTemplate;
     private final RedisLockRegistry redisLockRegistry;
     private final Duration sessionTimeout;
@@ -39,7 +38,7 @@ public abstract class GameRoomBaseController<Room extends GameRoomBase, State ex
     protected final SimpMessagingTemplate messagingTemplate;
 
     public GameRoomBaseController(
-           GameRoomBaseService<Room, State> roomBaseService,
+           GameRoomBaseService<State> roomBaseService,
            SimpMessagingTemplate messagingTemplate,
            StringRedisTemplate redisTemplate,
            RedisLockRegistry redisLockRegistry,

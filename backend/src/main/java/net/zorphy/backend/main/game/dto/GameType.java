@@ -8,5 +8,6 @@ public enum GameType {
     RISK,
     HASHI,
     SCOTLAND_YARD,
-    NOBODY_IS_PERFECT
+    NOBODY_IS_PERFECT,
+    AIRSOFT
 }

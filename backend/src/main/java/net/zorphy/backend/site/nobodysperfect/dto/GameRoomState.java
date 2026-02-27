@@ -1,5 +1,6 @@
 package net.zorphy.backend.site.nobodysperfect.dto;
 
+import net.zorphy.backend.site.core.ws.dto.GameRoom;
 import net.zorphy.backend.site.core.ws.dto.GameRoomPrivateStateBase;
 import net.zorphy.backend.site.core.ws.dto.GameRoomStateBase;
 import net.zorphy.backend.site.core.ws.dto.GameRoomMember;

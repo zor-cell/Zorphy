@@ -1,7 +1,4 @@
-package net.zorphy.backend.site.nobodysperfect.dto;
-
-import net.zorphy.backend.site.core.ws.dto.GameRoomBase;
-import net.zorphy.backend.site.core.ws.dto.GameRoomMember;
+package net.zorphy.backend.site.core.ws.dto;
 
 import java.time.Instant;
 import java.util.List;
