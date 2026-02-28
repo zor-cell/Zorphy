@@ -2,7 +2,7 @@ import {ApplicationConfig, importProvidersFrom, provideZonelessChangeDetection} 
 import {provideRouter, withComponentInputBinding} from '@angular/router';
 
 import {routes} from './app.routes';
-import {provideHttpClient, withInterceptors} from "@angular/common/http";
+import {provideHttpClient, withInterceptors, withXsrfConfiguration} from "@angular/common/http";
 import {provideCharts, withDefaultRegisterables} from 'ng2-charts';
 import {credentialInterceptor, errorInterceptor} from "./main/core/interceptors";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
@@ -33,13 +33,17 @@ export const appConfig: ApplicationConfig = {
     providers: [
         provideZonelessChangeDetection(),
         provideRouter(routes, withComponentInputBinding()),
-        provideHttpClient(withInterceptors([credentialInterceptor, errorInterceptor])),
+        provideHttpClient(
+          withInterceptors([credentialInterceptor, errorInterceptor]),
+          withXsrfConfiguration({
+              cookieName: 'XSRF-TOKEN',
+              headerName: 'X-XSRF-TOKEN'
+        })),
         importProvidersFrom(
             BrowserAnimationsModule
         ),
         provideCharts(withDefaultRegisterables()),
         galleryProvider,
-        lightBoxProvider,
-        WebSocketService
+        lightBoxProvider
     ]
 };
