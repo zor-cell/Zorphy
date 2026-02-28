@@ -27,7 +27,7 @@ import java.util.concurrent.locks.Lock;
 
 public abstract class GameRoomBaseController<State extends GameRoomStateBase> {
     private final String SESSION_KEY;
-    private final String SESSION_ROOM_KEY = "room-id";
+    protected final String SESSION_ROOM_KEY = "room-id";
 
     private final GameRoomBaseService<State> roomBaseService;
     protected final StringRedisTemplate redisTemplate;
@@ -224,7 +224,7 @@ public abstract class GameRoomBaseController<State extends GameRoomStateBase> {
         accessor.getSessionAttributes().put(key, value);
     }
 
-    private String getSessionAttribute(SimpMessageHeaderAccessor accessor, String key) {
+    protected String getSessionAttribute(SimpMessageHeaderAccessor accessor, String key) {
         if(accessor.getSessionAttributes() == null) return null;
 
         Object value = accessor.getSessionAttributes().get(key);

@@ -1,9 +1,3 @@
 <game-room [roomService]="roomService">
-    <div #map class="map-container">
-
-    </div>
-    Test
-    @for(loc of roomService.locations(); track loc.username) {
-        <div>{{loc.location.longitude}}, {{loc.location.latitude}}</div>
-    }
+    <div #map class="map-container"></div>
 </game-room>

@@ -15,17 +15,25 @@ export class AirsoftService extends GameRoomService<GameRoomState, GameRoomPriva
     public locations = signal<PlayerGeoLocation[]>([]);
 
     protected override onDisconnect(): void {
-
+        this.locations.set([]);
     }
 
-    protected override onSubscribe(roomId: string): void {
-        const initLocations = this.watchAndMap<PlayerGeoLocation[]>('/queue/locations').subscribe(locations => {
+    protected override onSubscribe() {
+        const initLocations = this.watchAndMap<PlayerGeoLocation[]>('/user/queue/locations').subscribe(locations => {
+            console.log(locations)
             this.locations.set(locations);
         });
         this.addSubscription(initLocations);
+    }
 
+    protected override onSubscribeWithRoom(roomId: string): void {
         const updatedLocations = this.watchAndMap<PlayerGeoLocation>(`/topic/game/${roomId}/locations`).subscribe(location => {
             this.locations.update(prev => {
+                //null keys means delete the location entry
+                if(!location.location) {
+                    return prev.filter(p => p.username !== location.username);
+                }
+
                 const index = prev.findIndex(p => p.username === location.username);
 
                 if (index < 0) {

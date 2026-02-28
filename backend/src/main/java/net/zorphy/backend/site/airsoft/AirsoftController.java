@@ -9,6 +9,7 @@ import net.zorphy.backend.site.airsoft.dto.PlayerGeoLocation;
 import net.zorphy.backend.site.airsoft.service.AirsoftService;
 import net.zorphy.backend.site.core.ws.controller.GameRoomBaseController;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.integration.redis.util.RedisLockRegistry;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -16,7 +17,9 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.util.List;
 import java.util.Map;
@@ -43,6 +46,21 @@ public class AirsoftController extends GameRoomBaseController<GameRoomState> {
                 GameType.AIRSOFT
         );
         this.socketService = socketService;
+    }
+
+    @Override
+    @EventListener
+    public void leaveRoom(SessionDisconnectEvent event) {
+        super.leaveRoom(event);
+
+        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
+        String username = getUsername(accessor);
+
+        String roomId = getSessionAttribute(accessor, SESSION_ROOM_KEY);
+        deleteLocation(roomId, username);
+
+        PlayerGeoLocation playerLocation = new PlayerGeoLocation(username, null);
+        messagingTemplate.convertAndSend("/topic/game/%s/locations".formatted(roomId), playerLocation);
     }
 
     @Override
@@ -76,7 +94,7 @@ public class AirsoftController extends GameRoomBaseController<GameRoomState> {
                     try {
                         return mapper.readValue((String) o, PlayerGeoLocation.class);
                     } catch (JsonProcessingException ex) {
-                        return null;
+                        throw new RuntimeException("Failed to serialize location", ex);
                     }
                 })
                 .toList();
@@ -90,6 +108,11 @@ public class AirsoftController extends GameRoomBaseController<GameRoomState> {
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to serialize location", e);
         }
+    }
+
+    private void deleteLocation(String roomId, String username) {
+        String key = getLocationsKey(roomId);
+        redisTemplate.opsForHash().delete(key, username);
     }
 
     private String getLocationsKey(String roomId) {

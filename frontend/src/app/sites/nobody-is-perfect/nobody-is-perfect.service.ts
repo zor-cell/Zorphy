@@ -34,7 +34,7 @@ export class NobodyIsPerfectService extends GameRoomService<GameRoomState, GameR
     this.sendMessage(`finish-round/${this.roomId()}`);
   }
 
-  protected override onSubscribe(roomId: string): void {
+  protected override onSubscribeWithRoom(roomId: string): void {
 
   }
 

@@ -52,14 +52,19 @@ export abstract class GameRoomService<State extends GameRoomStateBase, PrivateSt
    * Gets called when the service disconnects from the session.
    * Use this method to reset state signals etc
    */
-  protected abstract onDisconnect(): void;
+  protected onDisconnect(): void {}
 
   /**
-   * Gets called when the service subscribes to server channels.
+   * Gets called when the service subscribes to server channels after the room was joined.
+   * Use this method to subscribe to additional channels used in the service that required the room id
+   */
+  protected onSubscribeWithRoom(roomId: string): void {}
+
+  /**
+   * Gets called when the service subscribes to server channels before the room was joined.
    * Use this method to subscribe to additional channels used in the service
    */
-  protected abstract onSubscribe(roomId: string): void;
-
+  protected onSubscribe(): void {}
   /**
    * Creates a new room
    */
@@ -184,6 +189,8 @@ export abstract class GameRoomService<State extends GameRoomStateBase, PrivateSt
       }
     });
     this.addSubscription(errors);
+
+    this.onSubscribe();
   }
 
   private subscribeTopic(roomId: string) {
@@ -192,7 +199,7 @@ export abstract class GameRoomService<State extends GameRoomStateBase, PrivateSt
     });
     this.addSubscription(topic);
 
-    this.onSubscribe(roomId);
+    this.onSubscribeWithRoom(roomId);
   }
 
   private initStates(state: State) {
