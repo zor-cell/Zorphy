@@ -24,16 +24,19 @@ export class AirsoftGameComponent implements OnInit, AfterViewInit, OnDestroy {
     effect(() => {
       const loc = this.geoService.location();
 
-      if(loc) {
+      if (loc) {
         this.roomService.updateLocation(loc);
 
-        L.marker([loc.latitude, loc.longitude]).addTo(this.map);
-        const circle = L.circle([loc.latitude, loc.longitude], {
-          color: 'red',
-          radius: loc.accuracy,
-          fillOpacity: 0.2,
-        }).addTo(this.map);
+        if (this.map) {
+          L.marker([loc.latitude, loc.longitude]).addTo(this.map);
+          const circle = L.circle([loc.latitude, loc.longitude], {
+            color: 'red',
+            radius: loc.accuracy,
+            fillOpacity: 0.2,
+          }).addTo(this.map);
+        }
       }
+
     })
   }
 
@@ -51,7 +54,7 @@ export class AirsoftGameComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
-    if(this.map) {
+    if (this.map) {
       this.map.remove();
     }
   }
