@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 )
 @JsonSubTypes({
         @JsonSubTypes.Type(value = net.zorphy.backend.site.nobodysperfect.dto.GameRoomState.class, name = "NobodyIsPerfectGameRoomState"),
+        @JsonSubTypes.Type(value = net.zorphy.backend.site.airsoft.dto.GameRoomState.class, name = "AirsoftGameRoomState"),
 })
 public interface GameRoomStateBase {
     GameRoomBase room();

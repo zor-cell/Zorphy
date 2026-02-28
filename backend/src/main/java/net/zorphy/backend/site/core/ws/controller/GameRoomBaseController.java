@@ -30,10 +30,10 @@ public abstract class GameRoomBaseController<State extends GameRoomStateBase> {
     private final String SESSION_ROOM_KEY = "room-id";
 
     private final GameRoomBaseService<State> roomBaseService;
-    private final StringRedisTemplate redisTemplate;
+    protected final StringRedisTemplate redisTemplate;
     private final RedisLockRegistry redisLockRegistry;
     private final Duration sessionTimeout;
-    private final ObjectMapper mapper;
+    protected final ObjectMapper mapper;
     private final Class<State> stateClass;
     protected final SimpMessagingTemplate messagingTemplate;
 
@@ -208,6 +208,10 @@ public abstract class GameRoomBaseController<State extends GameRoomStateBase> {
         return user.getName();
     }
 
+    protected String getRoomKey(String roomId) {
+        return SESSION_KEY + ":" + roomId.trim().toLowerCase();
+    }
+
     private boolean roomExists(String roomId) {
         String roomKey = getRoomKey(roomId);
         String roomJson = redisTemplate.opsForValue().get(roomKey);
@@ -229,7 +233,4 @@ public abstract class GameRoomBaseController<State extends GameRoomStateBase> {
         return value.toString();
     }
 
-    private String getRoomKey(String roomId) {
-        return SESSION_KEY + ":" + roomId.trim().toLowerCase();
-    }
 }

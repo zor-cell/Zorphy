@@ -1,6 +1,7 @@
 package net.zorphy.backend.site.airsoft.service;
 
 import net.zorphy.backend.site.airsoft.dto.GameRoomState;
+import net.zorphy.backend.site.airsoft.dto.GeoLocation;
 import net.zorphy.backend.site.connect4.exception.InvalidOperationException;
 import net.zorphy.backend.site.core.ws.dto.GameRoom;
 import net.zorphy.backend.site.core.ws.dto.GameRoomMember;
@@ -96,5 +97,9 @@ public class AirsoftService implements GameRoomBaseService<GameRoomState> {
         state.room().members().addAll(members);
 
         return state;
+    }
+
+    public GameRoomState updateLocation(GameRoomState state, String username, GeoLocation location) {
+        return null;
     }
 }

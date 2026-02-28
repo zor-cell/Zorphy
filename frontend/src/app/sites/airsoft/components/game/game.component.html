@@ -3,7 +3,7 @@
 
     </div>
     Test
-    {{geoService.location()?.lat}}
-    {{geoService.location()?.lng}}
-    {{geoService.location()?.accuracy}}
+    @for(loc of roomService.locations(); track loc.username) {
+        <div>{{loc.location.longitude}}, {{loc.location.latitude}}</div>
+    }
 </game-room>

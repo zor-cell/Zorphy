@@ -1,11 +1,6 @@
 import {inject, Injectable, signal} from '@angular/core';
 import {NotificationService} from "./notification.service";
-
-export interface GeoState {
-  lat: number | null;
-  lng: number | null;
-  accuracy: number | null;
-}
+import {GeoLocation} from "../dto/GeoLocation";
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +8,7 @@ export interface GeoState {
 export class GeoLocationService {
   private notificationService = inject(NotificationService);
 
-  private state = signal<GeoState | null>(null);
+  private state = signal<GeoLocation | null>(null);
   public readonly location = this.state.asReadonly();
 
   private watchId: number | null = null;
@@ -30,9 +25,11 @@ export class GeoLocationService {
     this.watchId = navigator.geolocation.watchPosition(
       (position) => {
         this.state.set({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-          accuracy: position.coords.accuracy
+          timestamp: position.timestamp,
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          accuracy: position.coords.accuracy,
+          heading: position.coords.heading
         });
       },
       (error) => {
