@@ -1,4 +1,4 @@
-import {Router, Routes} from '@angular/router';
+import {Routes} from '@angular/router';
 import {Connect4Component} from "./sites/connect4/components/connect4.component";
 import {ProjectListComponent} from "./main/projects/components/project-list/project-list.component";
 import {ProjectInfoComponent} from "./main/projects/components/project-info/project-info.component";
@@ -14,9 +14,7 @@ import {RiskSimulationComponent} from "./sites/risk/components/simulation/simula
 import {GameStatsComponent} from "./main/games/components/stats/game-stats/game-stats.component";
 import {ScotlandYardGameComponent} from "./sites/scotland-yard/components/game/game.component";
 import {ScotlandYardConfigComponent} from "./sites/scotland-yard/components/config/config.component";
-import {NobodyIsPerfectGameComponent} from "./sites/nobody-is-perfect/components/game/game.component";
-import {GameRoomComponent} from "./sites/core/ws/components/game-room.component";
-import {inject} from "@angular/core";
+import {NobodyIsPerfectGameComponent} from "./sites/nobody-is-perfect/components/game/game.component";;
 import {AirsoftGameComponent} from "./sites/airsoft/components/game/game.component";
 
 export const routes: Routes = [
