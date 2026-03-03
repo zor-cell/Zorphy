@@ -28,6 +28,11 @@ public class WebSecurityConfig {
         CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
         csrfTokenRepository.setCookiePath("/");
 
+        csrfTokenRepository.setCookieCustomizer(customizer -> customizer
+                .sameSite("None")
+                .secure(true)
+        );
+
         http
                 .cors(Customizer.withDefaults())
                 .csrf(crsf -> crsf

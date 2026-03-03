@@ -121,6 +121,10 @@ public class FileStorageServiceImpl implements FileStorageService {
             int dotIndex = originalFilename.lastIndexOf('.');
             if (dotIndex > 0 && dotIndex < originalFilename.length() - 1) {
                 fileExtension = originalFilename.substring(dotIndex);
+
+                if (!fileExtension.matches("^\\.[a-zA-Z0-9]+$")) {
+                    throw new FileStorageException("Invalid file extension format.");
+                }
             }
 
             //get target directory
