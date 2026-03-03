@@ -28,6 +28,7 @@ import java.util.concurrent.locks.Lock;
 public abstract class GameRoomBaseController<State extends GameRoomStateBase> {
     private final String SESSION_KEY;
     protected final String SESSION_ROOM_KEY = "room-id";
+    protected final String SESSION_GAMETYPE_KEY = "game-type";
 
     private final GameRoomBaseService<State> roomBaseService;
     protected final StringRedisTemplate redisTemplate;
@@ -35,6 +36,7 @@ public abstract class GameRoomBaseController<State extends GameRoomStateBase> {
     private final Duration sessionTimeout;
     protected final ObjectMapper mapper;
     private final Class<State> stateClass;
+    private final GameType gameType;
     protected final SimpMessagingTemplate messagingTemplate;
 
     public GameRoomBaseController(
@@ -54,14 +56,21 @@ public abstract class GameRoomBaseController<State extends GameRoomStateBase> {
         this.sessionTimeout = serverProperties.getServlet().getSession().getTimeout();
         this.mapper = mapper;
         this.stateClass = stateClass;
+        this.gameType = gameType;
         this.SESSION_KEY = "zorphy:rooms:" + gameType.toString();
     }
 
     @EventListener
-    public void leaveRoom(SessionDisconnectEvent event) {
+    public final void leaveRoom(SessionDisconnectEvent event) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
 
         if(accessor.getUser() == null || accessor.getSessionAttributes() == null) {
+            return;
+        }
+
+        String sessionGameType = getSessionAttribute(accessor, SESSION_GAMETYPE_KEY);
+        //ignore disconnect event from other game types
+        if(sessionGameType == null || !sessionGameType.equals(gameType.toString())) {
             return;
         }
 
@@ -73,6 +82,8 @@ public abstract class GameRoomBaseController<State extends GameRoomStateBase> {
             setRoomState(state);
 
             messagingTemplate.convertAndSend("/topic/game/%s".formatted(roomId), state.toPublicState());
+
+            afterRoomLeave(username, roomId);
         });
     }
 
@@ -96,6 +107,7 @@ public abstract class GameRoomBaseController<State extends GameRoomStateBase> {
         setRoomState(state);
 
         addSessionAttribute(headerAccessor, SESSION_ROOM_KEY, state.room().roomId());
+        addSessionAttribute(headerAccessor, SESSION_GAMETYPE_KEY, gameType.toString());
 
         messagingTemplate.convertAndSendToUser(username, "/queue/state", state.toPrivateState(username));
         messagingTemplate.convertAndSendToUser(username, "/queue/created", state.toPublicState());
@@ -110,6 +122,7 @@ public abstract class GameRoomBaseController<State extends GameRoomStateBase> {
             setRoomState(state);
 
             addSessionAttribute(headerAccessor, SESSION_ROOM_KEY, roomId);
+            addSessionAttribute(headerAccessor, SESSION_GAMETYPE_KEY, gameType.toString());
 
             messagingTemplate.convertAndSendToUser(username, "/queue/state", state.toPrivateState(username));
             messagingTemplate.convertAndSendToUser(username, "/queue/joined", state.toPublicState());
@@ -153,6 +166,14 @@ public abstract class GameRoomBaseController<State extends GameRoomStateBase> {
                 lock.unlock();
             }
         }
+    }
+
+    /**
+     * Hook method for child classes to execute game-specific disconnect logic.
+     * This is only called if the disconnecting user belonged to this specific game type.
+     */
+    protected void afterRoomLeave(String username, String roomId) {
+
     }
 
     /**
@@ -228,7 +249,9 @@ public abstract class GameRoomBaseController<State extends GameRoomStateBase> {
         if(accessor.getSessionAttributes() == null) return null;
 
         Object value = accessor.getSessionAttributes().get(key);
-        if(value == null) return null;
+        if(value == null) {
+            throw new FatalWebsocketException("A session error occured");
+        };
 
         return value.toString();
     }
