@@ -31,6 +31,7 @@ public class WebSecurityConfig {
         csrfTokenRepository.setCookieCustomizer(customizer -> customizer
                 .sameSite("None")
                 .secure(true)
+                .domain("zorphy.net")
         );
 
         http
