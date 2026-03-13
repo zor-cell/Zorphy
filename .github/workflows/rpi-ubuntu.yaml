@@ -1,4 +1,6 @@
 name: Deploy to rpi5
+permissions:
+  contents: read
 
 on:
   push:
@@ -8,7 +10,7 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
-    
+
     steps:
     - uses: actions/checkout@v4
 
