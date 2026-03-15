@@ -4,7 +4,7 @@ import net.zorphy.backend.main.game.dto.GameDetails;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.site.core.http.dto.TeamDetails;
 import net.zorphy.backend.main.game.service.GameService;
-import net.zorphy.backend.site.core.http.dto.result.ResultState;
+import net.zorphy.backend.site.core.http.dto.result.DefaultResultState;
 import net.zorphy.backend.site.catan.dto.DicePair;
 import net.zorphy.backend.site.catan.dto.DiceRoll;
 import net.zorphy.backend.site.catan.dto.enums.GameMode;
@@ -161,7 +161,7 @@ public class CatanServiceImpl implements CatanService {
     }
 
     @Override
-    public GameDetails saveSession(GameState gameState, ResultState resultState, MultipartFile image) {
+    public GameDetails saveSession(GameState gameState, DefaultResultState resultState, MultipartFile image) {
         return gameService.saveGame(
                 GameType.CATAN,
                 gameState,

@@ -14,8 +14,8 @@ import net.zorphy.backend.main.game.service.metrics.DurationArithmeticStrategy;
 import net.zorphy.backend.main.game.service.metrics.GameStatsMetricAggregator;
 import net.zorphy.backend.site.core.shared.service.GameSpecificStatsCalculator;
 import net.zorphy.backend.main.game.service.GameStatsUtil;
-import net.zorphy.backend.site.core.http.dto.result.ResultState;
-import net.zorphy.backend.site.core.http.dto.result.ResultTeamState;
+import net.zorphy.backend.site.core.http.dto.result.DefaultResultState;
+import net.zorphy.backend.site.core.http.dto.result.DefaultResultTeamState;
 import net.zorphy.backend.site.catan.dto.DiceRoll;
 import net.zorphy.backend.site.catan.dto.game.GameState;
 import net.zorphy.backend.site.catan.dto.game.GameStats;
@@ -52,10 +52,10 @@ public class GameStatsCalculator implements GameSpecificStatsCalculator {
         for (Game game : games) {
             try {
                 GameState gameState = objectMapper.convertValue(game.getGameState(), GameState.class);
-                ResultState result = objectMapper.convertValue(game.getResult(), ResultState.class);
+                DefaultResultState result = objectMapper.convertValue(game.getResult(), DefaultResultState.class);
 
-                ResultTeamState resultPlayerTeam = GameStatsUtil.getResultTeam(result, currentPlayer.id());
-                ResultTeamState winnerTeam = GameStatsUtil.getWinnerTeam(result);
+                DefaultResultTeamState resultPlayerTeam = GameStatsUtil.getResultTeam(result, currentPlayer.id());
+                DefaultResultTeamState winnerTeam = GameStatsUtil.getWinnerTeam(result);
                 boolean playerIsWinner = winnerTeam.team().players().stream()
                         .anyMatch(p -> currentPlayer.id().equals(p.id()));
 

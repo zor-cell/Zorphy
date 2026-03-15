@@ -9,7 +9,7 @@ import net.zorphy.backend.main.core.exception.InvalidSessionException;
 import net.zorphy.backend.site.core.http.controller.GameSessionController;
 import net.zorphy.backend.site.core.http.controller.PausableController;
 import net.zorphy.backend.site.core.http.controller.SavableController;
-import net.zorphy.backend.site.core.http.dto.result.ResultState;
+import net.zorphy.backend.site.core.http.dto.result.DefaultResultState;
 import net.zorphy.backend.site.core.http.service.SavableService;
 import net.zorphy.backend.site.jolly.dto.RoundResult;
 import net.zorphy.backend.site.jolly.dto.game.GameConfig;
@@ -26,7 +26,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/jolly")
 public class JollyController extends GameSessionController<GameConfig, GameState> implements
-        SavableController<GameState, ResultState>,
+        SavableController<GameState, DefaultResultState>,
         PausableController<GameState>
 {
     private final JollyService jollyService;
@@ -71,7 +71,7 @@ public class JollyController extends GameSessionController<GameConfig, GameState
     @Secured("ROLE_ADMIN")
     @PostMapping(value = "session/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public GameDetails saveSession(HttpSession session,
-                                   @RequestPart("resultState") @Valid ResultState resultState,
+                                   @RequestPart("resultState") @Valid DefaultResultState resultState,
                                    @RequestPart(value = "image", required = false) MultipartFile image) {
         var gameState = getSessionState(session);
         if(gameState.isSaved()) {
@@ -100,7 +100,7 @@ public class JollyController extends GameSessionController<GameConfig, GameState
     }
 
     @Override
-    public SavableService<GameState, ResultState> getSessionService() {
+    public SavableService<GameState, DefaultResultState> getSessionService() {
         return jollyService;
     }
 

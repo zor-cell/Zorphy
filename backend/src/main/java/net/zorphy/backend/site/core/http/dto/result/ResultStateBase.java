@@ -2,6 +2,9 @@ package net.zorphy.backend.site.core.http.dto.result;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import net.zorphy.backend.site.sevenwonders.dto.result.DuelResultState;
 
 import java.util.List;
 
@@ -9,11 +12,14 @@ import java.util.List;
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
         property = "type",
-        defaultImpl = ResultState.class
+        defaultImpl = DefaultResultState.class
 )
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = ResultState.class, name = "DefaultResultState")
+        @JsonSubTypes.Type(value = DefaultResultState.class, name = "DefaultResultState"),
+        @JsonSubTypes.Type(value = DuelResultState.class, name = "SevenWondersResultState")
 })
 public interface ResultStateBase {
-    List<ResultTeamState> teams();
+    @NotEmpty
+    @Valid
+    List<? extends ResultStateTeamBase> teams();
 }

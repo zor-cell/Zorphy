@@ -8,7 +8,7 @@ import net.zorphy.backend.site.catan.service.CatanService;
 import net.zorphy.backend.site.core.http.controller.GameSessionController;
 import net.zorphy.backend.site.core.http.controller.PausableController;
 import net.zorphy.backend.site.core.http.controller.SavableController;
-import net.zorphy.backend.site.core.http.dto.result.ResultState;
+import net.zorphy.backend.site.core.http.dto.result.DefaultResultState;
 import net.zorphy.backend.site.core.http.service.SavableService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/catan")
 public class CatanController extends GameSessionController<GameConfig, GameState> implements
-        SavableController<GameState, ResultState>,
+        SavableController<GameState, DefaultResultState>,
         PausableController<GameState>
 {
     private final CatanService catanService;
@@ -46,7 +46,7 @@ public class CatanController extends GameSessionController<GameConfig, GameState
     }
 
     @Override
-    public SavableService<GameState, ResultState> getSessionService() {
+    public SavableService<GameState, DefaultResultState> getSessionService() {
         return catanService;
     }
 }

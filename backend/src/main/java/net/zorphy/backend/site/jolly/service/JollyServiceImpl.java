@@ -5,7 +5,7 @@ import net.zorphy.backend.main.game.dto.GameDetails;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.main.file.service.FileStorageService;
 import net.zorphy.backend.main.game.service.GameService;
-import net.zorphy.backend.site.core.http.dto.result.ResultState;
+import net.zorphy.backend.site.core.http.dto.result.DefaultResultState;
 import net.zorphy.backend.site.connect4.exception.InvalidOperationException;
 import net.zorphy.backend.site.jolly.dto.RoundInfo;
 import net.zorphy.backend.site.jolly.dto.RoundResult;
@@ -53,7 +53,7 @@ public class JollyServiceImpl implements JollyService {
     }
 
     @Override
-    public GameDetails saveSession(GameState gameState, ResultState resultState, MultipartFile image) {
+    public GameDetails saveSession(GameState gameState, DefaultResultState resultState, MultipartFile image) {
         return gameService.saveGame(
                 GameType.JOLLY,
                 gameState,

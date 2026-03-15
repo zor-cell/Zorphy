@@ -3,9 +3,9 @@ package net.zorphy.backend.site.sevenwonders.service;
 import net.zorphy.backend.main.game.dto.GameDetails;
 import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.main.game.service.GameService;
-import net.zorphy.backend.site.core.http.dto.result.ResultState;
 import net.zorphy.backend.site.sevenwonders.dto.game.GameConfig;
 import net.zorphy.backend.site.sevenwonders.dto.game.GameState;
+import net.zorphy.backend.site.sevenwonders.dto.result.DuelResultState;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,7 +43,7 @@ public class SevenWondersServiceImpl implements SevenWondersService {
     }
 
     @Override
-    public GameDetails saveSession(GameState gameState, ResultState resultState, MultipartFile image) {
+    public GameDetails saveSession(GameState gameState, DuelResultState resultState, MultipartFile image) {
         return gameService.saveGame(
                 GameType.SEVEN_WONDERS,
                 gameState,

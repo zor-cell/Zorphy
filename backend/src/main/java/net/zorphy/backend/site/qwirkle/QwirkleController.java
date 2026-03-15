@@ -6,7 +6,7 @@ import net.zorphy.backend.main.game.dto.GameType;
 import net.zorphy.backend.site.core.http.controller.GameSessionController;
 import net.zorphy.backend.site.core.http.controller.PausableController;
 import net.zorphy.backend.site.core.http.controller.SavableController;
-import net.zorphy.backend.site.core.http.dto.result.ResultState;
+import net.zorphy.backend.site.core.http.dto.result.DefaultResultState;
 import net.zorphy.backend.site.core.http.service.SavableService;
 import net.zorphy.backend.site.qwirkle.dto.SelectionInfo;
 import net.zorphy.backend.site.qwirkle.dto.game.GameConfig;
@@ -25,7 +25,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/qwirkle")
 public class QwirkleController extends GameSessionController<GameConfig, GameState> implements
-        SavableController<GameState, ResultState>,
+        SavableController<GameState, DefaultResultState>,
         PausableController<GameState>
 {
     private final QwirkleService qwirkleService;
@@ -92,7 +92,7 @@ public class QwirkleController extends GameSessionController<GameConfig, GameSta
     }
 
     @Override
-    public SavableService<GameState, ResultState> getSessionService() {
+    public SavableService<GameState, DefaultResultState> getSessionService() {
         return qwirkleService;
     }
 }
