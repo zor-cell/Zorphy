@@ -33,7 +33,7 @@ public class WebSecurityConfig {
                     customizer.sameSite(cookieProps.getSameSite())
                             .secure(cookieProps.isSecure());
 
-                    //Only set domain if present
+                    //only set domain if present
                     if (cookieProps.getDomain() != null && !cookieProps.getDomain().isBlank()) {
                         customizer.domain(cookieProps.getDomain());
                     }
