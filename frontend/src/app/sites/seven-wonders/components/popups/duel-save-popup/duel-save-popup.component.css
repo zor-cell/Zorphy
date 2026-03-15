@@ -1,0 +1,28 @@
+td {
+    vertical-align: middle;
+}
+
+td input[type="checkbox"] {
+    display: block;
+    margin: 0 auto;
+}
+
+.blue {
+    color: blue;
+}
+
+.green {
+    color: #008000;
+}
+
+.yellow {
+    color: #e6ac00
+}
+
+.purple {
+    color: rebeccapurple;
+}
+
+.red {
+    color: #cc2900;
+}

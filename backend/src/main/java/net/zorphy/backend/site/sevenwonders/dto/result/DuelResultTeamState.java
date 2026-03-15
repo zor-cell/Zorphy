@@ -11,10 +11,10 @@ public record DuelResultTeamState(
         int yellowCardScore,
         int purpleCardScore,
         int wonderScore,
-        int developmentScore,
+        int scienceScore,
         int coinScore,
         int warScore,
         boolean wonWithWar,
-        boolean wonWithDevelopment
+        boolean wonWithScience
 ) implements ResultStateTeamBase {
 }

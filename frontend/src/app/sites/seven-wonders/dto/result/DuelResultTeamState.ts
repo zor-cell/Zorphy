@@ -8,9 +8,9 @@ export interface DuelResultTeamState {
   yellowCardScore: number;
   purpleCardScore: number;
   wonderScore: number;
-  developmentScore: number;
+  scienceScore: number;
   coinScore: number;
   warScore: number;
   wonWithWar: boolean;
-  wonWithDevelopment: boolean;
+  wonWithScience: boolean;
 }

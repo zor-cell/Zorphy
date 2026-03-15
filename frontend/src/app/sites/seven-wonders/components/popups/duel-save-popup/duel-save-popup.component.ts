@@ -1,4 +1,15 @@
-import {Component, forwardRef, inject, input, OnInit, output, signal, TemplateRef, viewChild} from '@angular/core';
+import {
+  Component,
+  forwardRef,
+  inject,
+  input,
+  OnDestroy,
+  OnInit,
+  output,
+  signal,
+  TemplateRef,
+  viewChild
+} from '@angular/core';
 import {PopupService} from "../../../../../main/core/services/popup.service";
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {FileUploadComponent} from "../../../../../main/core/components/file-upload/file-upload.component";
@@ -10,6 +21,7 @@ import {DuelResultState} from "../../../dto/result/DuelResultState";
 import {DuelResultTeamState} from "../../../dto/result/DuelResultTeamState";
 import {GameSavePopupBase} from "../../../../core/http/directives/game-save-popup-base.directive";
 import {callback} from "chart.js/helpers";
+import {Subscription} from "rxjs";
 
 interface DuelSaveForm {
   score: FormControl<number | null>;
@@ -21,8 +33,8 @@ interface DuelSaveForm {
   developmentScore: FormControl<number | null>;
   coinScore: FormControl<number | null>;
   warScore: FormControl<number | null>;
-  wonWithWar: FormControl<boolean | null>;
-  wonWithDevelopment: FormControl<boolean | null>;
+  wonWithWar: FormControl<boolean>;
+  wonWithDevelopment: FormControl<boolean>;
 }
 
 @Component({
@@ -35,20 +47,21 @@ interface DuelSaveForm {
   templateUrl: './duel-save-popup.component.html',
   styleUrl: './duel-save-popup.component.css',
 })
-export class DuelSavePopupComponent extends GameSavePopupBase<DuelResultState> implements OnInit {
+export class DuelSavePopupComponent extends GameSavePopupBase<DuelResultState> implements OnInit, OnDestroy {
   private popupService = inject(PopupService);
   private fb = inject(FormBuilder);
 
   private saveTemplate = viewChild.required<TemplateRef<any>>('duelSavePopup');
   public teams = input.required<Team[]>();
 
+  private formSubs: Subscription[] = [];
   protected saveForm!: FormGroup<Record<string, FormGroup<DuelSaveForm>>>;
   protected fileUpload = signal<FileUpload>(new FileUpload());
 
   ngOnInit() {
     const group: Record<string, FormGroup<DuelSaveForm>> = {};
 
-    for(let team of this.teams()) {
+    for (let team of this.teams()) {
       group[team.name] = this.fb.group({
         score: this.fb.control<number | null>(null, {validators: Validators.required}),
         blueCardScore: this.fb.control<number | null>(null, {validators: Validators.required}),
@@ -59,12 +72,46 @@ export class DuelSavePopupComponent extends GameSavePopupBase<DuelResultState> i
         developmentScore: this.fb.control<number | null>(null, {validators: Validators.required}),
         coinScore: this.fb.control<number | null>(null, {validators: Validators.required}),
         warScore: this.fb.control<number | null>(null, {validators: Validators.required}),
-        wonWithWar: this.fb.control<boolean | null>(null),
-        wonWithDevelopment: this.fb.control<boolean | null>(null)
+        wonWithWar: this.fb.control<boolean>(false, {nonNullable: true}),
+        wonWithDevelopment: this.fb.control<boolean>(false, {nonNullable: true})
       });
     }
 
     this.saveForm = this.fb.group(group);
+
+    //form value logic
+    for (let team of this.teams()) {
+      const teamGroup = this.saveForm.get(team.name) as FormGroup<DuelSaveForm>;
+
+      const sub = teamGroup.valueChanges.subscribe(val => {
+        if (val.wonWithWar || val.wonWithDevelopment) {
+          if (teamGroup.get('score')?.value !== 0) {
+            this.disableNumberInputs(teamGroup);
+          }
+        } else {
+          this.enableNumberInputs(teamGroup);
+        }
+
+        // calculate the sum
+        const total = (val.blueCardScore || 0) +
+          (val.greenCardScore || 0) +
+          (val.yellowCardScore || 0) +
+          (val.purpleCardScore || 0) +
+          (val.wonderScore || 0) +
+          (val.developmentScore || 0) +
+          (val.coinScore || 0) +
+          (val.warScore || 0);
+
+        if (teamGroup.get('score')?.value !== total) {
+          teamGroup.patchValue({score: total}, {emitEvent: false});
+        }
+      });
+      this.formSubs.push(sub);
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.formSubs.forEach(sub => sub.unsubscribe());
   }
 
   public openPopup() {
@@ -72,7 +119,7 @@ export class DuelSavePopupComponent extends GameSavePopupBase<DuelResultState> i
       'Save Game Data',
       this.saveTemplate(),
       this.callback.bind(this),
-      () => true, //this.saveForm.valid, TODO: reuse in prod
+      () => this.saveForm.valid,
       'Save'
     );
   }
@@ -97,11 +144,11 @@ export class DuelSavePopupComponent extends GameSavePopupBase<DuelResultState> i
       yellowCardScore: Number(formValue[team.name].yellowCardScore),
       purpleCardScore: Number(formValue[team.name].purpleCardScore),
       wonderScore: Number(formValue[team.name].wonderScore),
-      developmentScore: Number(formValue[team.name].developmentScore),
+      scienceScore: Number(formValue[team.name].developmentScore),
       coinScore: Number(formValue[team.name].coinScore),
       warScore: Number(formValue[team.name].warScore),
       wonWithWar: Boolean(formValue[team.name].wonWithWar),
-      wonWithDevelopment: Boolean(formValue[team.name].wonWithDevelopment)
+      wonWithScience: Boolean(formValue[team.name].wonWithDevelopment)
     }));
 
     this.saveSessionEvent.emit({
@@ -109,6 +156,22 @@ export class DuelSavePopupComponent extends GameSavePopupBase<DuelResultState> i
         teams: teamState
       },
       file: this.fileUpload().getAndRevokeFile()
+    });
+  }
+
+  private disableNumberInputs(group: FormGroup<DuelSaveForm>) {
+    Object.keys(group.controls).forEach(key => {
+      if (key !== 'wonWithWar' && key !== 'wonWithDevelopment') {
+        group.controls[key as keyof DuelSaveForm].disable({ emitEvent: false });
+      }
+    });
+  }
+
+  private enableNumberInputs(group: FormGroup) {
+    Object.keys(group.controls).forEach(key => {
+      if (key !== 'wonWithWar' && key !== 'wonWithDevelopment') {
+        group.controls[key as keyof DuelSaveForm].enable({ emitEvent: false });
+      }
     });
   }
 }

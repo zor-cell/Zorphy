@@ -133,7 +133,7 @@ export class GameSessionGameComponent<
     effect((onCleanup) => {
       const popup = this.customSavePopup();
       if (popup) {
-        const sub = popup.saveSessionEvent.subscribe((event) => {
+        const sub = popup.saveSessionEvent.subscribe((event: WithFile<ResultStateBase>) => {
           this.saveSession(event);
         });
         onCleanup(() => sub.unsubscribe());
@@ -152,7 +152,6 @@ export class GameSessionGameComponent<
   }
 
   protected saveSession(event: WithFile<ResultStateBase>) {
-    console.log(event)
     this.sessionService().saveSession(event.data, event.file).subscribe({
       next: res => {
         this.getSession();
