@@ -4,6 +4,7 @@ import {CatanGameInfoComponent} from "../../../sites/catan/components/game-info/
 import {CatanGameStatsComponent} from "../../../sites/catan/components/game-stats/game-stats.component";
 import {JollyGameInfoComponent} from "../../../sites/jolly/components/game-info/game-info.component";
 import {JollyGameStatsComponent} from "../../../sites/jolly/components/game-stats/game-stats.component";
+import {SevenWondersGameStatsComponent} from "../../../sites/seven-wonders/components/game-stats/game-stats.component";
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class GameComponentRegistryService {
 
   private gameStatsComponents: Partial<Record<GameType, Type<any>>> = {
     [GameType.CATAN]: CatanGameStatsComponent,
-    [GameType.JOLLY]: JollyGameStatsComponent
+    [GameType.JOLLY]: JollyGameStatsComponent,
+    [GameType.SEVEN_WONDERS]: SevenWondersGameStatsComponent
   };
 
   getInfoComponent(gameType: GameType) {

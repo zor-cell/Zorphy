@@ -10,7 +10,7 @@ import {NotificationService} from "../../main/core/services/notification.service
   providedIn: 'root',
 })
 export class SevenWondersService extends GameSessionService<GameConfig, GameState> {
-  protected override baseUri: string = environment.httpApiUrl + '/jolly';
+  protected override baseUri: string = environment.httpApiUrl + '/seven-wonders';
 
   constructor(httpClient: HttpClient, notification: NotificationService) {
     super(httpClient, notification);

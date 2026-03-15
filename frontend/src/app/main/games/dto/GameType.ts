@@ -4,4 +4,5 @@ export enum GameType {
     JOLLY = "JOLLY",
     RISK = "RISK",
     HASHI = "HASHI",
+    SEVEN_WONDERS = "SEVEN_WONDERS",
 }

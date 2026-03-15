@@ -1,1 +1,11 @@
-<p>game works!</p>
+@if(gameState(); as state) {
+    <game-session-game [sessionService]="sevenWondersService"
+                       [(gameState)]="gameState"
+    >
+        <div class="main-container">
+            <b class="flex-container text-center">
+                Play the board game and save the game afterwards!
+            </b>
+        </div>
+    </game-session-game>
+}

@@ -20,7 +20,6 @@ import {GameSessionGameComponent} from "../../../core/http/components/game-sessi
     GameSessionGameComponent
 ],
     templateUrl: './game.component.html',
-    
     styleUrl: './game.component.css'
 })
 export class CatanGameComponent implements OnInit {

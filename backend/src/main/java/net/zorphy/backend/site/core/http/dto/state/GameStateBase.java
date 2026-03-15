@@ -14,7 +14,8 @@ import java.time.Instant;
 @JsonSubTypes({
         @JsonSubTypes.Type(value = net.zorphy.backend.site.catan.dto.game.GameState.class, name = "CatanGameState"),
         @JsonSubTypes.Type(value = net.zorphy.backend.site.jolly.dto.game.GameState.class, name = "JollyGameState"),
-        @JsonSubTypes.Type(value = net.zorphy.backend.site.qwirkle.dto.game.GameState.class, name = "QwirkleGameState")
+        @JsonSubTypes.Type(value = net.zorphy.backend.site.qwirkle.dto.game.GameState.class, name = "QwirkleGameState"),
+        @JsonSubTypes.Type(value = net.zorphy.backend.site.sevenwonders.dto.game.GameState.class, name = "SevenWondersGameState")
 })
 public interface GameStateBase {
     Instant startTime();
