@@ -9,5 +9,6 @@ public enum GameType {
     HASHI,
     SCOTLAND_YARD,
     NOBODY_IS_PERFECT,
-    AIRSOFT
+    AIRSOFT,
+    SEVEN_WONDERS
 }
