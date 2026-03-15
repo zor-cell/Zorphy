@@ -12,6 +12,10 @@ spring:
 
 app:
   base-url: http://localhost:8080/api/
+  csrf:
+    cookie:
+      secure: false
+      same-site: "Lax"
 
 file-storage:
   directory: ../file-storage

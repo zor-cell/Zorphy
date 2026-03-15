@@ -8,6 +8,11 @@ spring:
 
 app:
   base-url: https://server.zorphy.net/api/
+  csrf:
+    cookie:
+      domain: "zorphy.net"
+      secure: true
+      same-site: "None"
 
 file-storage:
   directory: /app/file-storage

@@ -1,5 +1,6 @@
 package net.zorphy.backend.config.http;
 
+import net.zorphy.backend.config.property.CsrfCookieProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,22 +22,27 @@ import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 @EnableMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig {
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CsrfCookieProperties cookieProps) throws Exception {
         CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
         requestHandler.setCsrfRequestAttributeName(null);
 
         CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
         csrfTokenRepository.setCookiePath("/");
 
-        csrfTokenRepository.setCookieCustomizer(customizer -> customizer
-                .sameSite("None")
-                .secure(true)
-                .domain("zorphy.net")
+        csrfTokenRepository.setCookieCustomizer(customizer -> {
+                    customizer.sameSite(cookieProps.getSameSite())
+                            .secure(cookieProps.isSecure());
+
+                    //Only set domain if present
+                    if (cookieProps.getDomain() != null && !cookieProps.getDomain().isBlank()) {
+                        customizer.domain(cookieProps.getDomain());
+                    }
+                }
         );
 
         http
                 .cors(Customizer.withDefaults())
-                .csrf(crsf -> crsf
+                .csrf(csrf -> csrf
                         .csrfTokenRepository(csrfTokenRepository)
                         .csrfTokenRequestHandler(requestHandler)
                 )
