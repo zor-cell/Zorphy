@@ -1,7 +1,7 @@
 import {Component, input} from '@angular/core';
 import {GameMetadata} from "../../../../main/games/dto/GameMetadata";
 import {GameState} from "../../dto/game/GameState";
-import {ResultState} from "../../../../main/core/dto/result/ResultState";
+import {DefaultResultState} from "../../../core/http/dto/result/DefaultResultState";
 import {
     GameResultTableComponent
 } from "../../../../main/games/components/game-result-table/game-result-table.component";
@@ -21,5 +21,5 @@ import {JollyRoundTableComponent} from "../rounds-table/round-table.component";
 export class JollyGameInfoComponent {
   public metadata = input.required<GameMetadata>();
   public gameState = input.required<GameState>();
-  public resultState = input.required<ResultState>();
+  public resultState = input.required<DefaultResultState>();
 }

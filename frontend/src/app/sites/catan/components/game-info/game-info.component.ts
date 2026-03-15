@@ -1,7 +1,7 @@
 import {Component, computed, input} from '@angular/core';
 import {GameMetadata} from "../../../../main/games/dto/GameMetadata";
 import {GameState} from "../../dto/game/GameState";
-import {ResultState} from "../../../../main/core/dto/result/ResultState";
+import {DefaultResultState} from "../../../core/http/dto/result/DefaultResultState";
 
 import {CatanHistogramComponent} from "../histogram/histogram.component";
 import {GameMode, getGameModeName} from "../../dto/enums/GameMode";
@@ -22,7 +22,7 @@ import {
 export class CatanGameInfoComponent {
   public metadata = input.required<GameMetadata>();
   public gameState = input.required<GameState>();
-  public resultState = input.required<ResultState>();
+  public resultState = input.required<DefaultResultState>();
 
   private diceSums = computed(() => {
     return this.gameState().diceRolls.map(roll => roll.dicePair.dice1 + roll.dicePair.dice2);

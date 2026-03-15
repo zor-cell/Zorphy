@@ -5,7 +5,7 @@ import {AuthService} from "../../../../main/core/services/auth.service";
 import {GameStateBase} from "../dto/GameStateBase";
 import {GameConfigBase} from "../dto/GameConfigBase";
 import {GameSessionService} from "../game-session.service";
-import {ResultState} from "../../../../main/core/dto/result/ResultState";
+import {DefaultResultState} from "../dto/result/DefaultResultState";
 import {GameSessionSavePopupComponent} from "./popups/save-popup/save-popup.component";
 import {WithFile} from "../../../../main/core/dto/WithFile";
 import {SavableGameState} from "../dto/SavableGameState";
@@ -132,7 +132,7 @@ export class GameSessionGameComponent<
         });
     }
 
-    protected saveSession(event: WithFile<ResultState>) {
+    protected saveSession(event: WithFile<DefaultResultState>) {
         this.sessionService().saveSession(event.data, event.file).subscribe({
             next: res => {
                 this.getSession();

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {finalize, Observable, tap} from "rxjs";
-import {ResultState} from "../../../main/core/dto/result/ResultState";
+import {DefaultResultState} from "./dto/result/DefaultResultState";
 import {GameDetails} from "../../../main/games/dto/GameDetails";
 import {GameConfigBase} from "./dto/GameConfigBase";
 import {GameStateBase} from "./dto/GameStateBase";
@@ -40,7 +40,7 @@ export abstract class GameSessionService<Config extends GameConfigBase, State ex
         }));
   }
   
-  saveSession(resultState: ResultState, imageFile: File | null = null): Observable<GameDetails> {
+  saveSession(resultState: DefaultResultState, imageFile: File | null = null): Observable<GameDetails> {
     const formData = new FormData();
     formData.append('resultState', new Blob([JSON.stringify(resultState)], { type: 'application/json' }));
     if (imageFile) {

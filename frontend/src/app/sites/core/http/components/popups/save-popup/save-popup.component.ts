@@ -4,8 +4,8 @@ import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} fr
 import {Team} from "../../../../../../main/core/dto/Team";
 import {PopupService} from "../../../../../../main/core/services/popup.service";
 import {PopupResultType} from "../../../../../../main/core/dto/PopupResultType";
-import {ResultState} from "../../../../../../main/core/dto/result/ResultState";
-import {ResultTeamState} from "../../../../../../main/core/dto/result/ResultTeamState";
+import {DefaultResultState} from "../../../dto/result/DefaultResultState";
+import {DefaultResultTeamState} from "../../../dto/result/DefaultResultTeamState";
 import {FileUpload} from "../../../../../../main/core/dto/FileUpload";
 import {FileUploadComponent} from "../../../../../../main/core/components/file-upload/file-upload.component";
 import {WithFile} from "../../../../../../main/core/dto/WithFile";
@@ -21,7 +21,6 @@ interface SaveForm {
     FileUploadComponent
 ],
     templateUrl: './save-popup.component.html',
-    
     styleUrl: './save-popup.component.css'
 })
 export class GameSessionSavePopupComponent implements OnInit {
@@ -32,7 +31,7 @@ export class GameSessionSavePopupComponent implements OnInit {
     public teams = input.required<Team[]>();
     public scores = input<Record<string, number>>();
     public showFileUpload = input<boolean>(true);
-    public saveSessionEvent = output<WithFile<ResultState>>();
+    public saveSessionEvent = output<WithFile<DefaultResultState>>();
 
     protected saveForm!: FormGroup<Record<string, FormGroup<SaveForm>>>;
     protected fileUpload = signal<FileUpload>(new FileUpload());
@@ -78,7 +77,7 @@ export class GameSessionSavePopupComponent implements OnInit {
     private saveGame() {
         const formValue = this.saveForm.getRawValue();
 
-        const teamState: ResultTeamState[] = this.teams().map(team => ({
+        const teamState: DefaultResultTeamState[] = this.teams().map(team => ({
             team: team,
             score: Number(formValue[team.name].score)
         }));
