@@ -7,5 +7,9 @@
                 Play the board game and save the game afterwards!
             </b>
         </div>
+
+        <seven-wonders-duel-save-popup ngProjectAs="customSavePopup"
+                [teams]="state.gameConfig.teams"
+        />
     </game-session-game>
 }

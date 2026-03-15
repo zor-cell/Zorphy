@@ -6,6 +6,7 @@ import {GameDetails} from "../../../main/games/dto/GameDetails";
 import {GameConfigBase} from "./dto/GameConfigBase";
 import {GameStateBase} from "./dto/GameStateBase";
 import {NotificationService} from "../../../main/core/services/notification.service";
+import {ResultStateBase} from "./dto/result/ResultStateBase";
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +41,7 @@ export abstract class GameSessionService<Config extends GameConfigBase, State ex
         }));
   }
   
-  saveSession(resultState: DefaultResultState, imageFile: File | null = null): Observable<GameDetails> {
+  saveSession(resultState: ResultStateBase, imageFile: File | null = null): Observable<GameDetails> {
     const formData = new FormData();
     formData.append('resultState', new Blob([JSON.stringify(resultState)], { type: 'application/json' }));
     if (imageFile) {

@@ -1,4 +1,4 @@
-import {Component, inject, input, OnInit, output, signal, TemplateRef, viewChild} from '@angular/core';
+import {Component, forwardRef, inject, input, OnInit, output, signal, TemplateRef, viewChild} from '@angular/core';
 
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Team} from "../../../../../../main/core/dto/Team";
@@ -9,6 +9,8 @@ import {DefaultResultTeamState} from "../../../dto/result/DefaultResultTeamState
 import {FileUpload} from "../../../../../../main/core/dto/FileUpload";
 import {FileUploadComponent} from "../../../../../../main/core/components/file-upload/file-upload.component";
 import {WithFile} from "../../../../../../main/core/dto/WithFile";
+import {GameSavePopupBase} from "../../../directives/game-save-popup-base.directive";
+import {callback} from "chart.js/helpers";
 
 interface SaveForm {
     score: FormControl<number | null>;
@@ -20,10 +22,11 @@ interface SaveForm {
     ReactiveFormsModule,
     FileUploadComponent
 ],
+    providers: [{provide: GameSavePopupBase, useExisting: forwardRef(() => GameSessionSavePopupComponent)}],
     templateUrl: './save-popup.component.html',
     styleUrl: './save-popup.component.css'
 })
-export class GameSessionSavePopupComponent implements OnInit {
+export class GameSessionSavePopupComponent extends GameSavePopupBase<DefaultResultState> implements OnInit {
     private popupService = inject(PopupService);
     private fb = inject(FormBuilder);
 
@@ -31,7 +34,6 @@ export class GameSessionSavePopupComponent implements OnInit {
     public teams = input.required<Team[]>();
     public scores = input<Record<string, number>>();
     public showFileUpload = input<boolean>(true);
-    public saveSessionEvent = output<WithFile<DefaultResultState>>();
 
     protected saveForm!: FormGroup<Record<string, FormGroup<SaveForm>>>;
     protected fileUpload = signal<FileUpload>(new FileUpload());

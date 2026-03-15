@@ -3,11 +3,13 @@ import {SevenWondersService} from "../../seven-wonders.service";
 import {GameState} from "../../dto/game/GameState";
 import {Router} from "@angular/router";
 import {GameSessionGameComponent} from "../../../core/http/components/game-session-game.component";
+import {DuelSavePopupComponent} from "../popups/duel-save-popup/duel-save-popup.component";
 
 @Component({
   selector: 'seven-wonders-game',
   imports: [
-    GameSessionGameComponent
+    GameSessionGameComponent,
+    DuelSavePopupComponent
   ],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css',

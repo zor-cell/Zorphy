@@ -1,3 +1,5 @@
+import {DuelResultTeamState} from "./DuelResultTeamState";
+
 export interface DuelResultState {
-  teams: DuelResultState[];
+  teams: DuelResultTeamState[];
 }

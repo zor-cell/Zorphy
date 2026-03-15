@@ -1,0 +1,120 @@
+<ng-template #duelSavePopup let-formId="formId">
+    <form [formGroup]="saveForm" [id]="formId" novalidate class="main-flex">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col" class="w-25">Category</th>
+                @for (team of teams(); track team.name) {
+                    <th scope="col" class="text-center w-auto">{{ team.name }}</th>
+                }
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Blue Cards</td>
+                @for (team of teams(); track team.name) {
+                    <ng-container [formGroupName]="team.name">
+                        <td><input type="number" class="form-control form-control-sm" formControlName="blueCardScore"></td>
+                    </ng-container>
+                }
+            </tr>
+
+            <tr>
+                <td>Green Cards</td>
+                @for (team of teams(); track team.name) {
+                    <ng-container [formGroupName]="team.name">
+                        <td><input type="number" class="form-control form-control-sm" formControlName="greenCardScore"></td>
+                    </ng-container>
+                }
+            </tr>
+
+            <tr>
+                <td>Yellow Cards</td>
+                @for (team of teams(); track team.name) {
+                    <ng-container [formGroupName]="team.name">
+                        <td><input type="number" class="form-control form-control-sm" formControlName="yellowCardScore"></td>
+                    </ng-container>
+                }
+            </tr>
+
+            <tr>
+                <td>Purple Cards</td>
+                @for (team of teams(); track team.name) {
+                    <ng-container [formGroupName]="team.name">
+                        <td><input type="number" class="form-control form-control-sm" formControlName="purpleCardScore"></td>
+                    </ng-container>
+                }
+            </tr>
+
+            <tr>
+                <td>Wonders</td>
+                @for (team of teams(); track team.name) {
+                    <ng-container [formGroupName]="team.name">
+                        <td><input type="number" class="form-control form-control-sm" formControlName="wonderScore"></td>
+                    </ng-container>
+                }
+            </tr>
+
+            <tr>
+                <td>Science</td>
+                @for (team of teams(); track team.name) {
+                    <ng-container [formGroupName]="team.name">
+                        <td><input type="number" class="form-control form-control-sm" formControlName="developmentScore"></td>
+                    </ng-container>
+                }
+            </tr>
+
+            <tr>
+                <td>Coins</td>
+                @for (team of teams(); track team.name) {
+                    <ng-container [formGroupName]="team.name">
+                        <td><input type="number" class="form-control form-control-sm" formControlName="coinScore"></td>
+                    </ng-container>
+                }
+            </tr>
+
+            <tr>
+                <td>War Points</td>
+                @for (team of teams(); track team.name) {
+                    <ng-container [formGroupName]="team.name">
+                        <td><input type="number" class="form-control form-control-sm" formControlName="warScore"></td>
+                    </ng-container>
+                }
+            </tr>
+
+            <tr>
+                <td class="fw-bold">Total Score</td>
+                @for (team of teams(); track team.name) {
+                    <ng-container [formGroupName]="team.name">
+                        <td><input type="number" class="form-control" formControlName="score"></td>
+                    </ng-container>
+                }
+            </tr>
+
+            <tr>
+                <td>Won War</td>
+                @for (team of teams(); track team.name) {
+                    <ng-container [formGroupName]="team.name">
+                        <td class="text-center"><input class="form-check-input" type="checkbox" formControlName="wonWithWar"></td>
+                    </ng-container>
+                }
+            </tr>
+            <tr>
+                <td>Won S</td>
+                @for (team of teams(); track team.name) {
+                    <ng-container [formGroupName]="team.name">
+                        <td class="text-center"><input class="form-check-input" type="checkbox" formControlName="wonWithDevelopment"></td>
+                    </ng-container>
+                }
+            </tr>
+            </tbody>
+        </table>
+
+        <app-file-upload (fileChangedEvent)="fileUpload.set($event)"/>
+    </form>
+    @if (fileUpload().getFileUrl(); as url) {
+        <div class="image-container">
+            <img [src]="url" alt="" width="300" height="300" class="image">
+        </div>
+    }
+</ng-template>
