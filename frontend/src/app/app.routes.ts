@@ -16,6 +16,8 @@ import {ScotlandYardGameComponent} from "./sites/scotland-yard/components/game/g
 import {ScotlandYardConfigComponent} from "./sites/scotland-yard/components/config/config.component";
 import {NobodyIsPerfectGameComponent} from "./sites/nobody-is-perfect/components/game/game.component";;
 import {AirsoftGameComponent} from "./sites/airsoft/components/game/game.component";
+import {SevenWondersConfigComponent} from "./sites/seven-wonders/components/config/config.component";
+import {SevenWondersGameComponent} from "./sites/seven-wonders/components/game/game.component";
 
 export const routes: Routes = [
     //project routing
@@ -62,5 +64,10 @@ export const routes: Routes = [
     // airsoft routing
     {path: 'projects/airsoft', redirectTo: 'projects/airsoft/game', pathMatch: 'full'},
     {path: 'projects/airsoft/game', component: AirsoftGameComponent},
+
+    //seven wonders routing
+    {path: 'projects/seven-wonders', redirectTo: 'projects/seven-wonders/config', pathMatch: 'full'},
+    {path: 'projects/seven-wonders/config', component: SevenWondersConfigComponent},
+    {path: 'projects/seven-wonders/game', component: SevenWondersGameComponent},
 ];
 

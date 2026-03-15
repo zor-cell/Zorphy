@@ -1,12 +1,12 @@
 export enum GameMode {
-  DUEL = 'DUELS',
+  DUEL = 'DUEL',
   CLASSIC = 'CLASSIC'
 }
 
 export function getGameModeName(mode: GameMode) {
   switch (mode) {
     case GameMode.DUEL:
-      return '1 vs 1';
+      return 'Duel';
     case GameMode.CLASSIC:
       return 'Classic';
     default:

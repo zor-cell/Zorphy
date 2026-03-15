@@ -1,0 +1,26 @@
+<game-session-config [sessionService]="sevenWondersService"
+                     [projectName]="projectName"
+                     [(gameConfig)]="gameConfig"
+                     [isValidConfig]="configForm.valid"
+>
+    <form class="main-container" [formGroup]="configForm">
+        <section class="config-container">
+            <div class="config-grid-container">
+                <h3 class="config-header">Players</h3>
+                <app-player-select formControlName="teams"/>
+            </div>
+
+            <div class="config-grid-container">
+                <h3 class="config-header">Mode</h3>
+                <div class="select-container">
+                    <select formControlName="gameMode">
+                        @for (mode of gameModes; track mode) {
+                            <option [ngValue]="mode">{{ getGameModeName(GameMode[mode]) }}
+                            </option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </section>
+    </form>
+</game-session-config>
