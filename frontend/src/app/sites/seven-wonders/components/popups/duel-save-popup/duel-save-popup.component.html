@@ -59,7 +59,7 @@
                 <td><i class="bi bi-flask green"></i></td>
                 @for (team of teams(); track team.name) {
                     <ng-container [formGroupName]="team.name">
-                        <td><input type="number" class="form-control" formControlName="developmentScore"></td>
+                        <td><input type="number" class="form-control" formControlName="scienceScore"></td>
                     </ng-container>
                 }
             </tr>
@@ -95,7 +95,7 @@
                 <td class="border-0"><i class="bi bi-award red"></i></td>
                 @for (team of teams(); track team.name) {
                     <ng-container [formGroupName]="team.name">
-                        <td class="text-center border-0" style="min-height: 38px;"><input type="checkbox" class="form-check-input"formControlName="wonWithWar"></td>
+                        <td class="text-center border-0" style="min-height: 38px;"><input type="checkbox" class="form-check-input" formControlName="wonWithWar"></td>
                     </ng-container>
                 }
             </tr>
@@ -103,7 +103,7 @@
                 <td class="border-0"><i class="bi bi-award green"></i></td>
                 @for (team of teams(); track team.name) {
                     <ng-container [formGroupName]="team.name">
-                        <td class="text-center border-0" style="min-height: 38px;"><input type="checkbox"  class="form-check-input" formControlName="wonWithDevelopment"></td>
+                        <td class="text-center border-0" style="min-height: 38px;"><input type="checkbox"  class="form-check-input" formControlName="wonWithScience"></td>
                     </ng-container>
                 }
             </tr>

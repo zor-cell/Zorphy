@@ -30,11 +30,11 @@ interface DuelSaveForm {
   yellowCardScore: FormControl<number | null>;
   purpleCardScore: FormControl<number | null>;
   wonderScore: FormControl<number | null>;
-  developmentScore: FormControl<number | null>;
+  scienceScore: FormControl<number | null>;
   coinScore: FormControl<number | null>;
   warScore: FormControl<number | null>;
   wonWithWar: FormControl<boolean>;
-  wonWithDevelopment: FormControl<boolean>;
+  wonWithScience: FormControl<boolean>;
 }
 
 @Component({
@@ -69,11 +69,11 @@ export class DuelSavePopupComponent extends GameSavePopupBase<DuelResultState> i
         yellowCardScore: this.fb.control<number | null>(null, {validators: Validators.required}),
         purpleCardScore: this.fb.control<number | null>(null, {validators: Validators.required}),
         wonderScore: this.fb.control<number | null>(null, {validators: Validators.required}),
-        developmentScore: this.fb.control<number | null>(null, {validators: Validators.required}),
+        scienceScore: this.fb.control<number | null>(null, {validators: Validators.required}),
         coinScore: this.fb.control<number | null>(null, {validators: Validators.required}),
         warScore: this.fb.control<number | null>(null, {validators: Validators.required}),
         wonWithWar: this.fb.control<boolean>(false, {nonNullable: true}),
-        wonWithDevelopment: this.fb.control<boolean>(false, {nonNullable: true})
+        wonWithScience: this.fb.control<boolean>(false, {nonNullable: true})
       });
     }
 
@@ -84,29 +84,48 @@ export class DuelSavePopupComponent extends GameSavePopupBase<DuelResultState> i
       const teamGroup = this.saveForm.get(team.name) as FormGroup<DuelSaveForm>;
 
       const sub = teamGroup.valueChanges.subscribe(val => {
-        if (val.wonWithWar || val.wonWithDevelopment) {
-          if (teamGroup.get('score')?.value !== 0) {
-            this.disableNumberInputs(teamGroup);
+        const disableNumbers = (val.wonWithWar || val.wonWithScience);
+
+        //toggle visibility when instant win occurs
+        if(disableNumbers !== undefined) {
+          for (const team2 of this.teams()) {
+            this.updateNumberInputs(team2, disableNumbers);
           }
-        } else {
-          this.enableNumberInputs(teamGroup);
         }
 
         // calculate the sum
-        const total = (val.blueCardScore || 0) +
-          (val.greenCardScore || 0) +
-          (val.yellowCardScore || 0) +
-          (val.purpleCardScore || 0) +
-          (val.wonderScore || 0) +
-          (val.developmentScore || 0) +
-          (val.coinScore || 0) +
-          (val.warScore || 0);
+        const rawVal = teamGroup.getRawValue();
+        const total = (rawVal.blueCardScore || 0) +
+          (rawVal.greenCardScore || 0) +
+          (rawVal.yellowCardScore || 0) +
+          (rawVal.purpleCardScore || 0) +
+          (rawVal.wonderScore || 0) +
+          (rawVal.scienceScore || 0) +
+          (rawVal.coinScore || 0) +
+          (rawVal.warScore || 0);
 
-        if (teamGroup.get('score')?.value !== total) {
+        if (teamGroup.controls.score.value !== total) {
           teamGroup.patchValue({score: total}, {emitEvent: false});
         }
       });
       this.formSubs.push(sub);
+
+      //enforce that only one instant win can be checked at a time
+      teamGroup.controls.wonWithWar.valueChanges.subscribe(value => {
+        if(value) {
+          teamGroup.controls.wonWithScience.setValue(false, {emitEvent: false});
+
+          this.resetInstantWins(team);
+        }
+      });
+
+      teamGroup.controls.wonWithScience.valueChanges.subscribe(value => {
+        if(value) {
+          teamGroup.controls.wonWithWar.setValue(false, {emitEvent: false});
+
+          this.resetInstantWins(team);
+        }
+      });
     }
   }
 
@@ -144,11 +163,11 @@ export class DuelSavePopupComponent extends GameSavePopupBase<DuelResultState> i
       yellowCardScore: Number(formValue[team.name].yellowCardScore),
       purpleCardScore: Number(formValue[team.name].purpleCardScore),
       wonderScore: Number(formValue[team.name].wonderScore),
-      scienceScore: Number(formValue[team.name].developmentScore),
+      scienceScore: Number(formValue[team.name].scienceScore),
       coinScore: Number(formValue[team.name].coinScore),
       warScore: Number(formValue[team.name].warScore),
       wonWithWar: Boolean(formValue[team.name].wonWithWar),
-      wonWithScience: Boolean(formValue[team.name].wonWithDevelopment)
+      wonWithScience: Boolean(formValue[team.name].wonWithScience)
     }));
 
     this.saveSessionEvent.emit({
@@ -159,19 +178,25 @@ export class DuelSavePopupComponent extends GameSavePopupBase<DuelResultState> i
     });
   }
 
-  private disableNumberInputs(group: FormGroup<DuelSaveForm>) {
-    Object.keys(group.controls).forEach(key => {
-      if (key !== 'wonWithWar' && key !== 'wonWithDevelopment') {
-        group.controls[key as keyof DuelSaveForm].disable({ emitEvent: false });
+  private updateNumberInputs(team: Team, disable: boolean) {
+    const group = this.saveForm.controls[team.name];
+    Object.values(group.controls).forEach(control => {
+      if (control !== group.controls.wonWithWar && control !== group.controls.wonWithScience) {
+        if(disable) {
+          control.disable({ emitEvent: false });
+        } else {
+          control.enable({ emitEvent: false });
+        }
       }
     });
   }
 
-  private enableNumberInputs(group: FormGroup) {
-    Object.keys(group.controls).forEach(key => {
-      if (key !== 'wonWithWar' && key !== 'wonWithDevelopment') {
-        group.controls[key as keyof DuelSaveForm].enable({ emitEvent: false });
+  private resetInstantWins(team: Team) {
+    for (let other of this.teams()) {
+      if (other.name !== team.name) {
+        this.saveForm.controls[other.name].controls.wonWithWar.setValue(false, {emitEvent: false});
+        this.saveForm.controls[other.name].controls.wonWithScience.setValue(false, {emitEvent: false});
       }
-    });
+    }
   }
 }
