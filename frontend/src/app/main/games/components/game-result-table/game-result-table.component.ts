@@ -7,7 +7,6 @@ import {DefaultResultState} from "../../../../sites/core/http/dto/result/Default
   selector: 'game-result-table',
     imports: [],
   templateUrl: './game-result-table.component.html',
-    
   styleUrl: './game-result-table.component.css'
 })
 export class GameResultTableComponent {

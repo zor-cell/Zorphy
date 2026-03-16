@@ -1,0 +1,92 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col" class="w-25"><i class="bi bi-tags"></i></th>
+        @for (team of teams(); track team.team.name) {
+            <th scope="col" class="text-center w-auto">
+                {{ team.team.name }}
+                @if(isWinner(team.team.name)) {
+                    <i class="bi bi-trophy-fill winner-icon"></i>
+                }
+            </th>
+        }
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><i class="bi bi-file-fill blue"></i></td>
+        @for (team of teams(); track team.team.name) {
+            <td>{{team.blueCardScore}}</td>
+        }
+    </tr>
+
+    <tr>
+        <td><i class="bi bi-file-fill green"></i></td>
+        @for (team of teams(); track team.team.name) {
+            <td>{{team.blueCardScore}}</td>
+        }
+    </tr>
+
+    <tr>
+        <td><i class="bi bi-file-fill yellow"></i></td>
+        @for (team of teams(); track team.team.name) {
+            <td>{{team.blueCardScore}}</td>
+        }
+    </tr>
+
+    <tr>
+        <td><i class="bi bi-file-fill purple"></i></td>
+        @for (team of teams(); track team.team.name) {
+            <td>{{team.blueCardScore}}</td>
+        }
+    </tr>
+
+    <tr>
+        <td><i class="bi bi-triangle-half yellow"></i></td>
+        @for (team of teams(); track team.team.name) {
+            <td>{{team.blueCardScore}}</td>
+        }
+    </tr>
+
+    <tr>
+        <td><i class="bi bi-flask green"></i></td>
+        @for (team of teams(); track team.team.name) {
+            <td>{{team.blueCardScore}}</td>
+        }
+    </tr>
+
+    <tr>
+        <td><i class="bi bi-coin yellow"></i></td>
+        @for (team of teams(); track team.team.name) {
+            <td>{{team.blueCardScore}}</td>
+        }
+    </tr>
+
+    <tr>
+        <td><i class="bi bi-shield-shaded red"></i></td>
+        @for (team of teams(); track team.team.name) {
+            <td>{{team.blueCardScore}}</td>
+        }
+    </tr>
+
+    <tr>
+        <td class="fw-bold"><i class="bi bi-calculator"></i></td>
+        @for (team of teams(); track team.team.name) {
+            <td>{{team.blueCardScore}}</td>
+        }
+    </tr>
+
+    <tr>
+        <td><i class="bi bi-award red"></i></td>
+        @for (team of teams(); track team.team.name) {
+            <td class="text-center" style="min-height: 38px;"><input type="checkbox" class="form-check-input" [checked]="team.wonWithWar" disabled></td>
+        }
+    </tr>
+    <tr>
+        <td><i class="bi bi-award green"></i></td>
+        @for (team of teams(); track team.team.name) {
+            <td class="text-center" style="min-height: 38px;"><input type="checkbox" class="form-check-input" [checked]="team.wonWithScience" disabled></td>
+        }
+    </tr>
+    </tbody>
+</table>
