@@ -18,8 +18,8 @@ import net.zorphy.backend.main.game.service.metrics.DoubleArithmeticStrategy;
 import net.zorphy.backend.main.game.service.metrics.DurationArithmeticStrategy;
 import net.zorphy.backend.main.game.service.metrics.GameStatsMetricAggregator;
 import net.zorphy.backend.site.core.http.dto.PauseEntry;
-import net.zorphy.backend.site.core.http.dto.result.DefaultResultState;
-import net.zorphy.backend.site.core.http.dto.result.DefaultResultTeamState;
+import net.zorphy.backend.site.core.http.dto.result.ResultStateBase;
+import net.zorphy.backend.site.core.http.dto.result.ResultStateTeamBase;
 import net.zorphy.backend.site.core.shared.service.GameSpecificStatsCalculator;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
@@ -70,13 +70,13 @@ public class GameStatsUtil {
 
         for (Game game : games) {
             try {
-                DefaultResultState result = objectMapper.convertValue(game.getResult(), DefaultResultState.class);
+                ResultStateBase result = objectMapper.convertValue(game.getResult(), ResultStateBase.class);
 
                 //get player team data
-                DefaultResultTeamState playerTeam = getResultTeam(result, currentPlayer.id());
+                ResultStateTeamBase playerTeam = getResultTeam(result, currentPlayer.id());
 
                 //get winner team data
-                DefaultResultTeamState winnerTeam = getWinnerTeam(result);
+                ResultStateTeamBase winnerTeam = getWinnerTeam(result);
                 boolean playerIsWinner = winnerTeam.team().players().stream()
                         .anyMatch(p -> currentPlayer.id().equals(p.id()));
 
@@ -90,7 +90,7 @@ public class GameStatsUtil {
                 //update opponents
                 if (playerIsWinner) {
                     //all players are counted since current player won
-                    for (DefaultResultTeamState teamResult : result.teams()) {
+                    for (ResultStateTeamBase teamResult : result.teams()) {
                         if (teamResult.equals(playerTeam)) continue;
 
                         for (PlayerDetails player : teamResult.team().players()) {
@@ -226,8 +226,8 @@ public class GameStatsUtil {
     /**
      * Get the team of the player given with {@code playerId} from the given {@code result}
      */
-    public static DefaultResultTeamState getResultTeam(DefaultResultState result, UUID playerId) {
-        DefaultResultTeamState playerTeam = result.teams().stream()
+    public static ResultStateTeamBase getResultTeam(ResultStateBase result, UUID playerId) {
+        ResultStateTeamBase playerTeam = result.teams().stream()
                 .filter(team -> team.team().players().stream().anyMatch(p -> playerId.equals(p.id())))
                 .findFirst()
                 .orElse(null);
@@ -239,9 +239,9 @@ public class GameStatsUtil {
     /**
      * Get the winning team of a given {@code result}
      */
-    public static DefaultResultTeamState getWinnerTeam(DefaultResultState result) {
-        DefaultResultTeamState winnerTeam = result.teams().stream()
-                .max(Comparator.comparingInt(DefaultResultTeamState::score))
+    public static ResultStateTeamBase getWinnerTeam(ResultStateBase result) {
+        ResultStateTeamBase winnerTeam = result.teams().stream()
+                .max(Comparator.comparingInt(ResultStateTeamBase::score))
                 .orElse(null);
         assert winnerTeam != null;
 

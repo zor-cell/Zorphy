@@ -116,7 +116,6 @@ public class GameServiceImpl implements GameService {
             gameStats.add(stats);
         }
 
-
         return gameStats;
     }
 
