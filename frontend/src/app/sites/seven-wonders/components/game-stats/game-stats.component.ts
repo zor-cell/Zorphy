@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, input} from '@angular/core';
+import {GameStats} from "../../dto/game/GameStats";
 
 @Component({
   selector: 'seven-wonders-game-stats',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './game-stats.component.css',
 })
 export class SevenWondersGameStatsComponent {
-
+  public stats = input.required<GameStats>();
 }
