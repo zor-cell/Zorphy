@@ -44,5 +44,8 @@
     "@types/leaflet": "^1.9.21",
     "@types/sockjs-client": "^1.5.4",
     "typescript": "~5.9.3"
+  },
+  "overrides": {
+    "undici": "^7.24.0"
   }
 }
