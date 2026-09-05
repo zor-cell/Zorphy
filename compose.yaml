@@ -1,7 +1,8 @@
+name: zorphy
+
 services:
   postgres:
     image: postgres
-    container_name: postgres_container
     restart: unless-stopped
     env_file:
       - .env
@@ -12,7 +13,6 @@ services:
 
   redis:
     image: redis
-    container_name: redis_container
     restart: unless-stopped
     env_file:
       - .env
@@ -25,7 +25,6 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: backend_server_container
     restart: unless-stopped
     env_file:
       - .env
@@ -43,7 +42,6 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: frontend_server_container
     restart: unless-stopped
     ports:
       - "8021:80"
